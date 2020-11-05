@@ -62,22 +62,23 @@ class Provider_Telegram {
 	public static function get_fields() {
 		$fields = array(
 			'title' => array(
-				'label' => __( 'Название', 'social-planner' ),
-				'hint'  => __( 'Используется только для вашего удобства. Может быть любым.', 'social-planner' ),
+				'label' => __( 'Title', 'social-planner' ),
+				'hint'  => __( 'Used only for your convenience. It can be anything.', 'social-planner' ),
 			),
 
 			'token' => array(
-				'label'       => __( 'Токен бота', 'social-planner' ),
+				'label'       => __( 'Bot token', 'social-planner' ),
 				'placeholder' => '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11',
 			),
 
 			'group' => array(
-				'label' => __( 'ID группы или канала', 'social-planner' ),
+				'label' => __( 'Channel or group ID', 'social-planner' ),
 			),
 
 			'link'  => array(
-				'label' => __( 'Ссылка на канал', 'social-planner' ),
-				'hint'  => __( 'Необязательное поле. Используется для формирования ссылки на сообщение.', 'social-planner' ),
+				'label'       => __( 'Channel link', 'social-planner' ),
+				'placeholder' => __( 'https:/t.me/devup' ),
+				'hint'        => __( 'Optional field. Used to show link to published entry.', 'social-planner' ),
 			),
 		);
 

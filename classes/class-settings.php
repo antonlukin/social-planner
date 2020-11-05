@@ -82,7 +82,7 @@ class Settings {
 
 		wp_enqueue_style(
 			'social-planner-settings',
-			SOCIAL_PLANNER_URL . '/assets/settings.min.css',
+			SOCIAL_PLANNER_URL . '/assets/styles/settings.min.css',
 			array(),
 			SOCIAL_PLANNER_VERSION,
 			'all'
@@ -97,14 +97,7 @@ class Settings {
 			return;
 		}
 
-		/**
-		 * Add i18n strings here to support lower WordPress versions.
-		 */
-		$object = array(
-			'append'  => esc_html__( 'Add network', 'social-planner' ),
-			'heading' => esc_html__( 'Provider settings: ', 'social-planner' ),
-			'warning' => esc_html__( 'Provider class fields are not formatted correctly', 'social-planner' ),
-		);
+		$object = array();
 
 		/**
 		 * Find and append settings from each provider.
@@ -131,8 +124,8 @@ class Settings {
 
 		wp_enqueue_script(
 			'social-planner-settings',
-			SOCIAL_PLANNER_URL . '/assets/settings.min.js',
-			array(),
+			SOCIAL_PLANNER_URL . '/assets/scripts/settings.min.js',
+			array( 'wp-i18n' ),
 			SOCIAL_PLANNER_VERSION,
 			true
 		);

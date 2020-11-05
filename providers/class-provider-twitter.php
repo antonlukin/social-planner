@@ -42,7 +42,7 @@ class Provider_Twitter {
 		$helper = sprintf(
 			wp_kses(
 				// translators: %s is a link for current provider help guide.
-				__( 'Read the <a href="%s" target="_blank">help guide</a> for configuring Telegram provider.', 'social-planner' ),
+				__( 'Read the <a href="%s" target="_blank">help guide</a> for configuring Twitter provider.', 'social-planner' ),
 				array(
 					'a' => array(
 						'href'   => array(),
@@ -61,23 +61,35 @@ class Provider_Twitter {
 	 */
 	public static function get_fields() {
 		$fields = array(
-			'title' => array(
-				'label' => __( 'Название', 'social-planner' ),
-				'hint'  => __( 'Используется только для вашего удобства. Может быть любым.', 'social-planner' ),
+			'title'         => array(
+				'label' => __( 'Title', 'social-planner' ),
+				'hint'  => __( 'Used only for your convenience. It can be anything.', 'social-planner' ),
 			),
 
-			'token' => array(
-				'label'       => __( 'Токен бота', 'social-planner' ),
-				'placeholder' => '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11',
+			'api_key'       => array(
+				'label' => __( 'API key', 'social-planner' ),
 			),
 
-			'group' => array(
-				'label' => __( 'ID группы или канала', 'social-planner' ),
+			'api_secret'    => array(
+				'label' => __( 'API secret key', 'social-planner' ),
 			),
 
-			'link'  => array(
-				'label' => __( 'Ссылка на канал', 'social-planner' ),
-				'hint'  => __( 'Необязательное поле. Используется для формирования ссылки на сообщение.', 'social-planner' ),
+			'access_token'  => array(
+				'label' => __( 'Access token', 'social-planner' ),
+			),
+
+			'access_secret' => array(
+				'label' => __( 'Access token secret', 'social-planner' ),
+			),
+
+			'access_secret' => array(
+				'label' => __( 'Access token secret', 'social-planner' ),
+			),
+
+			'link'          => array(
+				'label'       => __( 'Profile link', 'social-planner' ),
+				'placeholder' => __( 'https:/twitter.com/npv' ),
+				'hint'        => __( 'Optional field. Used to show link to published entry.', 'social-planner' ),
 			),
 		);
 
