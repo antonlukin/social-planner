@@ -1,0 +1,102 @@
+#social-planner-settings {
+  display: block;
+}
+
+#social-planner-settings .social-planner-wrapper {
+  display: block;
+  box-sizing: border-box;
+
+  width: 100%;
+  max-width: 680px;
+
+  margin-top: 20px;
+}
+
+#social-planner-settings .social-planner-header {
+  display: block;
+
+  width: 100%;
+  max-width: 680px;
+
+  margin: 10px 0;
+}
+
+#social-planner-settings .social-planner-hint {
+  display: block;
+  margin: 12px 0;
+}
+
+#social-planner-settings .social-planner-network {
+  display: block;
+  position: relative;
+
+  margin: 0 0 15px;
+  padding: 12px 10px;
+
+  background-color: #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+
+  border: 1px solid #ccd0d4;
+  border-radius: 4px;
+}
+
+#social-planner-settings .social-planner-network h3 {
+  display: block;
+
+  margin: 0;
+  padding-right: 20px;
+
+  font-size: 16px;
+}
+
+#social-planner-settings .social-planner-option {
+  display: block;
+
+  width: 100%;
+  margin: 14px 0 0;
+}
+
+#social-planner-settings .social-planner-option > strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+#social-planner-settings .social-planner-option > input {
+  display: block;
+  width: 100%;
+}
+
+#social-planner-settings .social-planner-remove {
+  display: block;
+  cursor: pointer;
+
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  padding: 0;
+  font-size: 18px;
+
+  color: #a00;
+  background: transparent;
+
+  border: none;
+}
+
+#social-planner-settings .social-planner-append {
+  display: block;
+  margin: 20px 0;
+}
+
+#social-planner-settings .social-planner-append select {
+  min-width: 200px;
+  margin-right: 8px;
+}
+
+.social-planner-manage {
+  margin-top: 16px;
+}
+
+#social-planner-settings .submit {
+  padding: 0;
+}
