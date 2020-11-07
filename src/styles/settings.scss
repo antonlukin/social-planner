@@ -1,14 +1,26 @@
 #social-planner-settings {
   display: block;
 
-  .social-planner-wrapper {
+  .social-planner-providers {
     display: block;
     box-sizing: border-box;
 
     width: 100%;
     max-width: 680px;
-
     margin-top: 20px;
+
+    &.updated .social-planner-submit {
+      display: block;
+    }
+  }
+
+  .social-planner-submit {
+    display: none;
+  }
+
+  .social-planner-warning {
+    display: block;
+    color: #a00;
   }
 
   .social-planner-header {
@@ -16,8 +28,14 @@
 
     width: 100%;
     max-width: 680px;
-
     margin: 10px 0;
+  }
+
+  .social-planner-addnew {
+    display: block;
+
+    width: 100%;
+    max-width: 680px;
   }
 
   .social-planner-helper {
@@ -25,27 +43,80 @@
     margin: 12px 0;
   }
 
-  .social-planner-network {
+  .social-planner-provider {
     display: block;
     position: relative;
 
     margin: 0 0 15px;
-    padding: 12px 10px;
+    padding: 10px 10px;
 
     background-color: #fff;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
 
     border: 1px solid #ccd0d4;
     border-radius: 4px;
+
+    &.collapsed {
+      cursor: pointer;
+
+      .social-planner-heading {
+        &::after {
+          transform: rotate(180deg);
+        }
+      }
+
+      .social-planner-helper {
+        display: none;
+      }
+
+      .social-planner-field {
+        display: none;
+      }
+
+      .social-planner-remover {
+        display: none;
+      }
+    }
   }
 
-  .social-planner-network h3 {
+  .social-planner-heading {
     display: block;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
 
-    margin: 0;
-    padding-right: 20px;
+    margin: -10px;
+    padding: 12px 10px;
+    padding-right: 30px;
 
     font-size: 16px;
+    font-weight: 600;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    span {
+      color: #666;
+    }
+
+    &::after {
+      content: "\f343";
+
+      position: absolute;
+      top: 12px;
+      right: 12px;
+
+      font-family: dashicons;
+      font-size: 18px;
+
+      color: #777;
+      transition: color 0.25s, transform 0.25s;
+    }
+
+    &:hover::after {
+      color: #0073aa;
+    }
   }
 
   .social-planner-field {
@@ -63,32 +134,46 @@
       display: block;
       width: 100%;
     }
+
+    small {
+      display: block;
+
+      margin-top: 4px;
+      line-height: 1.5;
+    }
   }
 
   .social-planner-remover {
     display: block;
     cursor: pointer;
+    outline: 1px dotted transparent;
 
-    position: absolute;
-    top: 10px;
-    right: 10px;
-
+    margin: 16px 0 8px;
     padding: 0;
-    font-size: 18px;
 
     color: #a00;
     background: transparent;
-
     border: none;
+    border-bottom: solid 1px;
+
+    transition: border 0.125s;
+
+    &:hover {
+      border-color: transparent;
+    }
   }
 
-  .social-planner-append {
+  .social-planner-addnew {
     display: block;
     margin: 20px 0;
 
     select {
       min-width: 200px;
       margin-right: 8px;
+
+      @media screen and (max-width: 479px) {
+        min-width: auto;
+      }
     }
   }
 

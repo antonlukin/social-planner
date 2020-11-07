@@ -1,6 +1,6 @@
 <?php
 /**
- * Telegram provider for Social Planner plugin
+ * Telegram network handler for Social Planner plugin
  *
  * @package social-planner
  * @author  Anton Lukin
@@ -13,13 +13,13 @@ namespace Social_Planner;
  *
  * @since 1.0.0
  */
-class Provider_Telegram {
+class Network_Telegram {
 	/**
-	 * Unique provider slug.
+	 * Unique network slug.
 	 *
 	 * @var string
 	 */
-	const PROVIDER_NAME = 'telegram';
+	const NETWORK_NAME = 'telegram';
 
 	/**
 	 * Settings helper link.
@@ -29,19 +29,19 @@ class Provider_Telegram {
 	const HELPER_LINK = 'http://example.com';
 
 	/**
-	 * Return human-readable provider label
+	 * Return human-readable network label
 	 */
 	public static function get_label() {
-		return _x( 'Telegram', 'provider label', 'social-planner' );
+		return _x( 'Telegram', 'network label', 'social-planner' );
 	}
 
 	/**
-	 * Get provider helper link
+	 * Get network helper link
 	 */
 	public static function get_helper() {
 		$helper = sprintf(
 			wp_kses(
-				// translators: %s is a link for current provider help guide.
+				// translators: %s is a link for current network help guide.
 				__( 'Read the <a href="%s" target="_blank">help guide</a> for configuring Telegram provider.', 'social-planner' ),
 				array(
 					'a' => array(
@@ -57,15 +57,10 @@ class Provider_Telegram {
 	}
 
 	/**
-	 * Return provider required settings fields
+	 * Return network required settings fields
 	 */
 	public static function get_fields() {
 		$fields = array(
-			'title' => array(
-				'label' => __( 'Title', 'social-planner' ),
-				'hint'  => __( 'Used only for your convenience. It can be anything.', 'social-planner' ),
-			),
-
 			'token' => array(
 				'label'       => __( 'Bot token', 'social-planner' ),
 				'placeholder' => '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11',
@@ -75,10 +70,15 @@ class Provider_Telegram {
 				'label' => __( 'Channel or group ID', 'social-planner' ),
 			),
 
+			'title' => array(
+				'label' => __( 'Subtitle', 'social-planner' ),
+				'hint'  => __( 'Optional field. Used as an subtitle if there are multiple Telegram providers.', 'social-planner' ),
+			),
+
 			'link'  => array(
-				'label'       => __( 'Channel link', 'social-planner' ),
-				'placeholder' => __( 'https:/t.me/devup' ),
-				'hint'        => __( 'Optional field. Used to show link to published entry.', 'social-planner' ),
+				'label'       => __( 'Public link', 'social-planner' ),
+				'placeholder' => __( 'https://t.me/devup' ),
+				'hint'        => __( 'Optional field. Used to display a link to a published post.', 'social-planner' ),
 			),
 		);
 

@@ -17,11 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Core {
 	/**
-	 * Store list of publishing providers.
+	 * Store list of publishing networks.
 	 *
 	 * @var array
 	 */
-	public static $providers = array();
+	public static $networks = array();
 
 	/**
 	 * Entry point of core class.
@@ -34,40 +34,40 @@ class Core {
 	 * Init required plugin classes.
 	 */
 	public static function init_classes() {
-		self::get_providers();
+		self::get_networks();
 
 		// Init settings class.
 		Settings::add_hooks();
 	}
 
 	/**
-	 * Parse list of providers with its name as key and class as value.
+	 * Parse list of networks with its name as key and class as value.
 	 */
-	public static function get_providers() {
-		$providers = array(
-			'Social_Planner\Provider_Telegram' => SOCIAL_PLANNER_DIR . '/providers/class-provider-telegram.php',
-			'Social_Planner\Provider_Twitter'  => SOCIAL_PLANNER_DIR . '/providers/class-provider-twitter.php',
+	public static function get_networks() {
+		$networks = array(
+			'Social_Planner\Network_Telegram' => SOCIAL_PLANNER_DIR . '/networks/class-network-telegram.php',
+			'Social_Planner\Network_Twitter'  => SOCIAL_PLANNER_DIR . '/networks/class-network-twitter.php',
 		);
 
 		/**
-		 * Filter publishing providers.
-		 * This lets third-parties either remove providers or their own
+		 * Filter publishing networks.
+		 * This lets third-parties either remove networks or their own
 		 *
-		 * @param array $providers A key-value array with class name key and path to the file as value
+		 * @param array $networks A key-value array with class name key and path to the file as value
 		 */
-		$providers = apply_filters( 'social_planner_providers', $providers );
+		$networks = apply_filters( 'social_planner_networks', $networks );
 
 		/**
-		 * For each filtered provider
+		 * For each filtered network
 		 */
-		foreach ( $providers as $class => $path ) {
+		foreach ( $networks as $class => $path ) {
 			include_once $path;
 
 			/**
-			 * Add class to providers list with its name as key.
+			 * Add class to networks list with its name as key.
 			 */
-			if ( defined( "$class::PROVIDER_NAME" ) ) {
-				self::$providers[ $class::PROVIDER_NAME ] = $class;
+			if ( defined( "$class::NETWORK_NAME" ) ) {
+				self::$networks[ $class::NETWORK_NAME ] = $class;
 			}
 		}
 	}

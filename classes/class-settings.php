@@ -31,17 +31,25 @@ class Settings {
 	const PAGE = 'social-planner';
 
 	/**
-	 * Social planner options name.
+	 * Social planner providers options group.
 	 *
 	 * @var string
 	 */
-	const OPTION_NAME = 'social_planner_settings';
+	const GROUP_PROVIDERS = 'social_planner_providers';
+
+	/**
+	 * Social planner providers options name.
+	 *
+	 * @var string
+	 */
+	const OPTION_PROVIDERS = 'social_planner_providers';
 
 	/**
 	 * Add hooks for settings page.
 	 */
 	public static function add_hooks() {
 		add_action( 'admin_menu', array( __CLASS__, 'add_menu' ) );
+		add_action( 'admin_init', array( __CLASS__, 'init_settings' ) );
 
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
@@ -62,7 +70,7 @@ class Settings {
 	}
 
 	/**
-	 * Show plugin settings
+	 * Show plugin settings.
 	 */
 	public static function display_settings() {
 		if ( ! self::is_options_screen() ) {
@@ -70,6 +78,13 @@ class Settings {
 		}
 
 		include_once SOCIAL_PLANNER_DIR . '/templates/settings.php';
+	}
+
+	/**
+	 * Init settings page.
+	 */
+	public static function init_settings() {
+		register_setting( self::GROUP_PROVIDERS, self::OPTION_PROVIDERS );
 	}
 
 	/**
@@ -97,12 +112,14 @@ class Settings {
 			return;
 		}
 
-		$object = array();
+		$object = array(
+			'option' => self::OPTION_PROVIDERS,
+		);
 
 		/**
-		 * Find and append settings from each provider.
+		 * Find and append settings from each network.
 		 */
-		foreach ( Core::$providers as $name => $class ) {
+		foreach ( Core::$networks as $name => $class ) {
 			if ( ! method_exists( $class, 'get_fields' ) ) {
 				continue;
 			}
@@ -111,16 +128,19 @@ class Settings {
 				continue;
 			}
 
-			// Add required provder fields.
+			// Add required network fields.
 			$object['fields'][ $name ] = $class::get_fields();
 
-			// Add required provider label.
+			// Add required network label.
 			$object['labels'][ $name ] = $class::get_label();
 
 			if ( method_exists( $class, 'get_helper' ) ) {
 				$object['helpers'][ $name ] = $class::get_helper();
 			}
 		}
+
+		// Append list of providers from options.
+		$object['providers'] = get_option( self::OPTION_PROVIDERS, array() );
 
 		wp_enqueue_script(
 			'social-planner-settings',

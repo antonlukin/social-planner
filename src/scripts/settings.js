@@ -1,5 +1,5 @@
 ( function( ) {
-	const { __, _x, _n, _nx } = wp.i18n;
+	const { __ } = wp.i18n;
 
 	let screen = document.getElementById( 'social-planner-settings' );
 
@@ -14,20 +14,24 @@
 
 	let settings = socialPlannerSettings;
 
-	// Check required settings.
-	if ( ! settings.labels || ! settings.fields ) {
-		return;
-	}
+	/**
+	 * Show warning message.
+	 */
+	const showWarning = ( parent, message ) => {
+		let warning = document.createElement( 'p' );
+		warning.classList.add( 'social-planner-warning' );
+		warning.textContent = message;
 
-	let wrapper = screen.querySelector( '.social-planner-wrapper' );
+		parent.appendChild( warning );
+	};
 
 	/**
-	 * Create network field.
+	 * Create provider settings field.
 	 */
-	const createField = ( key, args, network ) => {
+	const createField = ( args, provider ) => {
 		let field = document.createElement( 'div' );
 		field.classList.add( 'social-planner-field' );
-		network.appendChild( field );
+		provider.appendChild( field );
 
 		let title = document.createElement( 'strong' );
 		title.textContent = args.label;
@@ -47,91 +51,189 @@
 		if ( args.hint ) {
 			hint.innerHTML = args.hint;
 		}
-	};
 
-	const removeNetwork = ( network ) => {
-		network.remove();
+		return field;
 	};
 
 	/**
-	 * Append empty network to list.
+	 * Prepend provider to list.
 	 */
-	const appendNetwork = ( name, label ) => {
-		let network = document.createElement( 'div' );
-		network.classList.add( 'social-planner-network' );
-		wrapper.appendChild( network );
+	const prependProvider = ( list, network, index, data ) => {
+		let provider = document.createElement( 'div' );
+		provider.classList.add( 'social-planner-provider' );
+		list.insertBefore( provider, list.lastChild );
 
-		// Create network heading.
-		let heading = document.createElement( 'h3' );
-		heading.textContent = __( 'Provider settings: ', 'social-planner' ) + label;
-		network.appendChild( heading );
+		// Collapse provider if it exists.
+		if ( data ) {
+			provider.classList.add( 'collapsed' );
+		}
 
-		// Create delete icon.
-		let remover = document.createElement( 'button' );
-		remover.classList.add( 'social-planner-remover', 'dashicons', 'dashicons-trash' );
-		remover.setAttribute( 'type', 'button' );
-		network.appendChild( remover );
+		data = data || [];
 
-		// Trigger on network remover button click.
-		remover.addEventListener( 'click', ( e ) => {
+		// Set list not empty class.
+		list.classList.add( 'updated' );
+
+		// Find label in settings by network.
+		let label = settings.labels[network] || '';
+
+		// Create provider heading.
+		let heading = document.createElement( 'div' );
+		heading.classList.add( 'social-planner-heading' );
+		heading.textContent = label + ' ' + __( 'settings', 'social-planner' );
+		provider.appendChild( heading );
+
+		// Create heading explainer.
+		let explainer = document.createElement( 'span' );
+		heading.appendChild( explainer );
+
+		if ( data.title ) {
+			explainer.textContent = ': ' + data.title;
+		}
+
+		// Trigger on heading click.
+		heading.addEventListener( 'click', ( e ) => {
 			e.preventDefault();
 
-			removeNetwork( network );
+			provider.classList.toggle( 'collapsed' );
 		});
 
 		// Create helper text.
 		let helper = document.createElement( 'div' );
 		helper.classList.add( 'social-planner-helper' );
 
-		if ( settings.helpers.hasOwnProperty( name ) ) {
-			helper.innerHTML = settings.helpers[name];
-			network.appendChild( helper );
+		settings.helpers = settings.helpers || [];
+
+		if ( settings.helpers.hasOwnProperty( network ) ) {
+			helper.innerHTML = settings.helpers[network];
+			provider.appendChild( helper );
 		}
 
-		let fields = settings.fields[name] || [];
+		if ( ! settings.fields ) {
+			settings.fields = [];
+		}
 
+		let fields = settings.fields[network] || [];
+
+		// Create fields.
 		for ( let key in fields ) {
-			createField( key, fields[ key ], network );
+			let field = createField( fields[ key ], provider );
+
+			// Find input.
+			let input = field.querySelector( 'input' );
+
+			// Create field name attribute.
+			let name = '[' + network + '-' + index + '][' + key + ']';
+
+			// Set input name attribute.
+			input.setAttribute( 'name', settings.option + name );
+
+			if ( data.hasOwnProperty( key ) ) {
+				input.value = data[key];
+			}
 		}
+
+		// Create delete button.
+		let remover = document.createElement( 'button' );
+		remover.classList.add( 'social-planner-remover' );
+		remover.setAttribute( 'type', 'button' );
+		remover.textContent = __( 'Delete provider', 'social-planner' );
+		provider.appendChild( remover );
+
+		// Trigger on provider remover button click.
+		remover.addEventListener( 'click', ( e ) => {
+			e.preventDefault();
+
+			removeProvider( provider );
+		});
 	};
 
 	/**
 	 * Create and return main providers selector.
 	 */
-	const createSelector = ( wrapper ) => {
-		let append = document.createElement( 'div' );
-		append.classList.add( 'social-planner-append' );
-		wrapper.appendChild( append );
+	const createSelector = ( list ) => {
+		let addnew = document.createElement( 'div' );
+		addnew.classList.add( 'social-planner-addnew' );
+		list.appendChild( addnew );
 
 		let select = document.createElement( 'select' );
-		append.appendChild( select );
+		addnew.appendChild( select );
 
-		for ( name in settings.labels ) {
+		for ( let network in settings.labels ) {
 			let option = document.createElement( 'option' );
-			option.textContent = settings.labels[name];
-			option.value = name;
+			option.textContent = settings.labels[network];
+			option.value = network;
 
 			select.appendChild( option );
 		}
 
 		let button = document.createElement( 'button' );
 		button.classList.add( 'button' );
-		button.textContent = __( 'Add network', 'social-planner' );
-		append.appendChild( button );
+		button.setAttribute( 'type', 'button' );
+		button.textContent = __( 'Add provider', 'social-planner' );
+		addnew.appendChild( button );
 
-		// Trigger on append button click.
+		// Trigger on addnew button click.
 		button.addEventListener( 'click', ( e ) => {
 			e.preventDefault();
 
-			// Get selected option text content.
-			let label = select.options[select.selectedIndex].text;
+			// Generate unique provider index;
+			let index = ( new Date().getTime() ).toString( 16 );
 
-			appendNetwork( select.value, label );
+			prependProvider( list, select.value, index );
 		});
 
-		return button;
 	};
 
-	let selector = createSelector( wrapper );
+	/**
+	 * Create submit button
+	 */
+	const createSubmit = ( list ) => {
+		let submit = document.createElement( 'button' );
+		submit.classList.add( 'social-planner-submit', 'button', 'button-primary' );
+		submit.setAttribute( 'type', 'submit' );
+		submit.textContent = __( 'Save changes', 'social-planner' );
 
+		list.appendChild( submit );
+	};
+
+	const removeProvider = ( provider ) => {
+		provider.remove();
+	};
+
+	/**
+	 * Append settings form initial elements.
+	 */
+	const initProvidersForm = () => {
+		let list = screen.querySelector( '.social-planner-providers' );
+
+		// Check required settings.
+		if ( ! settings.option || ! settings.labels ) {
+			let message = __( 'Providers settings are not formatted correctly', 'social-planner' );
+
+			return showWarning( list, message );
+		}
+
+		// Add list selector.
+		createSelector( list );
+
+		// Add submit list button.
+		createSubmit( list );
+
+		for ( let key in settings.providers ) {
+			let match = key.match( /(.+)-(\w+)$/ ) || [];
+
+			if ( 3 > match.length ) {
+				continue;
+			}
+
+			let data = settings.providers[key];
+
+			// Use destructuring assignment on match.
+			let [ , network, index ] = match;
+
+			prependProvider( list, network, index, data );
+		}
+	};
+
+	return initProvidersForm();
 }() );

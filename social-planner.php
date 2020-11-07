@@ -4,10 +4,10 @@
  *
  * Plugin Name: Social planner
  * Plugin URI: https://github.com/antonlukin/social-planner
- * Description:
+ * Description: This plugin automatically publishes posts from your blog to your social media accounts on Facebook, Twitter, VK.com, Telegram.
  * Author: Anton Lukin
- * Author URI: https://profiles.wordpress.org/antonlukin/
- * Requires at least: 4.9
+ * Author URI: https://lukin.me
+ * Requires at least: 5.0
  * Tested up to: 5.5
  * Version: 1.0.0
  *

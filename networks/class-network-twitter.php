@@ -1,6 +1,6 @@
 <?php
 /**
- * Twitter provider for Social Planner plugin
+ * Twitter network handler for Social Planner plugin
  *
  * @package social-planner
  * @author  Anton Lukin
@@ -13,13 +13,13 @@ namespace Social_Planner;
  *
  * @since 1.0.0
  */
-class Provider_Twitter {
+class Network_Twitter {
 	/**
-	 * Unique provider slug.
+	 * Unique network slug.
 	 *
 	 * @var string
 	 */
-	const PROVIDER_NAME = 'twitter';
+	const NETWORK_NAME = 'twitter';
 
 	/**
 	 * Settings helper link.
@@ -29,19 +29,19 @@ class Provider_Twitter {
 	const HELPER_LINK = 'http://example.com';
 
 	/**
-	 * Return human-readable provider label
+	 * Return human-readable network label
 	 */
 	public static function get_label() {
 		return _x( 'Twitter', 'provider label', 'social-planner' );
 	}
 
 	/**
-	 * Get provider helper link
+	 * Get network helper link
 	 */
 	public static function get_helper() {
 		$helper = sprintf(
 			wp_kses(
-				// translators: %s is a link for current provider help guide.
+				// translators: %s is a link for current network help guide.
 				__( 'Read the <a href="%s" target="_blank">help guide</a> for configuring Twitter provider.', 'social-planner' ),
 				array(
 					'a' => array(
@@ -57,15 +57,10 @@ class Provider_Twitter {
 	}
 
 	/**
-	 * Return provider required settings fields
+	 * Return network required settings fields
 	 */
 	public static function get_fields() {
 		$fields = array(
-			'title'         => array(
-				'label' => __( 'Title', 'social-planner' ),
-				'hint'  => __( 'Used only for your convenience. It can be anything.', 'social-planner' ),
-			),
-
 			'api_key'       => array(
 				'label' => __( 'API key', 'social-planner' ),
 			),
@@ -86,9 +81,14 @@ class Provider_Twitter {
 				'label' => __( 'Access token secret', 'social-planner' ),
 			),
 
+			'title'         => array(
+				'label' => __( 'Subtitle', 'social-planner' ),
+				'hint'  => __( 'Optional field. Used as an subtitle if there are multiple Telegram providers.', 'social-planner' ),
+			),
+
 			'link'          => array(
 				'label'       => __( 'Profile link', 'social-planner' ),
-				'placeholder' => __( 'https:/twitter.com/npv' ),
+				'placeholder' => __( 'https://twitter.com/npv' ),
 				'hint'        => __( 'Optional field. Used to show link to published entry.', 'social-planner' ),
 			),
 		);
