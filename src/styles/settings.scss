@@ -1,3 +1,5 @@
+@import "includes/mixins";
+
 #social-planner-settings {
   display: block;
 
@@ -31,7 +33,7 @@
     margin: 10px 0;
   }
 
-  .social-planner-addnew {
+  .social-planner-append {
     display: block;
 
     width: 100%;
@@ -73,7 +75,7 @@
         display: none;
       }
 
-      .social-planner-remover {
+      .social-planner-remove {
         display: none;
       }
     }
@@ -143,7 +145,7 @@
     }
   }
 
-  .social-planner-remover {
+  .social-planner-remove {
     display: block;
     cursor: pointer;
     outline: 1px dotted transparent;
@@ -158,12 +160,16 @@
 
     transition: border 0.125s;
 
+    &:focus {
+      @include link-focus;
+    }
+
     &:hover {
       border-color: transparent;
     }
   }
 
-  .social-planner-addnew {
+  .social-planner-append {
     display: block;
     margin: 20px 0;
 

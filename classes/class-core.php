@@ -38,6 +38,9 @@ class Core {
 
 		// Init settings class.
 		Settings::add_hooks();
+
+		// Init metabox class.
+		Metabox::add_hooks();
 	}
 
 	/**

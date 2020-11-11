@@ -62,15 +62,18 @@ class Network_Twitter {
 	public static function get_fields() {
 		$fields = array(
 			'api_key'       => array(
-				'label' => __( 'API key', 'social-planner' ),
+				'label'    => __( 'API key', 'social-planner' ),
+				'required' => true,
 			),
 
 			'api_secret'    => array(
-				'label' => __( 'API secret key', 'social-planner' ),
+				'label'    => __( 'API secret key', 'social-planner' ),
+				'required' => true,
 			),
 
 			'access_token'  => array(
-				'label' => __( 'Access token', 'social-planner' ),
+				'label'    => __( 'Access token', 'social-planner' ),
+				'required' => true,
 			),
 
 			'access_secret' => array(
@@ -78,7 +81,8 @@ class Network_Twitter {
 			),
 
 			'access_secret' => array(
-				'label' => __( 'Access token secret', 'social-planner' ),
+				'label'    => __( 'Access token secret', 'social-planner' ),
+				'required' => true,
 			),
 
 			'title'         => array(

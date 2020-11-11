@@ -16,6 +16,7 @@ namespace Social_Planner;
 class Network_Telegram {
 	/**
 	 * Unique network slug.
+	 * Use latin alphanumeric characters and underscore only.
 	 *
 	 * @var string
 	 */
@@ -64,10 +65,12 @@ class Network_Telegram {
 			'token' => array(
 				'label'       => __( 'Bot token', 'social-planner' ),
 				'placeholder' => '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11',
+				'required'    => true,
 			),
 
 			'group' => array(
-				'label' => __( 'Channel or group ID', 'social-planner' ),
+				'label'    => __( 'Channel or group ID', 'social-planner' ),
+				'required' => true,
 			),
 
 			'title' => array(

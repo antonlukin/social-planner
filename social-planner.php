@@ -57,6 +57,11 @@ require_once SOCIAL_PLANNER_DIR . '/classes/class-core.php';
 require_once SOCIAL_PLANNER_DIR . '/classes/class-settings.php';
 
 /**
+ * Include metabox handler.
+ */
+require_once SOCIAL_PLANNER_DIR . '/classes/class-metabox.php';
+
+/**
  * Start with core plugin method.
  */
 Core::add_hooks();

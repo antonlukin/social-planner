@@ -1,4 +1,8 @@
 ( function( ) {
+	if ( 'undefined' === typeof wp ) {
+		return;
+	}
+
 	const { __ } = wp.i18n;
 
 	let screen = document.getElementById( 'social-planner-settings' );
@@ -12,7 +16,7 @@
 		return;
 	}
 
-	let settings = socialPlannerSettings;
+	let config = socialPlannerSettings;
 
 	/**
 	 * Show warning message.
@@ -41,6 +45,10 @@
 		input.setAttribute( 'type', 'text' );
 		field.appendChild( input );
 
+		if ( args.required ) {
+			input.setAttribute( 'required', 'required' );
+		}
+
 		if ( args.placeholder ) {
 			input.setAttribute( 'placeholder', args.placeholder );
 		}
@@ -56,12 +64,12 @@
 	};
 
 	/**
-	 * Prepend provider to list.
+	 * Append provider to form.
 	 */
-	const prependProvider = ( list, network, index, data ) => {
+	const appendProvider = ( form, network, index, data ) => {
 		let provider = document.createElement( 'div' );
 		provider.classList.add( 'social-planner-provider' );
-		list.insertBefore( provider, list.lastChild );
+		form.insertBefore( provider, form.lastChild );
 
 		// Collapse provider if it exists.
 		if ( data ) {
@@ -70,11 +78,11 @@
 
 		data = data || [];
 
-		// Set list not empty class.
-		list.classList.add( 'updated' );
+		// Set form not empty class.
+		form.classList.add( 'updated' );
 
-		// Find label in settings by network.
-		let label = settings.labels[network] || '';
+		// Find label in config by network.
+		let label = config.labels[network] || '';
 
 		// Create provider heading.
 		let heading = document.createElement( 'div' );
@@ -101,18 +109,18 @@
 		let helper = document.createElement( 'div' );
 		helper.classList.add( 'social-planner-helper' );
 
-		settings.helpers = settings.helpers || [];
+		config.helpers = config.helpers || [];
 
-		if ( settings.helpers.hasOwnProperty( network ) ) {
-			helper.innerHTML = settings.helpers[network];
+		if ( config.helpers.hasOwnProperty( network ) ) {
+			helper.innerHTML = config.helpers[network];
 			provider.appendChild( helper );
 		}
 
-		if ( ! settings.fields ) {
-			settings.fields = [];
+		if ( ! config.fields ) {
+			config.fields = [];
 		}
 
-		let fields = settings.fields[network] || [];
+		let fields = config.fields[network] || [];
 
 		// Create fields.
 		for ( let key in fields ) {
@@ -125,22 +133,22 @@
 			let name = '[' + network + '-' + index + '][' + key + ']';
 
 			// Set input name attribute.
-			input.setAttribute( 'name', settings.option + name );
+			input.setAttribute( 'name', config.option + name );
 
 			if ( data.hasOwnProperty( key ) ) {
 				input.value = data[key];
 			}
 		}
 
-		// Create delete button.
-		let remover = document.createElement( 'button' );
-		remover.classList.add( 'social-planner-remover' );
-		remover.setAttribute( 'type', 'button' );
-		remover.textContent = __( 'Delete provider', 'social-planner' );
-		provider.appendChild( remover );
+		// Create remove button.
+		let remove = document.createElement( 'button' );
+		remove.classList.add( 'social-planner-remove' );
+		remove.setAttribute( 'type', 'button' );
+		remove.textContent = __( 'Delete provider', 'social-planner' );
+		provider.appendChild( remove );
 
-		// Trigger on provider remover button click.
-		remover.addEventListener( 'click', ( e ) => {
+		// Trigger on provider remove button click.
+		remove.addEventListener( 'click', ( e ) => {
 			e.preventDefault();
 
 			removeProvider( provider );
@@ -150,17 +158,17 @@
 	/**
 	 * Create and return main providers selector.
 	 */
-	const createSelector = ( list ) => {
-		let addnew = document.createElement( 'div' );
-		addnew.classList.add( 'social-planner-addnew' );
-		list.appendChild( addnew );
+	const createAppend = ( form ) => {
+		let append = document.createElement( 'div' );
+		append.classList.add( 'social-planner-append' );
+		form.appendChild( append );
 
 		let select = document.createElement( 'select' );
-		addnew.appendChild( select );
+		append.appendChild( select );
 
-		for ( let network in settings.labels ) {
+		for ( let network in config.labels ) {
 			let option = document.createElement( 'option' );
-			option.textContent = settings.labels[network];
+			option.textContent = config.labels[network];
 			option.value = network;
 
 			select.appendChild( option );
@@ -170,70 +178,69 @@
 		button.classList.add( 'button' );
 		button.setAttribute( 'type', 'button' );
 		button.textContent = __( 'Add provider', 'social-planner' );
-		addnew.appendChild( button );
 
-		// Trigger on addnew button click.
-		button.addEventListener( 'click', ( e ) => {
-			e.preventDefault();
+		// Trigger on append button click.
+		button.addEventListener( 'click', () => {
 
 			// Generate unique provider index;
 			let index = ( new Date().getTime() ).toString( 16 );
 
-			prependProvider( list, select.value, index );
+			appendProvider( form, select.value, index );
 		});
 
+		append.appendChild( button );
 	};
 
 	/**
 	 * Create submit button
 	 */
-	const createSubmit = ( list ) => {
+	const createSubmit = ( form ) => {
 		let submit = document.createElement( 'button' );
 		submit.classList.add( 'social-planner-submit', 'button', 'button-primary' );
 		submit.setAttribute( 'type', 'submit' );
 		submit.textContent = __( 'Save changes', 'social-planner' );
 
-		list.appendChild( submit );
+		form.appendChild( submit );
 	};
 
 	const removeProvider = ( provider ) => {
-		provider.remove();
+		provider.parentNode.removeChild( provder );
 	};
 
 	/**
 	 * Append settings form initial elements.
 	 */
 	const initProvidersForm = () => {
-		let list = screen.querySelector( '.social-planner-providers' );
+		let form = screen.querySelector( '.social-planner-providers' );
 
 		// Check required settings.
-		if ( ! settings.option || ! settings.labels ) {
+		if ( ! config.option || ! config.labels ) {
 			let message = __( 'Providers settings are not formatted correctly', 'social-planner' );
 
-			return showWarning( list, message );
+			return showWarning( form, message );
 		}
 
-		// Add list selector.
-		createSelector( list );
+		// Add form append.
+		createAppend( form );
 
-		// Add submit list button.
-		createSubmit( list );
+		// Add submit form button.
+		createSubmit( form );
 
-		for ( let key in settings.providers ) {
+		for ( let key in config.providers ) {
 			let match = key.match( /(.+)-(\w+)$/ ) || [];
 
 			if ( 3 > match.length ) {
 				continue;
 			}
 
-			let data = settings.providers[key];
+			let data = config.providers[key];
 
 			// Use destructuring assignment on match.
 			let [ , network, index ] = match;
 
-			prependProvider( list, network, index, data );
+			appendProvider( form, network, index, data );
 		}
 	};
 
-	return initProvidersForm();
+	initProvidersForm();
 }() );

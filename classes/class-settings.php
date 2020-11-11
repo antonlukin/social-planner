@@ -51,6 +51,7 @@ class Settings {
 		add_action( 'admin_menu', array( __CLASS__, 'add_menu' ) );
 		add_action( 'admin_init', array( __CLASS__, 'init_settings' ) );
 
+		// Add required assets and objects.
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
 	}
@@ -73,7 +74,7 @@ class Settings {
 	 * Show plugin settings.
 	 */
 	public static function display_settings() {
-		if ( ! self::is_options_screen() ) {
+		if ( ! self::is_settings_screen() ) {
 			return;
 		}
 
@@ -91,7 +92,7 @@ class Settings {
 	 * Enqueue settings styles.
 	 */
 	public static function enqueue_styles() {
-		if ( ! self::is_options_screen() ) {
+		if ( ! self::is_settings_screen() ) {
 			return;
 		}
 
@@ -108,17 +109,36 @@ class Settings {
 	 * Enqueue settings scripts.
 	 */
 	public static function enqueue_scripts() {
-		if ( ! self::is_options_screen() ) {
+		if ( ! self::is_settings_screen() ) {
 			return;
 		}
 
+		wp_enqueue_script(
+			'social-planner-settings',
+			SOCIAL_PLANNER_URL . '/assets/scripts/settings.min.js',
+			array( 'wp-i18n' ),
+			SOCIAL_PLANNER_VERSION,
+			true
+		);
+
+		wp_localize_script( 'social-planner-settings', 'socialPlannerSettings', self::create_script_object() );
+	}
+
+	/**
+	 * Get options from database.
+	 */
+	public static function get_providers() {
+		return get_option( self::OPTION_PROVIDERS, array() );
+	}
+
+	/**
+	 * Create scripts object to inject on settings page.
+	 */
+	private static function create_script_object() {
 		$object = array(
 			'option' => self::OPTION_PROVIDERS,
 		);
 
-		/**
-		 * Find and append settings from each network.
-		 */
 		foreach ( Core::$networks as $name => $class ) {
 			if ( ! method_exists( $class, 'get_fields' ) ) {
 				continue;
@@ -140,17 +160,14 @@ class Settings {
 		}
 
 		// Append list of providers from options.
-		$object['providers'] = get_option( self::OPTION_PROVIDERS, array() );
+		$object['providers'] = self::get_providers();
 
-		wp_enqueue_script(
-			'social-planner-settings',
-			SOCIAL_PLANNER_URL . '/assets/scripts/settings.min.js',
-			array( 'wp-i18n' ),
-			SOCIAL_PLANNER_VERSION,
-			true
-		);
-
-		wp_localize_script( 'social-planner-settings', 'socialPlannerSettings', $object );
+		/**
+		 * Filter settings scripts object.
+		 *
+		 * @param array $object Array of settings scripts object.
+		 */
+		return apply_filters( 'social_planner_settings_object', $object );
 	}
 
 	/**
@@ -158,7 +175,7 @@ class Settings {
 	 *
 	 * @return bool
 	 */
-	private static function is_options_screen() {
+	private static function is_settings_screen() {
 		$current_screen = get_current_screen();
 
 		if ( $current_screen && self::SCREEN_ID === $current_screen->id ) {
