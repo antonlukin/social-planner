@@ -1,28 +1,32 @@
-( function( ) {
+( function () {
 	if ( 'undefined' === typeof wp ) {
 		return;
 	}
 
 	const { __ } = wp.i18n;
 
-	let metabox = document.querySelector( '#social-planner-metabox > .inside' );
+	const metabox = document.querySelector(
+		'#social-planner-metabox > .inside'
+	);
 
 	// Stop if settings element not exists.
 	if ( null === metabox ) {
 		return;
 	}
 
-	if ( 'undefined' === typeof socialPlannerMetabox ) {
+	if ( 'undefined' === typeof window.socialPlannerMetabox ) {
 		return;
 	}
 
-	let config = socialPlannerMetabox;
+	const config = window.socialPlannerMetabox;
 
 	/**
 	 * Show warning message.
+	 *
+	 * @param {string} message Error text message.
 	 */
 	const showWarning = ( message ) => {
-		let warning = document.createElement( 'p' );
+		const warning = document.createElement( 'p' );
 		warning.classList.add( 'social-planner-warning' );
 		warning.textContent = message;
 
@@ -30,39 +34,49 @@
 	};
 
 	/**
-	 * Create task snippet poster
+	 * Create task snippet poster.
+	 *
+	 * @param {HTMLElement} parent Snippet DOM element.
+	 * @param {Object} args Field settings.
 	 */
-	const createPoster = ( snippet ) => {
+	const createPoster = ( parent, args ) => {
 		if ( ! wp.media ) {
 			return;
 		}
 
-		let poster = document.createElement( 'figure' );
+		const poster = document.createElement( 'figure' );
 		poster.classList.add( 'social-planner-poster' );
-		snippet.appendChild( poster );
+		parent.appendChild( poster );
 
-		let input = document.createElement( 'input' );
+		// Create hidden input with attachment id.
+		const input = document.createElement( 'input' );
 		input.setAttribute( 'type', 'hidden' );
+		input.setAttribute( 'name', args.name + '[attachment]' );
 		poster.appendChild( input );
 
-		// Create image object.
-		let image = document.createElement( 'img' );
-
-		let choose = document.createElement( 'button' );
+		// Create choose button.
+		const choose = document.createElement( 'button' );
 		choose.classList.add( 'choose' );
 		choose.setAttribute( 'type', 'button' );
 		choose.textContent = '+';
 		poster.appendChild( choose );
 
+		// Create image object.
+		const image = document.createElement( 'img' );
+
 		// Choose button listener.
 		choose.addEventListener( 'click', () => {
-			let frame = wp.media({
+			const frame = wp.media( {
 				title: __( 'Choose poster image', 'social-planner' ),
-				multiple: false
-			});
+				multiple: false,
+			} );
 
 			frame.on( 'select', () => {
-				var selection = frame.state().get( 'selection' ).first().toJSON();
+				let selection = frame
+					.state()
+					.get( 'selection' )
+					.first()
+					.toJSON();
 
 				// Set hidden inputs values
 				input.value = selection.id;
@@ -73,15 +87,14 @@
 				}
 
 				image.setAttribute( 'src', selection.url );
-
-				// Insert image.
 				poster.insertBefore( image, choose );
-			});
+			} );
 
 			frame.open();
-		});
+		} );
 
-		let remove = document.createElement( 'button' );
+		// Create revemo button.
+		const remove = document.createElement( 'button' );
 		remove.classList.add( 'remove' );
 		remove.setAttribute( 'type', 'button' );
 		poster.appendChild( remove );
@@ -90,109 +103,151 @@
 		remove.addEventListener( 'click', ( e ) => {
 			e.stopPropagation();
 
-			input.value = '';
-
-			// Remove image.
 			poster.removeChild( image );
-		});
+			input.value = '';
+		} );
 
 		return poster;
 	};
 
 	/**
-	 * Create task snippet.
+	 * Create task snippet poster.
+	 *
+	 * @param {HTMLElement} parent Parent DOM element.
+	 * @param {Object} args Field settings.
 	 */
-	const createSnippet = ( task ) => {
-		let snippet = document.createElement( 'div' );
+	const createSnippet = ( parent, args ) => {
+		const snippet = document.createElement( 'div' );
 		snippet.classList.add( 'social-planner-snippet' );
-		task.appendChild( snippet );
+		parent.appendChild( snippet );
 
-		let excerpt = document.createElement( 'textarea' );
+		const excerpt = document.createElement( 'textarea' );
 		excerpt.classList.add( 'social-planner-excerpt' );
-		excerpt.setAttribute( 'placeholder', __( 'Social networks summary', 'social-planner' ) );
+		excerpt.setAttribute(
+			'placeholder',
+			__( 'Social networks summary', 'social-planner' )
+		);
+		excerpt.setAttribute( 'name', args.name + '[excerpt]' );
 		snippet.appendChild( excerpt );
 
-		let poster = createPoster( snippet );
-
-		return snippet;
+		createPoster( snippet, args );
 	};
 
 	/**
 	 * Create non-publihsed target.
+	 *
+	 * @param {HTMLElement} parent Parent DOM element.
+	 * @param {string} label Target label.
 	 */
-	const createTargetCheck = ( key, label, targets ) => {
-		let check = document.createElement( 'label' );
+	const createTargetCheck = ( parent, label ) => {
+		const check = document.createElement( 'label' );
 		check.classList.add( 'social-planner-check' );
-		targets.append( check );
+		parent.append( check );
 
-		let input = document.createElement( 'input' );
+		const input = document.createElement( 'input' );
 		input.setAttribute( 'type', 'checkbox' );
 		check.appendChild( input );
 
-		let span = document.createElement( 'span' );
+		const span = document.createElement( 'span' );
 		span.textContent = label;
 		check.appendChild( span );
+
+		return check;
 	};
 
 	/**
 	 * Append task.
+	 *
+	 * @param {HTMLElement} parent List DOM element.
+	 * @param {Object} args Task settings object.
 	 */
-	const appendTask = ( list ) => {
-		let task = document.createElement( 'div' );
+	const appendTask = ( parent, args ) => {
+		const task = document.createElement( 'div' );
 		task.classList.add( 'social-planner-task' );
-		list.appendChild( task );
+		parent.appendChild( task );
 
-		let targets = document.createElement( 'div' );
+		const targets = document.createElement( 'div' );
 		targets.classList.add( 'social-planner-targets' );
 		task.appendChild( targets );
 
-		for ( let key in config.labels ) {
-			createTargetCheck( key, config.labels[key], targets );
+		for ( const key in config.providers ) {
+			const provider = config.providers[ key ];
+
+			if ( ! provider.label ) {
+				continue;
+			}
+
+			const check = createTargetCheck( targets, provider.label );
+
+			const input = check.querySelector( 'input' );
+			input.setAttribute( 'name', args.name + '[targets][]' );
+			input.value = key;
 		}
 
-		let remove = document.createElement( 'button' );
+		const remove = document.createElement( 'button' );
 		remove.classList.add( 'social-planner-remove' );
 		remove.setAttribute( 'type', 'button' );
 		task.appendChild( remove );
 
 		remove.addEventListener( 'click', () => {
-			list.removeChild( task );
+			parent.removeChild( task );
+		} );
 
-			// Show at least one task.
-			if ( 1 > list.children.length ) {
-				appendTask( list );
-			}
-		});
+		createSnippet( task, args );
+	};
 
-		let snippet = createSnippet( task );
+	/**
+	 * Create button to append new task.
+	 *
+	 * @param {HTMLElement} list Parent DOM Element
+	 */
+	const createAppend = ( list ) => {
+		const append = document.createElement( 'button' );
+		append.classList.add( 'social-planner-append', 'button' );
+		append.setAttribute( 'type', 'button' );
+		append.textContent = __( 'Add task', 'social-planner' );
+
+		append.addEventListener( 'click', () => {
+			// Generate unique task index;
+			const index = new Date().getTime().toString( 16 );
+
+			appendTask( list, {
+				name: config.meta + '[' + index + ']',
+			} );
+		} );
+
+		metabox.appendChild( append );
 	};
 
 	/**
 	 * Create tasks list.
 	 */
 	const initMetabox = () => {
-		let list = document.createElement( 'div' );
+		const list = document.createElement( 'div' );
 		list.classList.add( 'social-planner-list' );
 		metabox.appendChild( list );
 
-		let append = document.createElement( 'button' );
-		append.classList.add( 'social-planner-append', 'button' );
-		append.setAttribute( 'type', 'button' );
-		append.textContent = __( 'Add task', 'social-planner' );
+		if ( ! config.meta || ! config.providers ) {
+			return showWarning(
+				__(
+					'You need to configure providers on the plugin settings page.',
+					'social-planner'
+				)
+			);
+		}
 
-		append.addEventListener( 'click', () => {
-			appendTask( list );
-		});
+		config.tasks = config.tasks || {};
 
-		metabox.appendChild( append );
+		// Add append button.
+		createAppend( metabox );
 
-		// TODO: Remove.
-		appendTask( list );
+		for ( const index in config.tasks ) {
+			appendTask( list, {
+				data: config.tasks[ index ],
+				name: config.meta + '[' + index + ']',
+			} );
+		}
 	};
 
-	if ( ! config.labels ) {
-		return showWarning( __( 'You need to configure providers on the plugin settings page.', 'social-planner' ) );
-	}
-
 	initMetabox();
-}() );
+} )();

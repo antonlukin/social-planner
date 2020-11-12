@@ -140,23 +140,24 @@ class Settings {
 		);
 
 		foreach ( Core::$networks as $name => $class ) {
-			if ( ! method_exists( $class, 'get_fields' ) ) {
-				continue;
-			}
-
-			if ( ! method_exists( $class, 'get_label' ) ) {
-				continue;
-			}
+			$network = array();
 
 			// Add required network fields.
-			$object['fields'][ $name ] = $class::get_fields();
+			if ( method_exists( $class, 'get_fields' ) ) {
+				$network['fields'] = $class::get_fields();
+			}
 
 			// Add required network label.
-			$object['labels'][ $name ] = $class::get_label();
-
-			if ( method_exists( $class, 'get_helper' ) ) {
-				$object['helpers'][ $name ] = $class::get_helper();
+			if ( method_exists( $class, 'get_label' ) ) {
+				$network['label'] = $class::get_label();
 			}
+
+			// Add network helper.
+			if ( method_exists( $class, 'get_helper' ) ) {
+				$network['helper'] = $class::get_helper();
+			}
+
+			$object['networks'][ $name ] = $network;
 		}
 
 		// Append list of providers from options.

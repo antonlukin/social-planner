@@ -31,6 +31,11 @@ class Metabox {
 	const META_PROVIDERS = '_social_planner_providers';
 
 	/**
+	 * Metabox nonce field
+	 */
+	const METABOX_NONCE = 'social_planner_metabox_nonce';
+
+	/**
 	 * Add hooks for settings page.
 	 */
 	public static function add_hooks() {
@@ -39,6 +44,9 @@ class Metabox {
 		// Add required assets and objects.
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
+
+		// Save metabox.
+		add_action( 'save_post', array( __CLASS__, 'save_metabox' ), 10, 2 );
 	}
 
 	/**
@@ -63,7 +71,40 @@ class Metabox {
 			esc_html__( 'This metabox requires JavaScript. Enable it in your browser settings, please.', 'social-planner' ),
 		);
 
-		wp_nonce_field( 'social_planner_metabox', 'social_planner_metabox_nonce' );
+		wp_nonce_field( 'metabox', self::METABOX_NONCE );
+	}
+
+	/**
+	 * Save metabox fields.
+	 *
+	 * @param int     $post_id Post ID.
+	 * @param WP_Post $post    Post object.
+	 */
+	public static function save_metabox( $post_id, $post ) {
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		if ( empty( $_POST[ self::METABOX_NONCE ] ) ) {
+			return;
+		}
+
+		if ( ! wp_verify_nonce( sanitize_key( $_POST[ self::METABOX_NONCE ] ), 'metabox' ) ) {
+			return;
+		}
+
+		if ( empty( $_REQUEST[ self::META_PROVIDERS ] ) ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+
+		$items = $_REQUEST[ self::META_PROVIDERS ];
+
+		// Update post meta.
+		update_post_meta( $post_id, self::META_PROVIDERS, $items );
 	}
 
 	/**
@@ -125,14 +166,21 @@ class Metabox {
 	 * Create scripts object to inject on settings page.
 	 */
 	private static function create_script_object() {
+		global $post;
+
 		$object = array(
 			'meta' => self::META_PROVIDERS,
 		);
 
-		// Get providers settings.
-		$providers = Settings::get_providers();
+		// Append tasks from post meta to object.
+		$object['tasks'] = get_post_meta( $post->ID, self::META_PROVIDERS, true );
 
-		foreach ( $providers as $key => $provider ) {
+		// Get providers settings.
+		$settings = Settings::get_providers();
+
+		foreach ( $settings as $key => $setting ) {
+			$provider = array();
+
 			// Parse index and network from provider key.
 			preg_match( '/^(.+)-(\w+)$/', $key, $matches );
 
@@ -143,17 +191,23 @@ class Metabox {
 			// Find class by network name.
 			$class = Core::$networks[ $matches[1] ];
 
-			if ( ! method_exists( $class, 'get_label' ) ) {
-				continue;
+			// Append provider label.
+			if ( method_exists( $class, 'get_label' ) ) {
+				$label = $class::get_label();
+
+				if ( $setting['title'] ) {
+					$label = $label . ': ' . $setting['title'];
+				}
+
+				$provider['label'] = esc_attr( $label );
 			}
 
-			$label = $class::get_label();
-
-			if ( $provider['title'] ) {
-				$label = $label . ': ' . $provider['title'];
+			// Append message limit.
+			if ( method_exists( $class, 'get_limit' ) ) {
+				$provider['limit'] = absint( $class::get_limit() );
 			}
 
-			$object['labels'][ $key ] = esc_attr( $label );
+			$object['providers'][ $key ] = $provider;
 		}
 
 		/**

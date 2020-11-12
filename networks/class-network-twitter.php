@@ -9,7 +9,7 @@
 namespace Social_Planner;
 
 /**
- * Telegram Social Planner class
+ * Twitter Social Planner class
  *
  * @since 1.0.0
  */
@@ -33,6 +33,19 @@ class Network_Twitter {
 	 */
 	public static function get_label() {
 		return _x( 'Twitter', 'provider label', 'social-planner' );
+	}
+
+	/**
+	 * Get message limit.
+	 */
+	public static function get_limit() {
+		/**
+		 * Filter twitter message limit.
+		 * Subtracting a few characters for the link and break line.
+		 *
+		 * @param int $limit Twitter message limit.
+		 */
+		return apply_filters( 'social_planner_twitter_limit', 255 );
 	}
 
 	/**
@@ -87,7 +100,7 @@ class Network_Twitter {
 
 			'title'         => array(
 				'label' => __( 'Subtitle', 'social-planner' ),
-				'hint'  => __( 'Optional field. Used as an subtitle if there are multiple Telegram providers.', 'social-planner' ),
+				'hint'  => __( 'Optional field. Used as an subtitle if there are multiple Twitter providers.', 'social-planner' ),
 			),
 
 			'link'          => array(
