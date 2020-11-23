@@ -66,6 +66,8 @@ class Metabox {
 	 * Show plugin settings.
 	 */
 	public static function display_metabox() {
+		do_action( 'social_planner_metabox_before' );
+
 		printf(
 			'<p class="hide-if-js">%s</p>',
 			esc_html__( 'This metabox requires JavaScript. Enable it in your browser settings, please.', 'social-planner' ),
@@ -85,7 +87,7 @@ class Metabox {
 			return;
 		}
 
-		if ( empty( $_POST[ self::METABOX_NONCE ] ) ) {
+		if ( ! isset( $_POST[ self::METABOX_NONCE ] ) ) {
 			return;
 		}
 
@@ -93,18 +95,60 @@ class Metabox {
 			return;
 		}
 
-		if ( empty( $_REQUEST[ self::META_PROVIDERS ] ) ) {
-			return;
-		}
-
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
 			return;
 		}
 
-		$items = $_REQUEST[ self::META_PROVIDERS ];
+		if ( ! isset( $_POST[ self::META_PROVIDERS ] ) ) {
+			return;
+		}
 
-		// Update post meta.
-		update_post_meta( $post_id, self::META_PROVIDERS, $items );
+		$tasks = array();
+
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$items = (array) wp_unslash( $_POST[ self::META_PROVIDERS ] );
+
+		foreach ( $items as $key => $item ) {
+			$task = array();
+
+			// Sanitize the task key.
+			$key = sanitize_key( $key );
+
+			if ( ! empty( $item['targets'] ) ) {
+				$task['targets'] = array_map( 'sanitize_key', $item['targets'] );
+			}
+
+			if ( ! empty( $item['excerpt'] ) ) {
+				$task['excerpt'] = sanitize_textarea_field( $item['excerpt'] );
+			}
+
+			if ( ! empty( $item['thumbnail'] ) ) {
+				$task['thumbnail'] = sanitize_text_field( $item['thumbnail'] );
+			}
+
+			if ( ! empty( $item['preview'] ) ) {
+				$task['preview'] = absint( $item['preview'] );
+			}
+
+			if ( ! empty( $item['attachment'] ) ) {
+				$task['attachment'] = absint( $item['attachment'] );
+			}
+
+			$tasks[ $key ] = $task;
+		}
+
+		// Remove empty tasks.
+		$tasks = array_filter( $tasks );
+
+		/**
+		 * Filter tasks while saving metabox.
+		 *
+		 * @param array $tasks List of tasks.
+		 */
+		$tasks = apply_filters( 'social_planner_save_tasks', $tasks );
+
+		// Update post meta with sanitized tasks.
+		update_post_meta( $post_id, self::META_PROVIDERS, $tasks );
 	}
 
 	/**
@@ -170,10 +214,18 @@ class Metabox {
 
 		$object = array(
 			'meta' => self::META_PROVIDERS,
+			'time' => current_time( 'H:i' ),
 		);
+
+		if ( 'future' === get_post_status( $post->ID ) ) {
+			$object['delay'] = $post->post_date;
+		}
 
 		// Append tasks from post meta to object.
 		$object['tasks'] = get_post_meta( $post->ID, self::META_PROVIDERS, true );
+
+		// Append dates options for calendar select box.
+		$object['calendar'] = self::get_calendar_days();
 
 		// Get providers settings.
 		$settings = Settings::get_providers();
@@ -241,5 +293,36 @@ class Metabox {
 		 * @param array $post_types Array of post types for which the metabox is displayed.
 		 */
 		return apply_filters( 'social_planner_post_types', $post_types );
+	}
+
+	/**
+	 * Get a list of localized nearest dates.
+	 *
+	 * @return array
+	 */
+	private static function get_calendar_days() {
+		$options = array();
+
+		// Get current local site timestamp.
+		$current_time = strtotime( current_time( 'mysql' ) );
+
+		/**
+		 * Filter number of future days in schedule select box.
+		 *
+		 * @param int $days_count Number of days in task calendar select box.
+		 */
+		$days_number = apply_filters( 'social_planner_calendar_days', 20 );
+
+		for ( $i = 0; $i < $days_number; $i++ ) {
+			$future_time = strtotime( "+ $i days", $current_time );
+
+			// Generate future date as option key.
+			$future_date = date_i18n( 'Y-m-d', $future_time );
+
+			// Generate future date title as value.
+			$options[ $future_date ] = date_i18n( 'j F, l', $future_time );
+		}
+
+		return $options;
 	}
 }

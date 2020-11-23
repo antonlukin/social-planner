@@ -51,9 +51,35 @@ class Settings {
 		add_action( 'admin_menu', array( __CLASS__, 'add_menu' ) );
 		add_action( 'admin_init', array( __CLASS__, 'init_settings' ) );
 
+		// Add settings link to plugins list.
+		add_filter( 'plugin_action_links', array( __CLASS__, 'add_settings_link' ), 10, 2 );
+
 		// Add required assets and objects.
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
+
+		// Sanitize options before save.
+		add_action( 'pre_update_option', array( __CLASS__, 'sanitize_option' ), 10, 2 );
+	}
+
+	/**
+	 * Add settings link to plugins list.
+	 *
+	 * @param array  $actions     An array of plugin action links.
+	 * @param string $plugin_file Path to the plugin file relative to the plugins directory.
+	 */
+	public static function add_settings_link( $actions, $plugin_file ) {
+		$actions = (array) $actions;
+
+		if ( plugin_basename( SOCIAL_PLANNER_FILE ) === $plugin_file ) {
+			$actions[] = sprintf(
+				'<a href="%s">%s</a>',
+				admin_url( 'options-general.php?page=' . self::PAGE ),
+				__( 'Settings', 'social-planner' ),
+			);
+		}
+
+		return $actions;
 	}
 
 	/**
@@ -169,6 +195,29 @@ class Settings {
 		 * @param array $object Array of settings scripts object.
 		 */
 		return apply_filters( 'social_planner_settings_object', $object );
+	}
+
+	/**
+	 * Filters an option before its value is (maybe) serialized and updated.
+	 *
+	 * @param mixed  $value  The new, unserialized option value.
+	 * @param string $option Option name.
+	 * @return array
+	 */
+	public static function sanitize_option( $value, $option ) {
+		if ( self::OPTION_PROVIDERS !== $option ) {
+			return $value;
+		}
+
+		foreach ( $value as $key => $item ) {
+			// Sanitize task key.
+			$key = sanitize_key( $key );
+
+			// Sanitize post fields.
+			$new_value[ $key ] = array_map( 'sanitize_text_field', $item );
+		}
+
+		return $new_value;
 	}
 
 	/**

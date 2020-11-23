@@ -79,7 +79,7 @@ class Network_Telegram {
 			),
 
 			'link'  => array(
-				'label'       => __( 'Public link', 'social-planner' ),
+				'label'       => __( 'Public Telegram link', 'social-planner' ),
 				'placeholder' => __( 'https://t.me/devup' ),
 				'hint'        => __( 'Optional field. Used to display a link to a published post.', 'social-planner' ),
 			),

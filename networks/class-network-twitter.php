@@ -104,7 +104,7 @@ class Network_Twitter {
 			),
 
 			'link'          => array(
-				'label'       => __( 'Profile link', 'social-planner' ),
+				'label'       => __( 'Your Twitter URL', 'social-planner' ),
 				'placeholder' => __( 'https://twitter.com/npv' ),
 				'hint'        => __( 'Optional field. Used to show link to published entry.', 'social-planner' ),
 			),

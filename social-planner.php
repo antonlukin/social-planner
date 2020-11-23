@@ -37,6 +37,11 @@ define( 'SOCIAL_PLANNER_VERSION', '1.0.0' );
 define( 'SOCIAL_PLANNER_SLUG', 'social-planner' );
 
 /**
+ * Main plugin file.
+ */
+define( 'SOCIAL_PLANNER_FILE', __FILE__ );
+
+/**
  * Shortcut constant to the path of this file.
  */
 define( 'SOCIAL_PLANNER_DIR', dirname( __FILE__ ) );

@@ -36,12 +36,10 @@
 	/**
 	 * Create provider settings field.
 	 *
-	 * @param {Object} args Field settings.
 	 * @param {HTMLElement} provider Parent DOM element.
-	 *
-	 * @type {HTMLElement}
+	 * @param {Object} args Field settings.
 	 */
-	const createField = ( args, provider ) => {
+	const createField = ( provider, args ) => {
 		const field = document.createElement( 'div' );
 		field.classList.add( 'social-planner-field' );
 		provider.appendChild( field );
@@ -75,23 +73,23 @@
 	/**
 	 * Append provider to form.
 	 *
-	 * @param {HTMLElement} form Form DOM element.
+	 * @param {HTMLElement} parent Form DOM element.
 	 * @param {Object} args Provider settings object.
 	 */
-	const appendProvider = ( form, args ) => {
+	const appendProvider = ( parent, args ) => {
 		const provider = document.createElement( 'div' );
 		provider.classList.add( 'social-planner-provider' );
-		form.insertBefore( provider, form.lastChild );
+		parent.insertBefore( provider, parent.lastChild );
 
 		// Collapse provider if it exists.
 		if ( args.data ) {
-			provider.classList.add( 'collapsed' );
+			provider.classList.add( 'is-collapsed' );
 		}
 
 		args.data = args.data || {};
 
 		// Set form not empty class to show submit button.
-		form.classList.add( 'updated' );
+		parent.classList.add( 'updated' );
 
 		// Find label in config by network.
 		const label = args.network.label || __( 'Provider', 'social-planner' );
@@ -114,7 +112,7 @@
 		heading.addEventListener( 'click', ( e ) => {
 			e.preventDefault();
 
-			provider.classList.toggle( 'collapsed' );
+			provider.classList.toggle( 'is-collapsed' );
 		} );
 
 		// Create helper text.
@@ -134,7 +132,7 @@
 
 		// Create fields.
 		for ( const key in fields ) {
-			const field = createField( fields[ key ], provider );
+			const field = createField( provider, fields[ key ] );
 
 			// Find input.
 			const input = field.querySelector( 'input' );
@@ -163,12 +161,12 @@
 	/**
 	 * Create and return main providers selector.
 	 *
-	 * @param {HTMLElement} form Parent DOM element.
+	 * @param {HTMLElement} parent Form DOM element.
 	 */
-	const createAppend = ( form ) => {
+	const createAppend = ( parent ) => {
 		const append = document.createElement( 'div' );
 		append.classList.add( 'social-planner-append' );
-		form.appendChild( append );
+		parent.appendChild( append );
 
 		const select = document.createElement( 'select' );
 		append.appendChild( select );
@@ -199,7 +197,7 @@
 			// Generate name using network and index.
 			const name = '[' + select.value + '-' + index + ']';
 
-			appendProvider( form, {
+			appendProvider( parent, {
 				name: config.option + name,
 				network: config.networks[ select.value ],
 			} );
@@ -211,9 +209,9 @@
 	/**
 	 * Create submit button
 	 *
-	 * @param {HTMLElement} form Parent DOM element.
+	 * @param {HTMLElement} parent Form DOM element.
 	 */
-	const createSubmit = ( form ) => {
+	const createSubmit = ( parent ) => {
 		const submit = document.createElement( 'button' );
 		submit.classList.add(
 			'social-planner-submit',
@@ -223,7 +221,7 @@
 		submit.setAttribute( 'type', 'submit' );
 		submit.textContent = __( 'Save changes', 'social-planner' );
 
-		form.appendChild( submit );
+		parent.appendChild( submit );
 	};
 
 	/**
