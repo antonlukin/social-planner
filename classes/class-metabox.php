@@ -24,11 +24,11 @@ class Metabox {
 	const METABOX_ID = 'social-planner-metabox';
 
 	/**
-	 * Social planner providers options name.
+	 * Social planner tasks post meta name.
 	 *
 	 * @var string
 	 */
-	const META_PROVIDERS = '_social_planner_providers';
+	const META_TASKS = '_social_planner_tasks';
 
 	/**
 	 * Metabox nonce field
@@ -99,14 +99,14 @@ class Metabox {
 			return;
 		}
 
-		if ( ! isset( $_POST[ self::META_PROVIDERS ] ) ) {
+		if ( ! isset( $_POST[ self::META_TASKS ] ) ) {
 			return;
 		}
 
 		$tasks = array();
 
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-		$items = (array) wp_unslash( $_POST[ self::META_PROVIDERS ] );
+		$items = (array) wp_unslash( $_POST[ self::META_TASKS ] );
 
 		foreach ( $items as $key => $item ) {
 			$task = array();
@@ -148,7 +148,7 @@ class Metabox {
 		$tasks = apply_filters( 'social_planner_save_tasks', $tasks );
 
 		// Update post meta with sanitized tasks.
-		update_post_meta( $post_id, self::META_PROVIDERS, $tasks );
+		update_post_meta( $post_id, self::META_TASKS, $tasks );
 	}
 
 	/**
@@ -213,54 +213,20 @@ class Metabox {
 		global $post;
 
 		$object = array(
-			'meta' => self::META_PROVIDERS,
-			'time' => current_time( 'H:i' ),
+			'meta' => self::META_TASKS,
 		);
 
-		if ( 'future' === get_post_status( $post->ID ) ) {
-			$object['delay'] = $post->post_date;
-		}
-
 		// Append tasks from post meta to object.
-		$object['tasks'] = get_post_meta( $post->ID, self::META_PROVIDERS, true );
+		$object['tasks'] = get_post_meta( $post->ID, self::META_TASKS, true );
+
+		// Append time offset.
+		$object['offset'] = self::get_time_offset();
 
 		// Append dates options for calendar select box.
 		$object['calendar'] = self::get_calendar_days();
 
-		// Get providers settings.
-		$settings = Settings::get_providers();
-
-		foreach ( $settings as $key => $setting ) {
-			$provider = array();
-
-			// Parse index and network from provider key.
-			preg_match( '/^(.+)-(\w+)$/', $key, $matches );
-
-			if ( empty( $matches ) ) {
-				continue;
-			}
-
-			// Find class by network name.
-			$class = Core::$networks[ $matches[1] ];
-
-			// Append provider label.
-			if ( method_exists( $class, 'get_label' ) ) {
-				$label = $class::get_label();
-
-				if ( $setting['title'] ) {
-					$label = $label . ': ' . $setting['title'];
-				}
-
-				$provider['label'] = esc_attr( $label );
-			}
-
-			// Append message limit.
-			if ( method_exists( $class, 'get_limit' ) ) {
-				$provider['limit'] = absint( $class::get_limit() );
-			}
-
-			$object['providers'][ $key ] = $provider;
-		}
+		// Append availble providers and their settings.
+		$object['providers'] = self::get_providers();
 
 		/**
 		 * Filter metabox scripts object.
@@ -303,8 +269,8 @@ class Metabox {
 	private static function get_calendar_days() {
 		$options = array();
 
-		// Get current local site timestamp.
-		$current_time = strtotime( current_time( 'mysql' ) );
+		// Get current server local timestamp.
+		$current_time = date_i18n( 'U' );
 
 		/**
 		 * Filter number of future days in schedule select box.
@@ -324,5 +290,65 @@ class Metabox {
 		}
 
 		return $options;
+	}
+
+	/**
+	 * Parse and return providers settings.
+	 *
+	 * @return array
+	 */
+	private static function get_providers() {
+		$providers = array();
+
+		// Get providers list from options.
+		$settings = Settings::get_providers();
+
+		foreach ( $settings as $key => $setting ) {
+			// Parse index and network from provider key.
+			preg_match( '/^(.+)-(\w+)$/', $key, $matches );
+
+			if ( empty( $matches ) ) {
+				continue;
+			}
+
+			// Find class by network name.
+			$class = Core::$networks[ $matches[1] ];
+
+			// Append provider label.
+			if ( method_exists( $class, 'get_label' ) ) {
+				$label = $class::get_label();
+
+				if ( $setting['title'] ) {
+					$label = $label . ': ' . $setting['title'];
+				}
+
+				$providers[ $key ]['label'] = esc_attr( $label );
+			}
+
+			// Append message limit.
+			if ( method_exists( $class, 'get_limit' ) ) {
+				$providers[ $key ]['limit'] = absint( $class::get_limit() );
+			}
+		}
+
+		return $providers;
+	}
+
+	/**
+	 * Get time offset.
+	 *
+	 * Time offset in seconds between UTC and server time.
+	 * It will be used in admin-side metabox to choose the time for planning.
+	 * Can be filtered to add your own preferred publish delay offset.
+	 *
+	 * @return int
+	 */
+	private static function get_time_offset() {
+		$offset = timezone_offset_get( wp_timezone(), date_create( 'now' ) );
+
+		/**
+		 * Filter time offset in seconds from UTC.
+		 */
+		return apply_filters( 'social_planner_time_offset', $offset );
 	}
 }

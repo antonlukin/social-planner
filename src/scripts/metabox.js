@@ -36,9 +36,27 @@
 	/**
 	 * Return current time in H:i format.
 	 */
-	const getClientTime = () => {
+	const getServerTime = () => {
+		let timestamp = Date.now();
+
+		if ( config.offset ) {
+			config.offset = parseInt( config.offset );
+
+			if ( ! isNaN( config.offset ) ) {
+				const offset = new Date().getTimezoneOffset();
+
+				// Get UTC timestamp.
+				const UTC = timestamp + offset * 60 * 1000;
+
+				// Update timestamp with server offset
+				timestamp = new Date( UTC + config.offset * 1000 );
+			}
+		}
+
 		const time = {};
-		const date = new Date();
+
+		// Get datetime using server timestamp.
+		const date = new Date( timestamp );
 
 		const hour = date.getHours();
 		time.hour = ( '0' + hour ).slice( -2 );
@@ -56,14 +74,7 @@
 	 * @param {Object} args Field settings.
 	 */
 	const createTime = ( parent, args ) => {
-		const time = getClientTime();
-
-		if ( config.time ) {
-			const match = config.time.split( /:/ );
-
-			time.hour = match[ 0 ];
-			time.minute = match[ 1 ];
-		}
+		const time = getServerTime();
 
 		const hour = document.createElement( 'input' );
 		hour.setAttribute( 'type', 'text' );
@@ -272,41 +283,42 @@
 		parent.appendChild( scheduler );
 
 		// Create delay select.
-		const delay = document.createElement( 'select' );
-		delay.setAttribute( 'name', args.name + '[delay]' );
-		scheduler.appendChild( delay );
+		const date = document.createElement( 'select' );
+		date.setAttribute( 'name', args.name + '[date]' );
+		scheduler.appendChild( date );
 
 		const time = document.createElement( 'div' );
 		time.classList.add( 'social-planner-time' );
 		scheduler.appendChild( time );
 
-		createTime( time, args );
-
-		// Create default option
+		// Create default option.
 		createOption(
-			delay,
+			date,
 			__( 'Do not send automatically', 'social-planner' )
 		);
 
-		// Create non-calendar option
+		// Create send immediately option.
 		createOption(
-			delay,
-			__( 'Send immediately', 'social-planner' ),
+			date,
+			__( 'Publish immediately', 'social-planner' ),
 			'now'
 		);
 
 		config.calendar = config.calendar || {};
 
 		for ( const name in config.calendar ) {
-			createOption( delay, config.calendar[ name ], name );
+			createOption( date, config.calendar[ name ], name );
 		}
 
-		delay.addEventListener( 'change', () => {
-			time.classList.remove( 'is-visible' );
+		date.addEventListener( 'change', () => {
+			// Remove time element children.
+			while ( time.firstChild ) {
+				time.removeChild( time.lastChild );
+			}
 
 			// Show time only if the date.
-			if ( delay.value && delay.value !== 'now' ) {
-				time.classList.add( 'is-visible' );
+			if ( date.value && date.value !== 'now' ) {
+				createTime( time, args );
 			}
 		} );
 	};
@@ -419,7 +431,7 @@
 	 * @param {Object} args Task settings object.
 	 */
 	const appendTask = ( parent, args ) => {
-		const task = document.createElement( 'div' );
+		const task = document.createElement( 'fieldset' );
 		task.classList.add( 'social-planner-task' );
 		parent.appendChild( task );
 
