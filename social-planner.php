@@ -7,7 +7,7 @@
  * Description: This plugin automatically publishes posts from your blog to your social media accounts on Facebook, Twitter, VK.com, Telegram.
  * Author: Anton Lukin
  * Author URI: https://lukin.me
- * Requires at least: 5.0
+ * Requires at least: 5.3
  * Tested up to: 5.5
  * Version: 1.0.0
  *
@@ -60,6 +60,11 @@ require_once SOCIAL_PLANNER_DIR . '/classes/class-core.php';
  * Include settings handler.
  */
 require_once SOCIAL_PLANNER_DIR . '/classes/class-settings.php';
+
+/**
+ * Include scheduler class.
+ */
+require_once SOCIAL_PLANNER_DIR . '/classes/class-scheduler.php';
 
 /**
  * Include metabox handler.

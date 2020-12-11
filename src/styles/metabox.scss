@@ -117,18 +117,40 @@
     display: flex;
     flex-flow: row wrap;
     align-items: center;
+    cursor: default;
+
+    min-height: 40px;
     margin-top: 10px;
 
     select {
       margin: 5px 10px 5px 0;
     }
 
-    button {
-      margin: 5px 0;
+    strong {
+      margin: 0 5px;
+    }
+
+    .button-link {
+      margin: 0 5px;
     }
 
     .spinner {
       margin-top: 0;
+    }
+  }
+
+  .social-planner-clock {
+    display: block;
+    color: #888;
+
+    margin-right: 5px;
+
+    &::after {
+      content: "\f469";
+      display: block;
+
+      font-family: dashicons;
+      font-size: 20px;
     }
   }
 
@@ -281,7 +303,7 @@
     order: 2;
     user-select: none;
 
-    margin-top: 15px;
+    margin-top: 10px;
     margin-left: auto;
 
     input {
@@ -292,6 +314,7 @@
       order: 0;
 
       width: 100%;
+      margin-top: 15px;
       margin-left: 0;
     }
   }

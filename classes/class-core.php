@@ -41,6 +41,9 @@ class Core {
 
 		// Init metabox class.
 		Metabox::add_hooks();
+
+		// Init scheduler class.
+		Scheduler::add_hooks();
 	}
 
 	/**

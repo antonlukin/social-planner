@@ -1,3 +1,8 @@
+/**
+ * Metabox script handler.
+ */
+/* global ajaxurl:true */
+
 ( function () {
 	if ( 'undefined' === typeof wp ) {
 		return;
@@ -23,62 +28,65 @@
 	/**
 	 * Show warning message.
 	 *
+	 * @param {HTMLElement} parent Parent DOM element.
 	 * @param {string} message Error text message.
 	 */
-	const showWarning = ( message ) => {
+	const showWarning = ( parent, message ) => {
 		const warning = document.createElement( 'p' );
 		warning.classList.add( 'social-planner-warning' );
 		warning.textContent = message;
 
-		metabox.appendChild( warning );
+		while ( parent.firstChild ) {
+			parent.removeChild( parent.firstChild );
+		}
+
+		parent.appendChild( warning );
 	};
 
 	/**
-	 * Return current time in H:i format.
+	 * Return Date object with server timezone.
+	 *
+	 * @param {number} timestamp Optional timestamp.
 	 */
-	const getServerTime = () => {
-		let timestamp = Date.now();
+	const getServerDate = ( timestamp ) => {
+		timestamp = timestamp || Date.now();
 
-		if ( config.offset ) {
-			config.offset = parseInt( config.offset );
+		// Set default config offset.
+		config.offset = parseInt( config.offset ) || 0;
 
-			if ( ! isNaN( config.offset ) ) {
-				const offset = new Date().getTimezoneOffset();
+		// Get client timezone offset.
+		const timezone = new Date().getTimezoneOffset();
 
-				// Get UTC timestamp.
-				const UTC = timestamp + offset * 60 * 1000;
+		// Get UTC timestamp with timezone offset.
+		const UTC = Date.now() + timezone * 60 * 1000;
 
-				// Update timestamp with server offset
-				timestamp = new Date( UTC + config.offset * 1000 );
-			}
-		}
+		// Update timestamp with server offset.
+		timestamp = new Date( UTC + config.offset * 1000 );
 
-		const time = {};
-
-		// Get datetime using server timestamp.
-		const date = new Date( timestamp );
-
-		const hour = date.getHours();
-		time.hour = ( '0' + hour ).slice( -2 );
-
-		const minute = date.getMinutes();
-		time.minute = ( '0' + minute ).slice( -2 );
-
-		return time;
+		// Get date using server timestamp.
+		return new Date( timestamp );
 	};
 
 	/**
 	 * Parse datetime string.
 	 *
-	 * @param {string} parent Parent element.
-	 * @param {Object} args Field settings.
+	 * @param {HTMLElement} parent Parent element.
+	 * @param {string} index Unique task key.
 	 */
-	const createTime = ( parent, args ) => {
-		const time = getServerTime();
+	const createTime = ( parent, index ) => {
+		const date = getServerDate();
 
+		const time = {
+			hour: ( '0' + date.getHours() ).slice( -2 ),
+			minute: ( '0' + date.getMinutes() ).slice( -2 ),
+		};
+
+		const meta = config.meta + '[' + index + ']';
+
+		// Create hour input.
 		const hour = document.createElement( 'input' );
 		hour.setAttribute( 'type', 'text' );
-		hour.setAttribute( 'name', args.name + '[hour]' );
+		hour.setAttribute( 'name', meta + '[hour]' );
 		hour.value = time.hour;
 		parent.appendChild( hour );
 
@@ -100,9 +108,10 @@
 		colon.textContent = ':';
 		parent.appendChild( colon );
 
+		// Create minute input.
 		const minute = document.createElement( 'input' );
 		minute.setAttribute( 'type', 'text' );
-		minute.setAttribute( 'name', args.name + '[minute]' );
+		minute.setAttribute( 'name', meta + '[minute]' );
 		minute.value = time.minute;
 		parent.appendChild( minute );
 
@@ -140,10 +149,11 @@
 	/**
 	 * Create task snippet poster.
 	 *
-	 * @param {HTMLElement} parent Snippet DOM element.
-	 * @param {Object} args Field settings.
+	 * @param {HTMLElement} parent Parent DOM element.
+	 * @param {string} index Unique task key.
+	 * @param {Object} data Task params.
 	 */
-	const createPoster = ( parent, args ) => {
+	const createPoster = ( parent, index, data ) => {
 		if ( ! wp.media ) {
 			return;
 		}
@@ -151,6 +161,8 @@
 		const poster = document.createElement( 'figure' );
 		poster.classList.add( 'social-planner-poster' );
 		parent.appendChild( poster );
+
+		const meta = config.meta + '[' + index + ']';
 
 		// Create choose button.
 		const choose = document.createElement( 'button' );
@@ -165,10 +177,10 @@
 		// Create hidden input with attachment id.
 		const attachment = document.createElement( 'input' );
 		attachment.setAttribute( 'type', 'hidden' );
-		attachment.setAttribute( 'name', args.name + '[attachment]' );
+		attachment.setAttribute( 'name', meta + '[attachment]' );
 
-		if ( args.data.attachment ) {
-			attachment.value = args.data.attachment;
+		if ( data.attachment ) {
+			attachment.value = data.attachment;
 		}
 
 		poster.appendChild( attachment );
@@ -176,13 +188,13 @@
 		// Create hidden input with thumbnail image.
 		const thumbnail = document.createElement( 'input' );
 		thumbnail.setAttribute( 'type', 'hidden' );
-		thumbnail.setAttribute( 'name', args.name + '[thumbnail]' );
+		thumbnail.setAttribute( 'name', meta + '[thumbnail]' );
 
-		if ( args.data.thumbnail ) {
-			thumbnail.value = args.data.thumbnail;
+		if ( data.thumbnail ) {
+			thumbnail.value = data.thumbnail;
 
 			// Create image if thumbnail not empty.
-			image.setAttribute( 'src', args.data.thumbnail );
+			image.setAttribute( 'src', data.thumbnail );
 			poster.insertBefore( image, choose );
 		}
 
@@ -247,44 +259,118 @@
 	 * Create task snippet poster.
 	 *
 	 * @param {HTMLElement} parent Parent DOM element.
-	 * @param {Object} args Field settings.
+	 * @param {string} index Unique task key.
+	 * @param {Object} data Task params.
 	 */
-	const createSnippet = ( parent, args ) => {
+	const createSnippet = ( parent, index, data ) => {
 		const snippet = document.createElement( 'div' );
 		snippet.classList.add( 'social-planner-snippet' );
 		parent.appendChild( snippet );
 
+		const meta = config.meta + '[' + index + ']';
+
+		// Create excerpt textrea.
 		const excerpt = document.createElement( 'textarea' );
 		excerpt.classList.add( 'social-planner-excerpt' );
 		excerpt.setAttribute(
 			'placeholder',
 			__( 'Social networks summary', 'social-planner' )
 		);
-		excerpt.setAttribute( 'name', args.name + '[excerpt]' );
+		excerpt.setAttribute( 'name', meta + '[excerpt]' );
 
-		if ( args.data.excerpt ) {
-			excerpt.textContent = args.data.excerpt;
+		if ( data.excerpt ) {
+			excerpt.textContent = data.excerpt;
 		}
 
 		snippet.appendChild( excerpt );
 
-		createPoster( snippet, args );
+		createPoster( snippet, index, data );
+	};
+
+	/**
+	 *
+	 * @param {*} parent
+	 * @param {string} index Unique task key.
+	 * @param {Object} data Task params.
+	 */
+	const blockScheduler = ( parent, index, data ) => {
+		const icon = document.createElement( 'span' );
+		icon.classList.add( 'social-planner-clock' );
+		parent.appendChild( icon );
+
+		const text = document.createElement( 'span' );
+		text.textContent = __( 'Scheduled for:', 'social-planner' );
+		parent.appendChild( text );
+
+		const time = document.createElement( 'strong' );
+		time.textContent = data.scheduled;
+		parent.appendChild( time );
+
+		if ( ! window.FormData ) {
+			return showWarning(
+				parent,
+				__(
+					'Your browser does not support the FormData feature.',
+					'social-planner'
+				)
+			);
+		}
+
+		const cancel = document.createElement( 'button' );
+		cancel.classList.add( 'button-link' );
+		cancel.textContent = __( 'Cancel', 'social-planner' );
+
+		cancel.addEventListener( 'click', ( e ) => {
+			e.preventDefault();
+
+			if ( ! config.action || ! config.nonces ) {
+				return showWarning(
+					parent,
+					__(
+						'Incorrect configuration of metbox options.',
+						'social-planner'
+					)
+				);
+			}
+
+			const postID = document.getElementById( 'post_ID' ).value;
+
+			const formData = new window.FormData();
+
+			formData.append( 'action', config.action );
+			formData.append( 'nonce', config.nonce );
+			formData.append( 'post', postID );
+
+			const xhr = new XMLHttpRequest();
+			xhr.open( 'POST', ajaxurl );
+			xhr.send( formData );
+		} );
+
+		parent.appendChild( cancel );
 	};
 
 	/**
 	 * Create task delay block.
 	 *
 	 * @param {HTMLElement} parent Parent DOM element.
-	 * @param {Object} args Field settings.
+	 * @param {string} index Unique task key.
+	 * @param {Object} data Task params.
 	 */
-	const createScheduler = ( parent, args ) => {
+	const createScheduler = ( parent, index, data ) => {
 		const scheduler = document.createElement( 'div' );
 		scheduler.classList.add( 'social-planner-scheduler' );
 		parent.appendChild( scheduler );
 
+		// Don't create scheduler for already planned tasks.
+		if ( data.scheduled ) {
+			return blockScheduler( scheduler, index, data );
+		}
+
+		const meta = config.meta + '[' + index + ']';
+
 		// Create delay select.
 		const date = document.createElement( 'select' );
-		date.setAttribute( 'name', args.name + '[date]' );
+		date.setAttribute( 'name', meta + '[date]' );
 		scheduler.appendChild( date );
 
 		const time = document.createElement( 'div' );
@@ -313,12 +399,12 @@
 		date.addEventListener( 'change', () => {
 			// Remove time element children.
 			while ( time.firstChild ) {
-				time.removeChild( time.lastChild );
+				time.removeChild( time.firstChild );
 			}
 
 			// Show time only if the date.
 			if ( date.value && date.value !== 'now' ) {
-				createTime( time, args );
+				createTime( time, index );
 			}
 		} );
 	};
@@ -327,19 +413,23 @@
 	 * Create preview setting element.
 	 *
 	 * @param {HTMLElement} parent Parent DOM element.
-	 * @param {Object} args Field settings.
+	 * @param {string} index Unique task key.
+	 * @param {Object} data Task params.
 	 */
-	const createPreview = ( parent, args ) => {
+	const createPreview = ( parent, index, data ) => {
 		const preview = document.createElement( 'label' );
 		preview.classList.add( 'social-planner-preview' );
 		parent.appendChild( preview );
 
+		const meta = config.meta + '[' + index + ']';
+
+		// Create preview checkbox.
 		const checkbox = document.createElement( 'input' );
 		checkbox.setAttribute( 'type', 'checkbox' );
-		checkbox.setAttribute( 'name', args.name + '[preview]' );
+		checkbox.setAttribute( 'name', meta + '[preview]' );
 		checkbox.value = 1;
 
-		if ( args.data.preview ) {
+		if ( data.preview ) {
 			checkbox.setAttribute( 'checked', 'checked' );
 		}
 
@@ -354,9 +444,10 @@
 	 * Create non-publihsed target.
 	 *
 	 * @param {HTMLElement} parent Parent DOM element.
-	 * @param {Object} args Settings object.
+	 * @param {string} index Unique task key.
+	 * @param {Object} data Task params.
 	 */
-	const createTargetCheck = ( parent, args ) => {
+	const createTargetCheck = ( parent, index, data ) => {
 		// Loop through availble providers.
 		for ( const key in config.providers ) {
 			const provider = config.providers[ key ];
@@ -369,12 +460,15 @@
 			check.classList.add( 'social-planner-check' );
 			parent.append( check );
 
+			const meta = config.meta + '[' + index + ']';
+
+			// Create checkbox input.
 			const input = document.createElement( 'input' );
 			input.setAttribute( 'type', 'checkbox' );
-			input.setAttribute( 'name', args.name + '[targets][]' );
+			input.setAttribute( 'name', meta + '[targets][]' );
 			input.value = key;
 
-			const targets = args.data.targets || [];
+			const targets = data.targets || [];
 
 			if ( targets && targets.indexOf( key ) > -1 ) {
 				input.setAttribute( 'checked', 'checked' );
@@ -392,9 +486,10 @@
 	 * Create targets element.
 	 *
 	 * @param {HTMLElement} parent Task DOM element.
-	 * @param {Object} args Task settings object.
+	 * @param {string} index Unique task key.
+	 * @param {Object} data Task params.
 	 */
-	const createTargets = ( parent, args ) => {
+	const createTargets = ( parent, index, data ) => {
 		const targets = document.createElement( 'div' );
 		targets.classList.add( 'social-planner-targets' );
 		parent.appendChild( targets );
@@ -407,7 +502,7 @@
 			return;
 		}
 
-		createTargetCheck( targets, args );
+		createTargetCheck( targets, index, data );
 	};
 
 	/**
@@ -419,26 +514,25 @@
 		// Generate unique task index;
 		const index = new Date().getTime().toString( 16 );
 
-		appendTask( parent, {
-			name: config.meta + '[' + index + ']',
-		} );
+		appendTask( parent, index );
 	};
 
 	/**
 	 * Append task.
 	 *
 	 * @param {HTMLElement} parent List DOM element.
-	 * @param {Object} args Task settings object.
+	 * @param {string} index Unique task key.
+	 * @param {Object} data Task params.
 	 */
-	const appendTask = ( parent, args ) => {
+	const appendTask = ( parent, index, data ) => {
 		const task = document.createElement( 'fieldset' );
 		task.classList.add( 'social-planner-task' );
 		parent.appendChild( task );
 
-		args.data = args.data || {};
+		data = data || {};
 
 		// Add element with list of targets.
-		createTargets( task, args );
+		createTargets( task, index, data );
 
 		const remove = document.createElement( 'button' );
 		remove.classList.add( 'social-planner-remove' );
@@ -454,13 +548,13 @@
 		} );
 
 		// Add snippet element.
-		createSnippet( task, args );
+		createSnippet( task, index, data );
 
-		// Add advanced settings element
-		createPreview( task, args );
+		// Add advanced settings element.
+		createPreview( task, index, data );
 
-		// Add scheduler element
-		createScheduler( task, args );
+		// Add scheduler element.
+		createScheduler( task, index, data );
 	};
 
 	/**
@@ -492,6 +586,7 @@
 
 		if ( ! config.meta || ! config.providers ) {
 			return showWarning(
+				metabox,
 				__(
 					'You need to configure providers on the plugin settings page.',
 					'social-planner'
@@ -504,11 +599,17 @@
 		// Add append button.
 		createAppend( list );
 
+		// List of index/datetime scheduled tasks.
+		const schedules = config.schedules || {};
+
 		for ( const index in config.tasks ) {
-			appendTask( list, {
-				data: config.tasks[ index ],
-				name: config.meta + '[' + index + ']',
-			} );
+			const data = config.tasks[ index ];
+
+			if ( schedules[ index ] ) {
+				data.scheduled = schedules[ index ];
+			}
+
+			appendTask( list, index, data );
 		}
 
 		// Append at least one task.

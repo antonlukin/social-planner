@@ -24,6 +24,11 @@ class Metabox {
 	const METABOX_ID = 'social-planner-metabox';
 
 	/**
+	 * Cancel ajax action.
+	 */
+	const AJAX_ACTION = 'social-planner-action';
+
+	/**
 	 * Social planner tasks post meta name.
 	 *
 	 * @var string
@@ -47,6 +52,9 @@ class Metabox {
 
 		// Save metabox.
 		add_action( 'save_post', array( __CLASS__, 'save_metabox' ), 10, 2 );
+
+		// Metabox AJAX actions.
+		add_action( 'wp_ajax_' . self::AJAX_ACTION, array( __CLASS__, 'process_ajax' ) );
 	}
 
 	/**
@@ -103,49 +111,14 @@ class Metabox {
 			return;
 		}
 
-		$tasks = array();
-
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-		$items = (array) wp_unslash( $_POST[ self::META_TASKS ] );
+		$tasks = (array) wp_unslash( $_POST[ self::META_TASKS ] );
 
-		foreach ( $items as $key => $item ) {
-			$task = array();
+		// Sanitize raw post data.
+		$tasks = self::sanitize_tasks( $tasks );
 
-			// Sanitize the task key.
-			$key = sanitize_key( $key );
-
-			if ( ! empty( $item['targets'] ) ) {
-				$task['targets'] = array_map( 'sanitize_key', $item['targets'] );
-			}
-
-			if ( ! empty( $item['excerpt'] ) ) {
-				$task['excerpt'] = sanitize_textarea_field( $item['excerpt'] );
-			}
-
-			if ( ! empty( $item['thumbnail'] ) ) {
-				$task['thumbnail'] = sanitize_text_field( $item['thumbnail'] );
-			}
-
-			if ( ! empty( $item['preview'] ) ) {
-				$task['preview'] = absint( $item['preview'] );
-			}
-
-			if ( ! empty( $item['attachment'] ) ) {
-				$task['attachment'] = absint( $item['attachment'] );
-			}
-
-			$tasks[ $key ] = $task;
-		}
-
-		// Remove empty tasks.
-		$tasks = array_filter( $tasks );
-
-		/**
-		 * Filter tasks while saving metabox.
-		 *
-		 * @param array $tasks List of tasks.
-		 */
-		$tasks = apply_filters( 'social_planner_save_tasks', $tasks );
+		// Try to schedule something.
+		$tasks = Scheduler::schedule_tasks( $tasks, $post_id, $post );
 
 		// Update post meta with sanitized tasks.
 		update_post_meta( $post_id, self::META_TASKS, $tasks );
@@ -207,17 +180,93 @@ class Metabox {
 	}
 
 	/**
+	 * Process metabox ajax action.
+	 */
+	public static function process_ajax() {
+		wp_die();
+	}
+
+	/**
+	 * Sanitize post items.
+	 *
+	 * @param array $items Post data from admin-side metabox.
+	 */
+	private static function sanitize_tasks( $items ) {
+		$tasks = array();
+
+		// Get providers list to filter targets.
+		$providers = Settings::get_providers();
+
+		foreach ( $items as $key => $item ) {
+			$task = array();
+
+			// Sanitize the task key.
+			$key = sanitize_key( $key );
+
+			if ( ! empty( $item['targets'] ) ) {
+				foreach ( (array) $item['targets'] as $target ) {
+					// Check if this target is in providers list.
+					if ( array_key_exists( $target, $providers ) ) {
+						$task['targets'][] = $target;
+					}
+				}
+			}
+
+			if ( ! empty( $item['excerpt'] ) ) {
+				$task['excerpt'] = sanitize_textarea_field( $item['excerpt'] );
+			}
+
+			if ( ! empty( $item['thumbnail'] ) ) {
+				$task['thumbnail'] = sanitize_text_field( $item['thumbnail'] );
+			}
+
+			if ( ! empty( $item['preview'] ) ) {
+				$task['preview'] = absint( $item['preview'] );
+			}
+
+			if ( ! empty( $item['attachment'] ) ) {
+				$task['attachment'] = absint( $item['attachment'] );
+			}
+
+			if ( ! empty( $item['date'] ) ) {
+				$task['date'] = sanitize_text_field( $item['date'] );
+
+				if ( isset( $item['hour'] ) ) {
+					$task['hour'] = sanitize_text_field( $item['hour'] );
+				}
+
+				if ( isset( $item['minute'] ) ) {
+					$task['minute'] = sanitize_text_field( $item['minute'] );
+				}
+			}
+
+			$tasks[ $key ] = $task;
+		}
+
+		/**
+		 * Filter tasks while saving metabox.
+		 *
+		 * @param array $tasks List of tasks.
+		 */
+		return apply_filters( 'social_planner_sanitize_tasks', array_filter( $tasks ) );
+	}
+
+	/**
 	 * Create scripts object to inject on settings page.
+	 *
+	 * @return array
 	 */
 	private static function create_script_object() {
-		global $post;
-
 		$object = array(
-			'meta' => self::META_TASKS,
+			'meta'   => self::META_TASKS,
+			'action' => self::AJAX_ACTION,
+			'nonce'  => wp_create_nonce( self::AJAX_ACTION ),
 		);
 
+		$post = get_post();
+
 		// Append tasks from post meta to object.
-		$object['tasks'] = get_post_meta( $post->ID, self::META_TASKS, true );
+		$object['tasks'] = (array) get_post_meta( $post->ID, self::META_TASKS, true );
 
 		// Append time offset.
 		$object['offset'] = self::get_time_offset();
@@ -227,6 +276,9 @@ class Metabox {
 
 		// Append availble providers and their settings.
 		$object['providers'] = self::get_providers();
+
+		// Append list of schedules tasks for this post.
+		$object['schedules'] = self::get_schedules( $post->ID, $object['tasks'] );
 
 		/**
 		 * Filter metabox scripts object.
@@ -269,8 +321,8 @@ class Metabox {
 	private static function get_calendar_days() {
 		$options = array();
 
-		// Get current server local timestamp.
-		$current_time = date_i18n( 'U' );
+		// Get UTC timestamp.
+		$current_time = time();
 
 		/**
 		 * Filter number of future days in schedule select box.
@@ -283,10 +335,10 @@ class Metabox {
 			$future_time = strtotime( "+ $i days", $current_time );
 
 			// Generate future date as option key.
-			$future_date = date_i18n( 'Y-m-d', $future_time );
+			$future_date = wp_date( 'Y-m-d', $future_time );
 
 			// Generate future date title as value.
-			$options[ $future_date ] = date_i18n( 'j F, l', $future_time );
+			$options[ $future_date ] = wp_date( 'j F, l', $future_time );
 		}
 
 		return $options;
@@ -350,5 +402,34 @@ class Metabox {
 		 * Filter time offset in seconds from UTC.
 		 */
 		return apply_filters( 'social_planner_time_offset', $offset );
+	}
+
+	/**
+	 * Get list of schedules for current post.
+	 *
+	 * @param int   $post_id Post ID.
+	 * @param array $tasks   List of tasks from post meta.
+	 */
+	private static function get_schedules( $post_id, $tasks ) {
+		$schedules = array();
+
+		foreach ( $tasks as $key => $task ) {
+			$scheduled = Scheduler::get_scheduled_time( $key, $post_id );
+
+			if ( $scheduled ) {
+				$format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
+
+				/**
+				 * Filters scheduled task datetime format.
+				 *
+				 * @param string $format Datetime format.
+				 */
+				$format = apply_filters( 'social_planner_scheduled_format', $format );
+
+				$schedules[ $key ] = wp_date( $format, $scheduled );
+			}
+		}
+
+		return $schedules;
 	}
 }
