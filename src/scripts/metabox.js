@@ -10,9 +10,7 @@
 
 	const { __ } = wp.i18n;
 
-	const metabox = document.querySelector(
-		'#social-planner-metabox > .inside'
-	);
+	const metabox = document.querySelector( '#social-planner-metabox > .inside' );
 
 	// Stop if settings element not exists.
 	if ( null === metabox ) {
@@ -208,11 +206,7 @@
 			} );
 
 			frame.on( 'select', () => {
-				const selection = frame
-					.state()
-					.get( 'selection' )
-					.first()
-					.toJSON();
+				const selection = frame.state().get( 'selection' ).first().toJSON();
 
 				let url = selection.url;
 
@@ -272,10 +266,7 @@
 		// Create excerpt textrea.
 		const excerpt = document.createElement( 'textarea' );
 		excerpt.classList.add( 'social-planner-excerpt' );
-		excerpt.setAttribute(
-			'placeholder',
-			__( 'Social networks summary', 'social-planner' )
-		);
+		excerpt.setAttribute( 'placeholder', __( 'Social networks summary', 'social-planner' ) );
 		excerpt.setAttribute( 'name', meta + '[excerpt]' );
 
 		if ( data.excerpt ) {
@@ -289,7 +280,7 @@
 
 	/**
 	 *
-	 * @param {*} parent
+	 * @param {HTMLElement} parent Parent DOM element.
 	 * @param {string} index Unique task key.
 	 * @param {Object} data Task params.
 	 */
@@ -307,13 +298,7 @@
 		parent.appendChild( time );
 
 		if ( ! window.FormData ) {
-			return showWarning(
-				parent,
-				__(
-					'Your browser does not support the FormData feature.',
-					'social-planner'
-				)
-			);
+			return showWarning( parent, __( 'Your browser does not support the FormData feature.', 'social-planner' ) );
 		}
 
 		const cancel = document.createElement( 'button' );
@@ -323,26 +308,49 @@
 		cancel.addEventListener( 'click', ( e ) => {
 			e.preventDefault();
 
-			if ( ! config.action || ! config.nonces ) {
-				return showWarning(
-					parent,
-					__(
-						'Incorrect configuration of metbox options.',
-						'social-planner'
-					)
-				);
+			if ( ! config.action || ! config.nonce ) {
+				return showWarning( parent, __( 'Incorrect configuration of metbox options.', 'social-planner' ) );
 			}
 
-			const postID = document.getElementById( 'post_ID' ).value;
+			const postID = document.getElementById( 'post_ID' );
+
+			if ( null === postID ) {
+				return showWarning( parent, __( 'Post ID element is not defined.', 'social-planner' ) );
+			}
+
+			// Show the spinner.
+			const spinner = document.createElement( 'span' );
+			spinner.classList.add( 'spinner', 'is-active' );
+			parent.appendChild( spinner );
 
 			const formData = new window.FormData();
 
+			// This parameter reflects the action that we send to the server.
+			formData.append( 'handler', 'cancel' );
+
 			formData.append( 'action', config.action );
 			formData.append( 'nonce', config.nonce );
-			formData.append( 'post', postID );
+
+			// Append current post id and task key.
+			formData.append( 'post', postID.value );
+			formData.append( 'key', index );
 
 			const xhr = new XMLHttpRequest();
 			xhr.open( 'POST', ajaxurl );
+
+			xhr.onerror = () => {
+				return showWarning( parent, __( 'Something wrong with request.', 'social-planner' ) );
+			};
+
+			xhr.onload = () => {
+				const response = JSON.parse( xhr.response );
+
+				delete data.scheduled;
+				parent.innerHTML = '';
+				createScheduler( parent.parentNode, index, data );
+				//return showWarning( parent, __( 'Post ID element is not defined.', 'social-planner' ) );
+			};
+
 			xhr.send( formData );
 		} );
 
@@ -378,17 +386,10 @@
 		scheduler.appendChild( time );
 
 		// Create default option.
-		createOption(
-			date,
-			__( 'Do not send automatically', 'social-planner' )
-		);
+		createOption( date, __( 'Do not send automatically', 'social-planner' ) );
 
 		// Create send immediately option.
-		createOption(
-			date,
-			__( 'Publish immediately', 'social-planner' ),
-			'now'
-		);
+		createOption( date, __( 'Publish immediately', 'social-planner' ), 'now' );
 
 		config.calendar = config.calendar || {};
 
@@ -511,8 +512,8 @@
 	 * @param {HTMLElement} parent List DOM element.
 	 */
 	const createEmptyTask = ( parent ) => {
-		// Generate unique task index;
-		const index = new Date().getTime().toString( 16 );
+		// Generate unique task index from timestamp.
+		const index = new Date().getTime().toString( 36 );
 
 		appendTask( parent, index );
 	};
@@ -587,10 +588,7 @@
 		if ( ! config.meta || ! config.providers ) {
 			return showWarning(
 				metabox,
-				__(
-					'You need to configure providers on the plugin settings page.',
-					'social-planner'
-				)
+				__( 'You need to configure providers on the plugin settings page.', 'social-planner' )
 			);
 		}
 

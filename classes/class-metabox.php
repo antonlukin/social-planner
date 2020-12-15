@@ -118,7 +118,7 @@ class Metabox {
 		$tasks = self::sanitize_tasks( $tasks );
 
 		// Try to schedule something.
-		$tasks = Scheduler::schedule_tasks( $tasks, $post_id, $post );
+		$tasks = Scheduler::schedule_tasks( $tasks, $post );
 
 		// Update post meta with sanitized tasks.
 		update_post_meta( $post_id, self::META_TASKS, $tasks );
@@ -183,7 +183,28 @@ class Metabox {
 	 * Process metabox ajax action.
 	 */
 	public static function process_ajax() {
-		wp_die();
+		check_ajax_referer( self::AJAX_ACTION, 'nonce' );
+
+		if ( empty( $_POST['handler'] ) || empty( $_POST['post'] ) ) {
+			wp_send_json_error();
+		}
+
+		$post_id = absint( $_POST['post'] );
+
+		// Process task canceling.
+		if ( 'cancel' === $_POST['handler'] ) {
+			// We need task key to unschedule task.
+			if ( empty( $_POST['key'] ) ) {
+				wp_send_json_error();
+			}
+
+			$key = sanitize_key( $_POST['key'] );
+
+			// Nevermind if the task is not exists.
+			Scheduler::unschedule_task( $key, $post_id );
+		}
+
+		wp_send_json_success();
 	}
 
 	/**
@@ -265,8 +286,8 @@ class Metabox {
 
 		$post = get_post();
 
-		// Append tasks from post meta to object.
-		$object['tasks'] = (array) get_post_meta( $post->ID, self::META_TASKS, true );
+		// Append tasks.
+		$object['tasks'] = self::get_tasks( $post->ID );
 
 		// Append time offset.
 		$object['offset'] = self::get_time_offset();
@@ -277,7 +298,7 @@ class Metabox {
 		// Append availble providers and their settings.
 		$object['providers'] = self::get_providers();
 
-		// Append list of schedules tasks for this post.
+		// Append list of tasks schedules for this post.
 		$object['schedules'] = self::get_schedules( $post->ID, $object['tasks'] );
 
 		/**
@@ -319,7 +340,7 @@ class Metabox {
 	 * @return array
 	 */
 	private static function get_calendar_days() {
-		$options = array();
+		$calendar = array();
 
 		// Get UTC timestamp.
 		$current_time = time();
@@ -338,10 +359,10 @@ class Metabox {
 			$future_date = wp_date( 'Y-m-d', $future_time );
 
 			// Generate future date title as value.
-			$options[ $future_date ] = wp_date( 'j F, l', $future_time );
+			$calendar[ $future_date ] = wp_date( 'j F, l', $future_time );
 		}
 
-		return $options;
+		return $calendar;
 	}
 
 	/**
@@ -352,6 +373,9 @@ class Metabox {
 	private static function get_providers() {
 		$providers = array();
 
+		// Get list of networks.
+		$networks = Core::get_networks();
+
 		// Get providers list from options.
 		$settings = Settings::get_providers();
 
@@ -359,12 +383,12 @@ class Metabox {
 			// Parse index and network from provider key.
 			preg_match( '/^(.+)-(\w+)$/', $key, $matches );
 
-			if ( empty( $matches ) ) {
+			if ( empty( $networks[ $matches[1] ] ) ) {
 				continue;
 			}
 
 			// Find class by network name.
-			$class = Core::$networks[ $matches[1] ];
+			$class = $networks[ $matches[1] ];
 
 			// Append provider label.
 			if ( method_exists( $class, 'get_label' ) ) {
@@ -431,5 +455,22 @@ class Metabox {
 		}
 
 		return $schedules;
+	}
+
+	/**
+	 * Get and filter tasks from post meta.
+	 *
+	 * @param int $post_id Post ID.
+	 */
+	private static function get_tasks( $post_id ) {
+		$tasks = get_post_meta( $post_id, self::META_TASKS, true );
+
+		/**
+		 * Filter tasks from post meta by post ID.
+		 *
+		 * @param array $tasks   List of tasks from post meta.
+		 * @param int   $post_id Post ID.
+		 */
+		return apply_filters( 'social_planner_get_tasks', (array) $tasks, $post_id );
 	}
 }

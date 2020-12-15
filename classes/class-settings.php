@@ -165,7 +165,9 @@ class Settings {
 			'option' => self::OPTION_PROVIDERS,
 		);
 
-		foreach ( Core::$networks as $name => $class ) {
+		$networks = Core::get_networks();
+
+		foreach ( $networks as $name => $class ) {
 			$network = array();
 
 			// Add required network fields.

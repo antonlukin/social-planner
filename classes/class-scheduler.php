@@ -34,16 +34,10 @@ class Scheduler {
 	 * Schedule tasks from metabox.
 	 *
 	 * @param array   $tasks   List of saintized tasks.
-	 * @param int     $post_id Post ID.
 	 * @param WP_Post $post    Post object.
 	 */
-	public static function schedule_tasks( $tasks, $post_id, $post ) {
+	public static function schedule_tasks( $tasks, $post ) {
 		foreach ( $tasks as $key => &$task ) {
-			$args = array( $key, $post_id );
-
-			// Check if the task already scheduled.
-			$scheduled = wp_next_scheduled( self::SCHEDULE_HOOK, $args );
-
 			// Get task planned time in GMT from metabox.
 			$planned = self::get_planned_time( $task );
 
@@ -52,10 +46,7 @@ class Scheduler {
 
 			// Unschedule and skip tasks with empty targets.
 			if ( empty( $task['targets'] ) ) {
-
-				if ( $scheduled ) {
-					wp_unschedule_event( $scheduled, self::SCHEDULE_HOOK, $args );
-				}
+				self::unschedule_task( $key, $post->ID );
 
 				continue;
 			}
@@ -70,38 +61,23 @@ class Scheduler {
 
 			// Unschedule and skip tasks with invalid post status.
 			if ( ! in_array( $post->post_status, $statuses, true ) ) {
-
-				if ( $scheduled ) {
-					wp_unschedule_event( $scheduled, self::SCHEDULE_HOOK, $args );
-				}
+				self::unschedule_task( $key, $post->ID );
 
 				continue;
 			}
 
+			if ( $planned ) {
+				self::reschedule_task( $planned, $key, $post->ID );
+			}
+
+			$scheduled = self::get_scheduled_time( $key, $post->ID );
+
+			// Get post date in UTC.
 			$post_date = strtotime( $post->post_date_gmt );
 
 			// Reschedule if the post's date is later than the task's.
-			if ( $scheduled ) {
-
-				if ( $post_date > $scheduled ) {
-					wp_unschedule_event( $scheduled, self::SCHEDULE_HOOK, $args );
-
-					// Set schedule timestamp as new post date.
-					wp_schedule_single_event( $post_date, self::SCHEDULE_HOOK, $args );
-				}
-
-				continue;
-			}
-
-			// Schedule new tasks.
-			if ( $planned ) {
-				$planned = max( time(), $planned );
-
-				if ( $post_date > $planned ) {
-					$planned = $post_date;
-				}
-
-				wp_schedule_single_event( $planned, self::SCHEDULE_HOOK, $args );
+			if ( $scheduled && $post_date > $scheduled ) {
+				self::reschedule_task( $post_date, $key, $post->ID );
 			}
 		}
 
@@ -127,10 +103,41 @@ class Scheduler {
 	 * @return int
 	 */
 	public static function get_scheduled_time( $key, $post_id ) {
-		$args = array( $key, $post_id );
+		return wp_next_scheduled( self::SCHEDULE_HOOK, self::sanitize_args( $key, $post_id ) );
+	}
 
-		// Check if task with args aready scheduled.
-		return wp_next_scheduled( self::SCHEDULE_HOOK, $args );
+	/**
+	 * Cancel task scheduling.
+	 *
+	 * @param string $key     Task key.
+	 * @param int    $post_id Post ID.
+	 */
+	public static function unschedule_task( $key, $post_id ) {
+		$scheduled = self::get_scheduled_time( $key, $post_id );
+
+		if ( $scheduled ) {
+			wp_unschedule_event( $scheduled, self::SCHEDULE_HOOK, self::sanitize_args( $key, $post_id ) );
+		}
+	}
+
+	/**
+	 * Reschedule task or create new one.
+	 *
+	 * @param int    $planned Timestamp for when to next run the event.
+	 * @param string $key     Task key.
+	 * @param int    $post_id Post ID.
+	 */
+	public static function reschedule_task( $planned, $key, $post_id ) {
+		$scheduled = self::get_scheduled_time( $key, $post_id );
+
+		if ( $scheduled ) {
+			wp_unschedule_event( $scheduled, self::SCHEDULE_HOOK, self::sanitize_args( $key, $post_id ) );
+		}
+
+		// No reason to plan in the past.
+		$planned = max( time(), $planned );
+
+		wp_schedule_single_event( $planned, self::SCHEDULE_HOOK, self::sanitize_args( $key, $post_id ) );
 	}
 
 	/**
@@ -138,7 +145,7 @@ class Scheduler {
 	 *
 	 * @param array $task The task settings.
 	 */
-	public static function get_planned_time( $task ) {
+	private static function get_planned_time( $task ) {
 		if ( empty( $task['date'] ) ) {
 			return false;
 		}
@@ -163,5 +170,18 @@ class Scheduler {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Sanitize scheduled args.
+	 * This method exists for casting uniform variable types.
+	 *
+	 * @param string $key     Task key.
+	 * @param int    $post_id Post ID.
+	 *
+	 * @return array
+	 */
+	private static function sanitize_args( $key, $post_id ) {
+		return array( (string) $key, (int) $post_id );
 	}
 }

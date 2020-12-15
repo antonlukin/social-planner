@@ -213,11 +213,7 @@
 	 */
 	const createSubmit = ( parent ) => {
 		const submit = document.createElement( 'button' );
-		submit.classList.add(
-			'social-planner-submit',
-			'button',
-			'button-primary'
-		);
+		submit.classList.add( 'social-planner-submit', 'button', 'button-primary' );
 		submit.setAttribute( 'type', 'submit' );
 		submit.textContent = __( 'Save changes', 'social-planner' );
 
@@ -232,10 +228,7 @@
 
 		// Check required settings.
 		if ( ! config.option || ! config.networks ) {
-			const message = __(
-				'Networks settings are not formatted correctly',
-				'social-planner'
-			);
+			const message = __( 'Networks settings are not formatted correctly', 'social-planner' );
 
 			return showWarning( form, message );
 		}

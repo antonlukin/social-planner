@@ -21,20 +21,13 @@ class Core {
 	 *
 	 * @var array
 	 */
-	public static $networks = array();
+	private static $networks = array();
 
 	/**
 	 * Entry point of core class.
 	 */
 	public static function add_hooks() {
-		add_action( 'init', array( __CLASS__, 'init_classes' ) );
-	}
-
-	/**
-	 * Init required plugin classes.
-	 */
-	public static function init_classes() {
-		self::get_networks();
+		add_action( 'init', array( __CLASS__, 'init_networks' ) );
 
 		// Init settings class.
 		Settings::add_hooks();
@@ -49,7 +42,7 @@ class Core {
 	/**
 	 * Parse list of networks with its name as key and class as value.
 	 */
-	public static function get_networks() {
+	public static function init_networks() {
 		$networks = array(
 			'Social_Planner\Network_Telegram' => SOCIAL_PLANNER_DIR . '/networks/class-network-telegram.php',
 			'Social_Planner\Network_Twitter'  => SOCIAL_PLANNER_DIR . '/networks/class-network-twitter.php',
@@ -76,5 +69,12 @@ class Core {
 				self::$networks[ $class::NETWORK_NAME ] = $class;
 			}
 		}
+	}
+
+	/**
+	 * Public method to get list of availible networks
+	 */
+	public static function get_networks() {
+		return self::$networks;
 	}
 }
