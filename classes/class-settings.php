@@ -154,7 +154,14 @@ class Settings {
 	 * Get options from database.
 	 */
 	public static function get_providers() {
-		return get_option( self::OPTION_PROVIDERS, array() );
+		$providers = get_option( self::OPTION_PROVIDERS, array() );
+
+		/**
+		 * Filter list of providers from options.
+		 *
+		 * @param array $providers List of provders.
+		 */
+		return apply_filters( 'social_planner_get_providers', $providers );
 	}
 
 	/**

@@ -91,11 +91,9 @@ class Network_Telegram {
 	/**
 	 * Send message method
 	 *
-	 * @param array  $message Message data.
-	 * @param array  $options Test.
-	 * @param string $poster Optional test.
+	 * @param array $message  Message data.
+	 * @param array $settings Test.
 	 */
-	public static function send_message( $message, $options, $poster = null ) {
-		return '';
+	public static function send_message( $message, $settings ) {
 	}
 }

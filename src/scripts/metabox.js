@@ -343,12 +343,11 @@
 			};
 
 			xhr.onload = () => {
-				const response = JSON.parse( xhr.response );
+				// const response = JSON.parse( xhr.response );
 
 				delete data.scheduled;
 				parent.innerHTML = '';
 				createScheduler( parent.parentNode, index, data );
-				//return showWarning( parent, __( 'Post ID element is not defined.', 'social-planner' ) );
 			};
 
 			xhr.send( formData );

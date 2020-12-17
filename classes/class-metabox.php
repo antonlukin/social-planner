@@ -29,11 +29,18 @@ class Metabox {
 	const AJAX_ACTION = 'social-planner-action';
 
 	/**
-	 * Social planner tasks post meta name.
+	 * Post meta key to store tasks.
 	 *
 	 * @var string
 	 */
 	const META_TASKS = '_social_planner_tasks';
+
+	/**
+	 * Post meta key to store results.
+	 *
+	 * @var string
+	 */
+	const META_RESULTS = '_social_planner_results';
 
 	/**
 	 * Metabox nonce field
@@ -121,7 +128,7 @@ class Metabox {
 		$tasks = Scheduler::schedule_tasks( $tasks, $post );
 
 		// Update post meta with sanitized tasks.
-		update_post_meta( $post_id, self::META_TASKS, $tasks );
+		self::update_tasks( $post_id, $tasks );
 	}
 
 	/**
@@ -273,6 +280,86 @@ class Metabox {
 	}
 
 	/**
+	 * Get and filter tasks from post meta.
+	 *
+	 * @param int $post_id  Post ID.
+	 */
+	public static function get_tasks( $post_id ) {
+		// Retrieve tasks from post meta.
+		$tasks = get_post_meta( $post_id, self::META_TASKS, true );
+
+		if ( empty( $tasks ) ) {
+			$tasks = array();
+		}
+
+		/**
+		 * Filter tasks from post meta by post ID.
+		 *
+		 * @param array $tasks   List of tasks from post meta.
+		 * @param int   $post_id Post ID.
+		 */
+		return apply_filters( 'social_planner_get_tasks', $tasks, $post_id );
+	}
+
+	/**
+	 * Filter and update tasks in post meta.
+	 *
+	 * @param int   $post_id Post ID.
+	 * @param array $tasks   List of tasks.
+	 */
+	public static function update_tasks( $post_id, $tasks ) {
+		/**
+		 * Filter tasks before update post meta.
+		 *
+		 * @param array $tasks   List of tasks from post meta.
+		 * @param int   $post_id Post ID.
+		 */
+		$tasks = apply_filters( 'social_planner_update_tasks', $tasks, $post_id );
+
+		update_post_meta( $post_id, self::META_TASKS, $tasks );
+	}
+
+	/**
+	 * Get and filter results from post meta.
+	 *
+	 * @param int $post_id Post ID.
+	 */
+	public static function get_results( $post_id ) {
+		// Retrieve results from post meta.
+		$results = get_post_meta( $post_id, self::META_RESULTS, true );
+
+		if ( empty( $results ) ) {
+			$results = array();
+		}
+
+		/**
+		 * Results tasks from post meta by post ID.
+		 *
+		 * @param array $results List of results from post meta.
+		 * @param int   $post_id Post ID.
+		 */
+		return apply_filters( 'social_planner_get_results', $results, $post_id );
+	}
+
+	/**
+	 * Filter and update results in post meta.
+	 *
+	 * @param int   $post_id Post ID.
+	 * @param array $results List of task results.
+	 */
+	public static function update_results( $post_id, $results ) {
+		/**
+		 * Filter results before update post meta.
+		 *
+		 * @param array $results List of tasks from post meta.
+		 * @param int   $post_id Post ID.
+		 */
+		$tasks = apply_filters( 'social_planner_update_results', $results, $post_id );
+
+		update_post_meta( $post_id, self::META_RESULTS, $results );
+	}
+
+	/**
 	 * Create scripts object to inject on settings page.
 	 *
 	 * @return array
@@ -286,17 +373,20 @@ class Metabox {
 
 		$post = get_post();
 
+		// Append time offset.
+		$object['offset'] = self::get_time_offset();
+
 		// Append tasks.
 		$object['tasks'] = self::get_tasks( $post->ID );
 
-		// Append time offset.
-		$object['offset'] = self::get_time_offset();
+		// Append results.
+		$object['results'] = self::get_results( $post->ID );
 
 		// Append dates options for calendar select box.
 		$object['calendar'] = self::get_calendar_days();
 
 		// Append availble providers and their settings.
-		$object['providers'] = self::get_providers();
+		$object['providers'] = self::prepare_providers();
 
 		// Append list of tasks schedules for this post.
 		$object['schedules'] = self::get_schedules( $post->ID, $object['tasks'] );
@@ -366,48 +456,42 @@ class Metabox {
 	}
 
 	/**
-	 * Parse and return providers settings.
+	 * Get and prepare required providers settings.
 	 *
 	 * @return array
 	 */
-	private static function get_providers() {
-		$providers = array();
-
-		// Get list of networks.
-		$networks = Core::get_networks();
+	private static function prepare_providers() {
+		$prepared = array();
 
 		// Get providers list from options.
-		$settings = Settings::get_providers();
+		$providers = Settings::get_providers();
 
-		foreach ( $settings as $key => $setting ) {
-			// Parse index and network from provider key.
-			preg_match( '/^(.+)-(\w+)$/', $key, $matches );
+		foreach ( $providers as $key => $provider ) {
+			// Find class by network name.
+			$class = Core::get_network_class( $key );
 
-			if ( empty( $networks[ $matches[1] ] ) ) {
+			if ( ! $class ) {
 				continue;
 			}
-
-			// Find class by network name.
-			$class = $networks[ $matches[1] ];
 
 			// Append provider label.
 			if ( method_exists( $class, 'get_label' ) ) {
 				$label = $class::get_label();
 
-				if ( $setting['title'] ) {
-					$label = $label . ': ' . $setting['title'];
+				if ( $provider['title'] ) {
+					$label = $label . ': ' . $provider['title'];
 				}
 
-				$providers[ $key ]['label'] = esc_attr( $label );
+				$prepared[ $key ]['label'] = esc_attr( $label );
 			}
 
 			// Append message limit.
 			if ( method_exists( $class, 'get_limit' ) ) {
-				$providers[ $key ]['limit'] = absint( $class::get_limit() );
+				$prepared[ $key ]['limit'] = absint( $class::get_limit() );
 			}
 		}
 
-		return $providers;
+		return $prepared;
 	}
 
 	/**
@@ -455,22 +539,5 @@ class Metabox {
 		}
 
 		return $schedules;
-	}
-
-	/**
-	 * Get and filter tasks from post meta.
-	 *
-	 * @param int $post_id Post ID.
-	 */
-	private static function get_tasks( $post_id ) {
-		$tasks = get_post_meta( $post_id, self::META_TASKS, true );
-
-		/**
-		 * Filter tasks from post meta by post ID.
-		 *
-		 * @param array $tasks   List of tasks from post meta.
-		 * @param int   $post_id Post ID.
-		 */
-		return apply_filters( 'social_planner_get_tasks', (array) $tasks, $post_id );
 	}
 }

@@ -77,4 +77,23 @@ class Core {
 	public static function get_networks() {
 		return self::$networks;
 	}
+
+	/**
+	 * Helper method to get network class by provider.
+	 *
+	 * @param string $key Parse network by provider key and return proper class.
+	 */
+	public static function get_network_class( $key ) {
+		$networks = self::$networks;
+
+		// Parse index and network from provider key.
+		preg_match( '/^(.+)-(\w+)$/', $key, $matches );
+
+		if ( empty( $networks[ $matches[1] ] ) ) {
+			return false;
+		}
+
+		// Find class by network name.
+		return $networks[ $matches[1] ];
+	}
 }

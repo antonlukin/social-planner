@@ -8,6 +8,8 @@
 
 namespace Social_Planner;
 
+use WP_Error;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
@@ -91,7 +93,47 @@ class Scheduler {
 	 * @param int    $post_id Post ID.
 	 */
 	public static function start_task( $key, $post_id ) {
+		$tasks = Metabox::get_tasks( $post_id );
 
+		if ( empty( $tasks[ $key ] ) ) {
+			return;
+		}
+
+		$task = $tasks[ $key ];
+
+		// Skip empty tasks.
+		if ( empty( $task['targets'] ) ) {
+			return;
+		}
+
+		// Get results from post ID.
+		$results = Metabox::get_results( $post_id );
+
+		// Skip already sent tasks.
+		if ( isset( $results[ $key ]['sent'] ) ) {
+			return;
+		}
+
+		// Loop through targets and send tasks.
+		foreach ( $task['targets'] as $target ) {
+			$result = array();
+
+			// Get output after sending task.
+			$output = self::send_task( $task, $target, $post_id );
+
+			if ( is_wp_error( $output ) ) {
+				$result['errors'][ $target ] = $output->get_error_message();
+			} else {
+				$result['links'][ $target ] = $output;
+			}
+
+			$results[ $key ] = $result;
+		}
+
+		$results[ $key ]['sent'] = time();
+
+		// Update list of results.
+		Metabox::update_results( $post_id, $results );
 	}
 
 	/**
@@ -170,6 +212,64 @@ class Scheduler {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Send scheduled task.
+	 *
+	 * @param array  $task    Scheduled task data.
+	 * @param string $target  Target provider name.
+	 * @param int    $post_id Post ID.
+	 */
+	private static function send_task( $task, $target, $post_id ) {
+		$providers = Settings::get_providers();
+
+		if ( ! isset( $providers[ $target ] ) ) {
+			return new WP_Error( 'config', esc_html__( 'Provider settings not found', 'social-planner' ) );
+		}
+
+		$class = Core::get_network_class( $target );
+
+		if ( ! $class ) {
+			return new WP_Error( 'config', esc_html__( 'Network does not exist', 'social-planner' ) );
+		}
+
+		if ( ! method_exists( $class, 'send_message' ) ) {
+			return new WP_Error( 'config', esc_html__( 'Missed sending method in network', 'social-planner' ) );
+		}
+
+		$message = array();
+
+		// Add excerpt to message. We should not sanitize it here.
+		if ( ! empty( $task['excerpt'] ) ) {
+			$message['excerpt'] = $task['excerpt'];
+		}
+
+		// Add attached file to message.
+		if ( ! empty( $task['attachment'] ) ) {
+			$message['poster'] = get_attached_file( $task['attachment'] );
+		}
+
+		// Add preview boolean.
+		if ( ! empty( $task['preview'] ) ) {
+			$message['preview'] = true;
+		}
+
+		// Current post ID permalink.
+		$message['link'] = esc_url( get_permalink( $post_id ) );
+
+		/**
+		 * Filter sending message array.
+		 *
+		 * @param array  $message Sending message data.
+		 * @param int    $post_id Current post ID.
+		 * @param string $target  Target provider name.
+		 * @param array  $task    Scheduled task data.
+		 */
+		$message = apply_filters( 'social_poster_send_message', $message, $post_id, $target, $task );
+
+		// Ok let's send the message.
+		return $class::send_message( $message, $providers[ $target ] );
 	}
 
 	/**
