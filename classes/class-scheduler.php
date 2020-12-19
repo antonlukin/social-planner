@@ -240,9 +240,9 @@ class Scheduler {
 
 		$message = array();
 
-		// Add excerpt to message. We should not sanitize it here.
+		// Add excerpt to message.
 		if ( ! empty( $task['excerpt'] ) ) {
-			$message['excerpt'] = $task['excerpt'];
+			$message['excerpt'] = wp_specialchars_decode( $task['excerpt'] );
 		}
 
 		// Add attached file to message.

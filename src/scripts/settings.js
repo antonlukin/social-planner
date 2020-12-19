@@ -1,3 +1,7 @@
+/**
+ * Settinhs script handler.
+ */
+
 ( function () {
 	if ( 'undefined' === typeof wp ) {
 		return;
