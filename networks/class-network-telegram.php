@@ -96,7 +96,7 @@ class Network_Telegram {
 		}
 
 		// Get API URL using bot token from settings.
-		$url = 'https://api.telegram.org/bot' . $settings['token'];
+		$url = 'https://api.telegram.org/bot2' . $settings['token'];
 
 		if ( empty( $settings['group'] ) ) {
 			return new WP_Error( 'sending', esc_html__( 'Group parameter is not found', 'social-planner' ) );

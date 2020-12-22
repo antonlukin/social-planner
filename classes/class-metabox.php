@@ -332,6 +332,15 @@ class Metabox {
 			$results = array();
 		}
 
+		// Update sent value of resutls.
+		foreach ( $results as $key => &$result ) {
+			if ( empty( $result['sent'] ) ) {
+				continue;
+			}
+
+			$result['sent'] = wp_date( self::time_format(), $result['sent'] );
+		}
+
 		/**
 		 * Results tasks from post meta by post ID.
 		 *
@@ -525,19 +534,24 @@ class Metabox {
 			$scheduled = Scheduler::get_scheduled_time( $key, $post_id );
 
 			if ( $scheduled ) {
-				$format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
-
-				/**
-				 * Filters scheduled task datetime format.
-				 *
-				 * @param string $format Datetime format.
-				 */
-				$format = apply_filters( 'social_planner_scheduled_format', $format );
-
-				$schedules[ $key ] = wp_date( $format, $scheduled );
+				$schedules[ $key ] = wp_date( self::time_format(), $scheduled );
 			}
 		}
 
 		return $schedules;
+	}
+
+	/**
+	 * Get datetime format for tasks.
+	 */
+	private static function time_format() {
+		$format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
+
+		/**
+		 * Filters scheduled and sent datetime format.
+		 *
+		 * @param string $format Datetime format.
+		 */
+		return apply_filters( 'social_planner_time_format', $format );
 	}
 }

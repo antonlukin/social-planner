@@ -35,7 +35,7 @@
 		warning.textContent = message;
 
 		while ( parent.firstChild ) {
-			parent.removeChild( parent.firstChild );
+			parent.removeChild( parent.lastChild );
 		}
 
 		parent.appendChild( warning );
@@ -147,7 +147,7 @@
 	/**
 	 * Create task snippet poster.
 	 *
-	 * @param {HTMLElement} parent Parent DOM element.
+	 * @param {HTMLElement} parent Snippet DOM element.
 	 * @param {string} index Unique task key.
 	 * @param {Object} data Task params.
 	 */
@@ -167,7 +167,11 @@
 		choose.classList.add( 'choose' );
 		choose.setAttribute( 'type', 'button' );
 		choose.textContent = '+';
-		poster.appendChild( choose );
+
+		// Append choose button only for new tasks.
+		if ( ! data.result.sent && ! data.schedule ) {
+			poster.appendChild( choose );
+		}
 
 		// Create image object.
 		const image = document.createElement( 'img' );
@@ -177,8 +181,8 @@
 		attachment.setAttribute( 'type', 'hidden' );
 		attachment.setAttribute( 'name', meta + '[attachment]' );
 
-		if ( data.attachment ) {
-			attachment.value = data.attachment;
+		if ( data.task.attachment ) {
+			attachment.value = data.task.attachment;
 		}
 
 		poster.appendChild( attachment );
@@ -188,12 +192,12 @@
 		thumbnail.setAttribute( 'type', 'hidden' );
 		thumbnail.setAttribute( 'name', meta + '[thumbnail]' );
 
-		if ( data.thumbnail ) {
-			thumbnail.value = data.thumbnail;
+		if ( data.task.thumbnail ) {
+			thumbnail.value = data.task.thumbnail;
 
 			// Create image if thumbnail not empty.
-			image.setAttribute( 'src', data.thumbnail );
-			poster.insertBefore( image, choose );
+			image.setAttribute( 'src', data.task.thumbnail );
+			poster.appendChild( image );
 		}
 
 		poster.appendChild( thumbnail );
@@ -233,7 +237,11 @@
 		const remove = document.createElement( 'button' );
 		remove.classList.add( 'remove' );
 		remove.setAttribute( 'type', 'button' );
-		poster.appendChild( remove );
+
+		// Append remove button only for new tasks.
+		if ( ! data.result.sent && ! data.schedule ) {
+			poster.appendChild( remove );
+		}
 
 		// Remove button listener.
 		remove.addEventListener( 'click', ( e ) => {
@@ -252,7 +260,7 @@
 	/**
 	 * Create task snippet poster.
 	 *
-	 * @param {HTMLElement} parent Parent DOM element.
+	 * @param {HTMLElement} parent Task DOM element.
 	 * @param {string} index Unique task key.
 	 * @param {Object} data Task params.
 	 */
@@ -269,8 +277,16 @@
 		excerpt.setAttribute( 'placeholder', __( 'Social networks summary', 'social-planner' ) );
 		excerpt.setAttribute( 'name', meta + '[excerpt]' );
 
-		if ( data.excerpt ) {
-			excerpt.textContent = data.excerpt;
+		if ( data.result.sent ) {
+			excerpt.setAttribute( 'readonly', 'readonly' );
+		}
+
+		if ( data.schedule ) {
+			excerpt.setAttribute( 'readonly', 'readonly' );
+		}
+
+		if ( data.task.excerpt ) {
+			excerpt.textContent = data.task.excerpt;
 		}
 
 		snippet.appendChild( excerpt );
@@ -279,12 +295,103 @@
 	};
 
 	/**
+	 * Draw task sent time.
 	 *
-	 * @param {HTMLElement} parent Parent DOM element.
+	 * @param {HTMLElement} parent Scheduler DOM element.
+	 * @param {Object} data Task params.
+	 */
+	const drawSentTime = ( parent, data ) => {
+		const icon = document.createElement( 'span' );
+		icon.classList.add( 'social-planner-calendar' );
+		parent.appendChild( icon );
+
+		const text = document.createElement( 'span' );
+		text.textContent = __( 'Sent:', 'social-planner' );
+		parent.appendChild( text );
+
+		const time = document.createElement( 'strong' );
+		time.textContent = data.result.sent;
+		parent.appendChild( time );
+	};
+
+	/**
+	 * Remove task by index.
+	 *
+	 * @param {string} index Unique task key.
+	 */
+	const removeTask = ( index ) => {
+		delete config.tasks[ index ];
+
+		// Create new tasks list.
+		createTasksList();
+	};
+
+	/**
+	 * Cancel task.
+	 *
+	 * @param {HTMLElement} parent Scheduler DOM element.
+	 * @param {string} index Unique task key.
+	 * @param {Function} callback Callback function.
+	 */
+	const cancelTask = ( parent, index, callback ) => {
+		if ( ! config.action || ! config.nonce ) {
+			return showWarning( parent, __( 'Incorrect configuration of metbox options.', 'social-planner' ) );
+		}
+
+		const postID = document.getElementById( 'post_ID' );
+
+		if ( null === postID ) {
+			return showWarning( parent, __( 'Post ID element is not defined.', 'social-planner' ) );
+		}
+
+		// Show the spinner.
+		const spinner = document.createElement( 'span' );
+		spinner.classList.add( 'spinner', 'is-active' );
+		parent.appendChild( spinner );
+
+		const formData = new window.FormData();
+
+		// This parameter reflects the action that we send to the server.
+		formData.append( 'handler', 'cancel' );
+
+		formData.append( 'action', config.action );
+		formData.append( 'nonce', config.nonce );
+
+		// Append current post id and task key.
+		formData.append( 'post', postID.value );
+		formData.append( 'key', index );
+
+		const xhr = new XMLHttpRequest();
+		xhr.open( 'POST', ajaxurl );
+
+		xhr.onerror = () => {
+			return showWarning( parent, __( 'Something went wrong.', 'social-planner' ) );
+		};
+
+		xhr.onload = () => {
+			const response = JSON.parse( xhr.responseText );
+
+			if ( ! response.success ) {
+				return showWarning( parent, __( 'Something went wrong.', 'social-planner' ) );
+			}
+
+			// Retrun callback if exists.
+			if ( typeof callback === 'function' ) {
+				callback();
+			}
+		};
+
+		xhr.send( formData );
+	};
+
+	/**
+	 * Draw task scheduled time.
+	 *
+	 * @param {HTMLElement} parent Scheduler DOM element.
 	 * @param {string} index Unique task key.
 	 * @param {Object} data Task params.
 	 */
-	const blockScheduler = ( parent, index, data ) => {
+	const drawScheduledTime = ( parent, index, data ) => {
 		const icon = document.createElement( 'span' );
 		icon.classList.add( 'social-planner-clock' );
 		parent.appendChild( icon );
@@ -294,7 +401,7 @@
 		parent.appendChild( text );
 
 		const time = document.createElement( 'strong' );
-		time.textContent = data.scheduled;
+		time.textContent = data.schedule;
 		parent.appendChild( time );
 
 		if ( ! window.FormData ) {
@@ -308,58 +415,21 @@
 		cancel.addEventListener( 'click', ( e ) => {
 			e.preventDefault();
 
-			if ( ! config.action || ! config.nonce ) {
-				return showWarning( parent, __( 'Incorrect configuration of metbox options.', 'social-planner' ) );
-			}
+			cancelTask( parent, index, () => {
+				delete config.schedules[ index ];
 
-			const postID = document.getElementById( 'post_ID' );
-
-			if ( null === postID ) {
-				return showWarning( parent, __( 'Post ID element is not defined.', 'social-planner' ) );
-			}
-
-			// Show the spinner.
-			const spinner = document.createElement( 'span' );
-			spinner.classList.add( 'spinner', 'is-active' );
-			parent.appendChild( spinner );
-
-			const formData = new window.FormData();
-
-			// This parameter reflects the action that we send to the server.
-			formData.append( 'handler', 'cancel' );
-
-			formData.append( 'action', config.action );
-			formData.append( 'nonce', config.nonce );
-
-			// Append current post id and task key.
-			formData.append( 'post', postID.value );
-			formData.append( 'key', index );
-
-			const xhr = new XMLHttpRequest();
-			xhr.open( 'POST', ajaxurl );
-
-			xhr.onerror = () => {
-				return showWarning( parent, __( 'Something wrong with request.', 'social-planner' ) );
-			};
-
-			xhr.onload = () => {
-				// const response = JSON.parse( xhr.response );
-
-				delete data.scheduled;
-				parent.innerHTML = '';
-				createScheduler( parent.parentNode, index, data );
-			};
-
-			xhr.send( formData );
+				// Create new tasks list.
+				createTasksList();
+			} );
 		} );
 
 		parent.appendChild( cancel );
 	};
 
 	/**
-	 * Create task delay block.
+	 * Create task scheduler block.
 	 *
-	 * @param {HTMLElement} parent Parent DOM element.
+	 * @param {HTMLElement} parent Task DOM element.
 	 * @param {string} index Unique task key.
 	 * @param {Object} data Task params.
 	 */
@@ -368,9 +438,14 @@
 		scheduler.classList.add( 'social-planner-scheduler' );
 		parent.appendChild( scheduler );
 
+		// Check if task sent right away.
+		if ( data.result.sent ) {
+			return drawSentTime( scheduler, data );
+		}
+
 		// Don't create scheduler for already planned tasks.
-		if ( data.scheduled ) {
-			return blockScheduler( scheduler, index, data );
+		if ( data.schedule ) {
+			return drawScheduledTime( scheduler, index, data );
 		}
 
 		const meta = config.meta + '[' + index + ']';
@@ -399,7 +474,7 @@
 		date.addEventListener( 'change', () => {
 			// Remove time element children.
 			while ( time.firstChild ) {
-				time.removeChild( time.firstChild );
+				time.removeChild( time.lastChild );
 			}
 
 			// Show time only if the date.
@@ -412,7 +487,7 @@
 	/**
 	 * Create preview setting element.
 	 *
-	 * @param {HTMLElement} parent Parent DOM element.
+	 * @param {HTMLElement} parent Task DOM element.
 	 * @param {string} index Unique task key.
 	 * @param {Object} data Task params.
 	 */
@@ -425,61 +500,164 @@
 
 		// Create preview checkbox.
 		const checkbox = document.createElement( 'input' );
-		checkbox.setAttribute( 'type', 'checkbox' );
 		checkbox.setAttribute( 'name', meta + '[preview]' );
 		checkbox.value = 1;
+		preview.appendChild( checkbox );
 
-		if ( data.preview ) {
+		// Create title.
+		const title = document.createElement( 'span' );
+		preview.appendChild( title );
+
+		if ( data.result.sent || data.schedule ) {
+			checkbox.setAttribute( 'type', 'hidden' );
+
+			title.textContent = __( 'Preview enabled', 'social-planner' );
+
+			if ( data.task.preview ) {
+				checkbox.value = 0;
+
+				// Set empty-preview title.
+				title.textContent = __( 'Preview disabled', 'social-planner' );
+			}
+
+			return;
+		}
+
+		checkbox.setAttribute( 'type', 'checkbox' );
+
+		if ( data.task.preview ) {
 			checkbox.setAttribute( 'checked', 'checked' );
 		}
 
-		preview.appendChild( checkbox );
-
-		const title = document.createElement( 'span' );
-		title.textContent = __( 'Do not generate preview', 'social-planner' );
-		preview.appendChild( title );
+		title.textContent = __( 'Disable preview', 'social-planner' );
 	};
 
 	/**
 	 * Create non-publihsed target.
 	 *
-	 * @param {HTMLElement} parent Parent DOM element.
-	 * @param {string} index Unique task key.
-	 * @param {Object} data Task params.
+	 * @param {HTMLElement} parent Targets DOM element.
+	 * @param {Object} provider Provider object.
 	 */
-	const createTargetCheck = ( parent, index, data ) => {
-		// Loop through availble providers.
-		for ( const key in config.providers ) {
-			const provider = config.providers[ key ];
+	const createTargetCheckbox = ( parent, provider ) => {
+		const label = document.createElement( 'label' );
+		label.classList.add( 'social-planner-checkbox' );
+		parent.appendChild( label );
 
-			if ( ! provider.label ) {
-				continue;
+		// Create checkbox input.
+		const input = document.createElement( 'input' );
+		input.setAttribute( 'type', 'checkbox' );
+		label.appendChild( input );
+
+		const span = document.createElement( 'span' );
+		span.textContent = provider.label;
+		label.appendChild( span );
+
+		return input;
+	};
+
+	/**
+	 * Create scheduled target.
+	 *
+	 * @param {HTMLElement} parent Targets DOM element.
+	 * @param {Object} provider Provider object.
+	 */
+	const createTargetScheduled = ( parent, provider ) => {
+		const label = document.createElement( 'label' );
+		label.classList.add( 'social-planner-scheduled' );
+		parent.appendChild( label );
+
+		// Create checkbox input.
+		const input = document.createElement( 'input' );
+		input.setAttribute( 'type', 'hidden' );
+		label.appendChild( input );
+
+		const span = document.createElement( 'span' );
+		span.textContent = provider.label;
+		label.appendChild( span );
+
+		return input;
+	};
+
+	/**
+	 * Create target with error.
+	 *
+	 * @param {HTMLElement} parent Targets DOM element.
+	 * @param {Object} message Link params.
+	 */
+	const createTargetError = ( parent, message ) => {
+		const error = document.createElement( 'button' );
+		error.classList.add( 'social-planner-error' );
+
+		error.addEventListener( 'click', ( e ) => {
+			e.preventDefault();
+
+			let extended = parent.querySelector( '.social-planner-extended' );
+
+			if ( null !== extended ) {
+				return parent.removeChild( extended );
 			}
 
-			const check = document.createElement( 'label' );
-			check.classList.add( 'social-planner-check' );
-			parent.append( check );
+			const content = '<strong>' + __( 'Sent error:', 'social-planner' ) + '</strong>';
 
-			const meta = config.meta + '[' + index + ']';
+			extended = document.createElement( 'p' );
+			extended.classList.add( 'social-planner-extended' );
+			extended.textContent = message;
+			extended.innerHTML = content + extended.textContent;
 
-			// Create checkbox input.
-			const input = document.createElement( 'input' );
-			input.setAttribute( 'type', 'checkbox' );
-			input.setAttribute( 'name', meta + '[targets][]' );
-			input.value = key;
+			parent.appendChild( extended );
+		} );
 
-			const targets = data.targets || [];
+		return error;
+	};
 
-			if ( targets && targets.indexOf( key ) > -1 ) {
-				input.setAttribute( 'checked', 'checked' );
+	/**
+	 * Create target with link to sent message.
+	 *
+	 * @param {HTMLElement} parent Targets DOM element.
+	 * @param {Object} message Link params.
+	 */
+	const createTargetLink = ( parent, message ) => {
+		const link = document.createElement( 'a' );
+		link.classList.add( 'social-planner-link' );
+
+		link.setAttribute( 'href', message );
+		link.setAttribute( 'target', '_blank' );
+		link.setAttribute( 'rel', 'noopener' );
+
+		return link;
+	};
+
+	/**
+	 * Create target with sent message id.
+	 *
+	 * @param {HTMLElement} parent Targets DOM element.
+	 * @param {Object} message Link params.
+	 */
+	const createTargetInfo = ( parent, message ) => {
+		const info = document.createElement( 'button' );
+
+		info.classList.add( 'social-planner-info' );
+		info.setAttribute( 'type', 'button' );
+
+		info.addEventListener( 'click', ( e ) => {
+			e.preventDefault();
+
+			let extended = parent.querySelector( '.social-planner-extended' );
+
+			if ( null !== extended ) {
+				return parent.removeChild( extended );
 			}
 
-			check.appendChild( input );
+			const content = '<strong>' + __( 'Sent message:', 'social-planner' ) + '</strong>';
 
-			const span = document.createElement( 'span' );
-			span.textContent = provider.label;
-			check.appendChild( span );
-		}
+			extended = document.createElement( 'p' );
+			extended.classList.add( 'social-planner-extended' );
+			extended.textContent = message;
+			extended.innerHTML = content + message;
+			parent.appendChild( extended );
+		} );
+
+		return info;
 	};
 
 	/**
@@ -494,15 +672,74 @@
 		targets.classList.add( 'social-planner-targets' );
 		parent.appendChild( targets );
 
-		if ( config.errors ) {
-			return;
-		}
+		const meta = config.meta + '[' + index + ']';
 
-		if ( config.sent ) {
-			return;
-		}
+		for ( const key in config.providers ) {
+			const provider = config.providers[ key ];
 
-		createTargetCheck( targets, index, data );
+			if ( ! provider.label ) {
+				continue;
+			}
+
+			data.task.targets = data.task.targets || [];
+
+			if ( data.schedule ) {
+				// Show only if provider key in targets array.
+				if ( data.task.targets.indexOf( key ) >= 0 ) {
+					const input = createTargetScheduled( targets, provider );
+
+					input.setAttribute( 'name', meta + '[targets][]' );
+					input.value = key;
+				}
+
+				continue;
+			}
+
+			if ( ! data.result.sent ) {
+				const input = createTargetCheckbox( targets, provider );
+
+				input.setAttribute( 'name', meta + '[targets][]' );
+				input.value = key;
+
+				// Check if provider key in targets array.
+				if ( data.task.targets.indexOf( key ) >= 0 ) {
+					input.setAttribute( 'checked', 'checked' );
+				}
+
+				continue;
+			}
+
+			let button = null;
+
+			// If sent and in links list.
+			if ( data.result.links && data.result.links[ key ] ) {
+				// Get message from results.
+				const message = data.result.links[ key ];
+
+				if ( 'http' === message.substring( 0, 4 ) ) {
+					button = createTargetLink( targets, message );
+				} else {
+					button = createTargetInfo( targets, message );
+				}
+
+				// Add provider label to link.
+				button.textContent = provider.label;
+
+				// Add button to targets.
+				targets.appendChild( button );
+			}
+
+			// If sent and in errors list.
+			if ( data.result.errors && data.result.errors[ key ] ) {
+				button = createTargetError( targets, data.result.errors[ key ] );
+
+				// Add provider label to link.
+				button.textContent = provider.label;
+
+				// Add button to targets.
+				targets.appendChild( button );
+			}
+		}
 	};
 
 	/**
@@ -522,29 +759,55 @@
 	 *
 	 * @param {HTMLElement} parent List DOM element.
 	 * @param {string} index Unique task key.
-	 * @param {Object} data Task params.
 	 */
-	const appendTask = ( parent, index, data ) => {
+	const appendTask = ( parent, index ) => {
+		const data = {};
+
 		const task = document.createElement( 'fieldset' );
 		task.classList.add( 'social-planner-task' );
 		parent.appendChild( task );
 
-		data = data || {};
+		data.task = {};
+
+		// Append task data.
+		if ( config.tasks && config.tasks[ index ] ) {
+			data.task = config.tasks[ index ];
+		}
+
+		data.result = {};
+
+		// Append task results.
+		if ( config.results && config.results[ index ] ) {
+			data.result = config.results[ index ];
+		}
+
+		data.schedule = null;
+
+		// Append task schedule.
+		if ( config.schedules && config.schedules[ index ] ) {
+			data.schedule = config.schedules[ index ];
+		}
 
 		// Add element with list of targets.
 		createTargets( task, index, data );
 
+		// Create remove button.
 		const remove = document.createElement( 'button' );
 		remove.classList.add( 'social-planner-remove' );
 		remove.setAttribute( 'type', 'button' );
 		task.appendChild( remove );
 
 		remove.addEventListener( 'click', () => {
-			parent.removeChild( task );
-
-			if ( ! parent.hasChildNodes() ) {
-				createEmptyTask( parent );
+			if ( ! data.schedule ) {
+				return removeTask( index );
 			}
+
+			const scheduler = task.querySelector( '.social-planner-scheduler' );
+
+			// Cancel this task first.
+			cancelTask( scheduler, index, () => {
+				return removeTask( index );
+			} );
 		} );
 
 		// Add snippet element.
@@ -560,7 +823,7 @@
 	/**
 	 * Create button to append new task.
 	 *
-	 * @param {HTMLElement} list Parent DOM Element
+	 * @param {HTMLElement} list List DOM Element
 	 */
 	const createAppend = ( list ) => {
 		const append = document.createElement( 'button' );
@@ -577,42 +840,49 @@
 	};
 
 	/**
-	 * Create tasks list.
+	 * Create metabox tasks list.
 	 */
-	const initMetabox = () => {
-		const list = document.createElement( 'div' );
-		list.classList.add( 'social-planner-list' );
-		metabox.appendChild( list );
+	const createTasksList = () => {
+		let list = metabox.querySelector( '.social-planner-list' );
 
-		if ( ! config.meta || ! config.providers ) {
-			return showWarning(
-				metabox,
-				__( 'You need to configure providers on the plugin settings page.', 'social-planner' )
-			);
+		if ( null === list ) {
+			list = document.createElement( 'div' );
+			list.classList.add( 'social-planner-list' );
+			metabox.appendChild( list );
 		}
 
+		// Clear list children.
+		while ( list.firstChild ) {
+			list.removeChild( list.lastChild );
+		}
+
+		// Define tasks if not yet.
 		config.tasks = config.tasks || {};
 
-		// Add append button.
-		createAppend( list );
-
-		// List of index/datetime scheduled tasks.
-		const schedules = config.schedules || {};
-
 		for ( const index in config.tasks ) {
-			const data = config.tasks[ index ];
-
-			if ( schedules[ index ] ) {
-				data.scheduled = schedules[ index ];
-			}
-
-			appendTask( list, index, data );
+			appendTask( list, index );
 		}
 
 		// Append at least one task.
 		if ( ! list.hasChildNodes() ) {
 			createEmptyTask( list );
 		}
+
+		return list;
+	};
+
+	/**
+	 * Create tasks list.
+	 */
+	const initMetabox = () => {
+		if ( ! config.meta || ! config.providers ) {
+			return showWarning( metabox, __( 'Need to configure the plugin on the settings page.', 'social-planner' ) );
+		}
+
+		const list = createTasksList();
+
+		// Add append button.
+		createAppend( list );
 	};
 
 	initMetabox();
