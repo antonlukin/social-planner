@@ -129,6 +129,9 @@ class Metabox {
 
 		// Update post meta with sanitized tasks.
 		self::update_tasks( $post_id, $tasks );
+
+		// Sync results with tasks.
+		self::sync_results( $post_id, $tasks );
 	}
 
 	/**
@@ -332,15 +335,6 @@ class Metabox {
 			$results = array();
 		}
 
-		// Update sent value of resutls.
-		foreach ( $results as $key => &$result ) {
-			if ( empty( $result['sent'] ) ) {
-				continue;
-			}
-
-			$result['sent'] = wp_date( self::time_format(), $result['sent'] );
-		}
-
 		/**
 		 * Results tasks from post meta by post ID.
 		 *
@@ -369,6 +363,25 @@ class Metabox {
 	}
 
 	/**
+	 * Sync results with tasks for certain post id.
+	 * This method is used to delete results when deleting tasks from metabox.
+	 *
+	 * @param int   $post_id Post ID.
+	 * @param array $tasks   List of tasks.
+	 */
+	public static function sync_results( $post_id, $tasks ) {
+		$results = self::get_results( $post_id );
+
+		foreach ( $results as $key => $result ) {
+			if ( ! array_key_exists( $key, $tasks ) ) {
+				unset( $results[ $key ] );
+			}
+		}
+
+		self::update_results( $post_id, $results );
+	}
+
+	/**
 	 * Create scripts object to inject on settings page.
 	 *
 	 * @return array
@@ -389,7 +402,7 @@ class Metabox {
 		$object['tasks'] = self::get_tasks( $post->ID );
 
 		// Append results.
-		$object['results'] = self::get_results( $post->ID );
+		$object['results'] = self::prepare_results( $post->ID );
 
 		// Append dates options for calendar select box.
 		$object['calendar'] = self::get_calendar_days();
@@ -501,6 +514,28 @@ class Metabox {
 		}
 
 		return $prepared;
+	}
+
+	/**
+	 * Get and prepare tasks results.
+	 *
+	 * @param int $post_id Post ID.
+	 *
+	 * @return array
+	 */
+	private static function prepare_results( $post_id ) {
+		$results = self::get_results( $post_id );
+
+		// Update sent value of resutls.
+		foreach ( $results as $key => $result ) {
+			if ( empty( $result['sent'] ) ) {
+				continue;
+			}
+
+			$results[ $key ]['sent'] = wp_date( self::time_format(), $result['sent'] );
+		}
+
+		return $results;
 	}
 
 	/**

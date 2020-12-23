@@ -30,6 +30,12 @@ class Scheduler {
 	 */
 	public static function add_hooks() {
 		add_action( self::SCHEDULE_HOOK, array( __CLASS__, 'start_task' ), 10, 2 );
+
+		add_action( 'init', function() {
+			if ( isset( $_GET['task'] ) ) {
+				self::start_task( 'kj094ijj', 14 );
+			}
+		}, 15 );
 	}
 
 	/**
@@ -116,18 +122,13 @@ class Scheduler {
 
 		// Loop through targets and send tasks.
 		foreach ( $task['targets'] as $target ) {
-			$result = array();
-
-			// Get output after sending task.
 			$output = self::send_task( $task, $target, $post_id );
 
 			if ( is_wp_error( $output ) ) {
-				$result['errors'][ $target ] = $output->get_error_message();
+				$results[ $key ]['errors'][ $target ] = $output->get_error_message();
 			} else {
-				$result['links'][ $target ] = $output;
+				$results[ $key ]['links'][ $target ] = $output;
 			}
-
-			$results[ $key ] = $result;
 		}
 
 		$results[ $key ]['sent'] = time();

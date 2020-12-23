@@ -583,10 +583,13 @@
 	 *
 	 * @param {HTMLElement} parent Targets DOM element.
 	 * @param {Object} message Link params.
+	 * @param {Object} provider Provider object.
 	 */
-	const createTargetError = ( parent, message ) => {
+	const createTargetError = ( parent, message, provider ) => {
 		const error = document.createElement( 'button' );
+
 		error.classList.add( 'social-planner-error' );
+		error.textContent = provider.label;
 
 		error.addEventListener( 'click', ( e ) => {
 			e.preventDefault();
@@ -607,7 +610,7 @@
 			parent.appendChild( extended );
 		} );
 
-		return error;
+		parent.appendChild( error );
 	};
 
 	/**
@@ -615,16 +618,19 @@
 	 *
 	 * @param {HTMLElement} parent Targets DOM element.
 	 * @param {Object} message Link params.
+	 * @param {Object} provider Provider object.
 	 */
-	const createTargetLink = ( parent, message ) => {
+	const createTargetLink = ( parent, message, provider ) => {
 		const link = document.createElement( 'a' );
+
 		link.classList.add( 'social-planner-link' );
+		link.textContent = provider.label;
 
 		link.setAttribute( 'href', message );
 		link.setAttribute( 'target', '_blank' );
 		link.setAttribute( 'rel', 'noopener' );
 
-		return link;
+		parent.appendChild( link );
 	};
 
 	/**
@@ -632,11 +638,14 @@
 	 *
 	 * @param {HTMLElement} parent Targets DOM element.
 	 * @param {Object} message Link params.
+	 * @param {Object} provider Provider object.
 	 */
-	const createTargetInfo = ( parent, message ) => {
+	const createTargetInfo = ( parent, message, provider ) => {
 		const info = document.createElement( 'button' );
 
 		info.classList.add( 'social-planner-info' );
+		info.textContent = provider.label;
+
 		info.setAttribute( 'type', 'button' );
 
 		info.addEventListener( 'click', ( e ) => {
@@ -657,7 +666,107 @@
 			parent.appendChild( extended );
 		} );
 
-		return info;
+		parent.appendChild( info );
+	};
+
+	/**
+	 * Create target for sent tasks.
+	 *
+	 * @param {HTMLElement} parent Targets DOM element.
+	 * @param {string} meta Task meta prefix.
+	 * @param {Object} data Task params.
+	 */
+	const createSentTargets = ( parent, meta, data ) => {
+		const targets = data.task.targets || [];
+
+		for ( let i = 0; i < targets.length; i++ ) {
+			const key = targets[ i ];
+
+			if ( ! config.providers[ key ] ) {
+				continue;
+			}
+
+			// Get provider by key.
+			const provider = config.providers[ key ];
+
+			if ( ! provider.label ) {
+				continue;
+			}
+
+			const input = document.createElement( 'input' );
+			input.value = key;
+
+			input.setAttribute( 'type', 'hidden' );
+			input.setAttribute( 'name', meta + '[targets][]' );
+
+			parent.appendChild( input );
+
+			// If target in links list.
+			if ( data.result.links && data.result.links[ key ] ) {
+				const message = data.result.links[ key ];
+
+				// Simple check if message is a link.
+				if ( 'http' === message.substring( 0, 4 ) ) {
+					createTargetLink( parent, message, provider );
+				} else {
+					createTargetInfo( parent, message, provider );
+				}
+
+				continue;
+			}
+
+			// Set default message.
+			let message = __( 'Unknown sent error', 'social-planner' );
+
+			// Update message if target in errors list.
+			if ( data.result.errors && data.result.errors[ key ] ) {
+				message = data.result.errors[ key ];
+			}
+
+			createTargetError( parent, message, provider );
+		}
+	};
+
+	/**
+	 * Create target for unsent tasks.
+	 *
+	 * @param {HTMLElement} parent Targets DOM element.
+	 * @param {string} meta Task meta prefix.
+	 * @param {Object} data Task params.
+	 */
+	const createUnsentTargets = ( parent, meta, data ) => {
+		const targets = data.task.targets || [];
+
+		for ( const key in config.providers ) {
+			const provider = config.providers[ key ];
+
+			if ( ! provider.label ) {
+				continue;
+			}
+
+			// For not scheduled tasks.
+			if ( ! data.schedule ) {
+				const input = createTargetCheckbox( parent, provider );
+
+				input.setAttribute( 'name', meta + '[targets][]' );
+				input.value = key;
+
+				// Check if provider key in targets array.
+				if ( targets.indexOf( key ) >= 0 ) {
+					input.setAttribute( 'checked', 'checked' );
+				}
+
+				continue;
+			}
+
+			// Create hidden inputs for scheduled tasks.
+			if ( targets.indexOf( key ) >= 0 ) {
+				const input = createTargetScheduled( parent, provider );
+
+				input.setAttribute( 'name', meta + '[targets][]' );
+				input.value = key;
+			}
+		}
 	};
 
 	/**
@@ -674,72 +783,12 @@
 
 		const meta = config.meta + '[' + index + ']';
 
-		for ( const key in config.providers ) {
-			const provider = config.providers[ key ];
-
-			if ( ! provider.label ) {
-				continue;
-			}
-
-			data.task.targets = data.task.targets || [];
-
-			if ( data.schedule ) {
-				// Show only if provider key in targets array.
-				if ( data.task.targets.indexOf( key ) >= 0 ) {
-					const input = createTargetScheduled( targets, provider );
-
-					input.setAttribute( 'name', meta + '[targets][]' );
-					input.value = key;
-				}
-
-				continue;
-			}
-
-			if ( ! data.result.sent ) {
-				const input = createTargetCheckbox( targets, provider );
-
-				input.setAttribute( 'name', meta + '[targets][]' );
-				input.value = key;
-
-				// Check if provider key in targets array.
-				if ( data.task.targets.indexOf( key ) >= 0 ) {
-					input.setAttribute( 'checked', 'checked' );
-				}
-
-				continue;
-			}
-
-			let button = null;
-
-			// If sent and in links list.
-			if ( data.result.links && data.result.links[ key ] ) {
-				// Get message from results.
-				const message = data.result.links[ key ];
-
-				if ( 'http' === message.substring( 0, 4 ) ) {
-					button = createTargetLink( targets, message );
-				} else {
-					button = createTargetInfo( targets, message );
-				}
-
-				// Add provider label to link.
-				button.textContent = provider.label;
-
-				// Add button to targets.
-				targets.appendChild( button );
-			}
-
-			// If sent and in errors list.
-			if ( data.result.errors && data.result.errors[ key ] ) {
-				button = createTargetError( targets, data.result.errors[ key ] );
-
-				// Add provider label to link.
-				button.textContent = provider.label;
-
-				// Add button to targets.
-				targets.appendChild( button );
-			}
+		// Show target for sent tasks.
+		if ( data.result.sent ) {
+			return createSentTargets( targets, meta, data );
 		}
+
+		return createUnsentTargets( targets, meta, data );
 	};
 
 	/**
