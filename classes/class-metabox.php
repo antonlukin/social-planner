@@ -13,11 +13,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Settings page class
+ * Metabox class
  */
 class Metabox {
 	/**
-	 * Admin screen id.
+	 * Metabox ID.
 	 *
 	 * @var string
 	 */
@@ -48,16 +48,10 @@ class Metabox {
 	const METABOX_NONCE = 'social_planner_metabox_nonce';
 
 	/**
-	 * Add hooks for settings page.
+	 * Add hooks to handle metabox.
 	 */
 	public static function add_hooks() {
 		add_action( 'add_meta_boxes', array( __CLASS__, 'add_metabox' ) );
-
-		// Add required assets and objects.
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_styles' ) );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
-
-		// Save metabox.
 		add_action( 'save_post', array( __CLASS__, 'save_metabox' ), 10, 2 );
 
 		// Metabox AJAX actions.
@@ -75,10 +69,14 @@ class Metabox {
 			self::get_post_types(),
 			'advanced'
 		);
+
+		// Add required assets and objects.
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
 	}
 
 	/**
-	 * Show plugin settings.
+	 * Display metabox.
 	 */
 	public static function display_metabox() {
 		do_action( 'social_planner_metabox_before' );
@@ -127,10 +125,9 @@ class Metabox {
 		// Try to schedule something.
 		$tasks = Scheduler::schedule_tasks( $tasks, $post );
 
-		// Update post meta with sanitized tasks.
 		self::update_tasks( $post_id, $tasks );
 
-		// Sync results with tasks.
+		// Remove from meta results deleted tasks.
 		self::sync_results( $post_id, $tasks );
 	}
 
@@ -175,7 +172,6 @@ class Metabox {
 			return;
 		}
 
-		// Insert wp media scripts.
 		wp_enqueue_media();
 
 		wp_enqueue_script(
@@ -199,11 +195,9 @@ class Metabox {
 			wp_send_json_error();
 		}
 
-		$post_id = absint( $_POST['post'] );
-
-		// Process task canceling.
 		if ( 'cancel' === $_POST['handler'] ) {
-			// We need task key to unschedule task.
+			$post_id = absint( $_POST['post'] );
+
 			if ( empty( $_POST['key'] ) ) {
 				wp_send_json_error();
 			}
@@ -218,60 +212,56 @@ class Metabox {
 	}
 
 	/**
-	 * Sanitize post items.
+	 * Sanitize post tasks.
 	 *
-	 * @param array $items Post data from admin-side metabox.
+	 * @param array $tasks Post data from admin-side metabox.
 	 */
-	private static function sanitize_tasks( $items ) {
-		$tasks = array();
+	private static function sanitize_tasks( $tasks ) {
+		$sanitized = array();
 
-		// Get providers list to filter targets.
+		// Get providers from settings.
 		$providers = Settings::get_providers();
 
-		foreach ( $items as $key => $item ) {
-			$task = array();
-
-			// Sanitize the task key.
+		foreach ( $tasks as $key => $task ) {
 			$key = sanitize_key( $key );
 
-			if ( ! empty( $item['targets'] ) ) {
-				foreach ( (array) $item['targets'] as $target ) {
-					// Check if this target is in providers list.
-					if ( array_key_exists( $target, $providers ) ) {
-						$task['targets'][] = $target;
+			if ( ! empty( $task['targets'] ) ) {
+				foreach ( (array) $task['targets'] as $target ) {
+					if ( ! array_key_exists( $target, $providers ) ) {
+						continue;
 					}
+
+					$sanitized[ $key ]['targets'][] = $target;
 				}
 			}
 
-			if ( ! empty( $item['excerpt'] ) ) {
-				$task['excerpt'] = sanitize_textarea_field( $item['excerpt'] );
+			if ( ! empty( $task['excerpt'] ) ) {
+				$sanitized[ $key ]['excerpt'] = sanitize_textarea_field( $task['excerpt'] );
 			}
 
-			if ( ! empty( $item['thumbnail'] ) ) {
-				$task['thumbnail'] = sanitize_text_field( $item['thumbnail'] );
+			if ( ! empty( $task['thumbnail'] ) ) {
+				$sanitized[ $key ]['thumbnail'] = sanitize_text_field( $task['thumbnail'] );
 			}
 
-			if ( ! empty( $item['preview'] ) ) {
-				$task['preview'] = absint( $item['preview'] );
+			if ( ! empty( $task['preview'] ) ) {
+				$sanitized[ $key ]['preview'] = absint( $task['preview'] );
 			}
 
-			if ( ! empty( $item['attachment'] ) ) {
-				$task['attachment'] = absint( $item['attachment'] );
+			if ( ! empty( $task['attachment'] ) ) {
+				$sanitized[ $key ]['attachment'] = absint( $task['attachment'] );
 			}
 
-			if ( ! empty( $item['date'] ) ) {
-				$task['date'] = sanitize_text_field( $item['date'] );
+			if ( ! empty( $task['date'] ) ) {
+				$sanitized[ $key ]['date'] = sanitize_text_field( $task['date'] );
 
-				if ( isset( $item['hour'] ) ) {
-					$task['hour'] = sanitize_text_field( $item['hour'] );
+				if ( isset( $task['hour'] ) ) {
+					$sanitized[ $key ]['hour'] = sanitize_text_field( $task['hour'] );
 				}
 
-				if ( isset( $item['minute'] ) ) {
-					$task['minute'] = sanitize_text_field( $item['minute'] );
+				if ( isset( $task['minute'] ) ) {
+					$sanitized[ $key ]['minute'] = sanitize_text_field( $task['minute'] );
 				}
 			}
-
-			$tasks[ $key ] = $task;
 		}
 
 		/**
@@ -279,16 +269,15 @@ class Metabox {
 		 *
 		 * @param array $tasks List of tasks.
 		 */
-		return apply_filters( 'social_planner_sanitize_tasks', array_filter( $tasks ) );
+		return apply_filters( 'social_planner_sanitize_tasks', array_filter( $sanitized ) );
 	}
 
 	/**
-	 * Get and filter tasks from post meta.
+	 * Get and filter tasks from post meta by post ID.
 	 *
-	 * @param int $post_id  Post ID.
+	 * @param int $post_id Post ID.
 	 */
 	public static function get_tasks( $post_id ) {
-		// Retrieve tasks from post meta.
 		$tasks = get_post_meta( $post_id, self::META_TASKS, true );
 
 		if ( empty( $tasks ) ) {
@@ -328,7 +317,6 @@ class Metabox {
 	 * @param int $post_id Post ID.
 	 */
 	public static function get_results( $post_id ) {
-		// Retrieve results from post meta.
 		$results = get_post_meta( $post_id, self::META_RESULTS, true );
 
 		if ( empty( $results ) ) {
@@ -382,35 +370,25 @@ class Metabox {
 	}
 
 	/**
-	 * Create scripts object to inject on settings page.
+	 * Create scripts object to inject with metabox.
 	 *
 	 * @return array
 	 */
 	private static function create_script_object() {
-		$object = array(
-			'meta'   => self::META_TASKS,
-			'action' => self::AJAX_ACTION,
-			'nonce'  => wp_create_nonce( self::AJAX_ACTION ),
-		);
-
 		$post = get_post();
 
-		// Append time offset.
-		$object['offset'] = self::get_time_offset();
+		$object = array(
+			'meta'      => self::META_TASKS,
+			'action'    => self::AJAX_ACTION,
+			'nonce'     => wp_create_nonce( self::AJAX_ACTION ),
 
-		// Append tasks.
-		$object['tasks'] = self::get_tasks( $post->ID );
+			'tasks'     => self::get_tasks( $post->ID ),
+			'results'   => self::prepare_results( $post->ID ),
+			'offset'    => self::get_time_offset(),
+			'calendar'  => self::get_calendar_days(),
+			'providers' => self::prepare_providers(),
+		);
 
-		// Append results.
-		$object['results'] = self::prepare_results( $post->ID );
-
-		// Append dates options for calendar select box.
-		$object['calendar'] = self::get_calendar_days();
-
-		// Append availble providers and their settings.
-		$object['providers'] = self::prepare_providers();
-
-		// Append list of tasks schedules for this post.
 		$object['schedules'] = self::get_schedules( $post->ID, $object['tasks'] );
 
 		/**
@@ -435,15 +413,12 @@ class Metabox {
 
 		unset( $post_types['attachment'] );
 
-		// Make one-dimensional array.
-		$post_types = array_values( $post_types );
-
 		/**
 		 * Filter metabox post types.
 		 *
 		 * @param array $post_types Array of post types for which the metabox is displayed.
 		 */
-		return apply_filters( 'social_planner_post_types', $post_types );
+		return apply_filters( 'social_planner_post_types', array_values( $post_types ) );
 	}
 
 	/**
@@ -466,11 +441,9 @@ class Metabox {
 
 		for ( $i = 0; $i < $days_number; $i++ ) {
 			$future_time = strtotime( "+ $i days", $current_time );
-
-			// Generate future date as option key.
 			$future_date = wp_date( 'Y-m-d', $future_time );
 
-			// Generate future date title as value.
+			// Generate calendar with local human-readable date.
 			$calendar[ $future_date ] = wp_date( 'j F, l', $future_time );
 		}
 
@@ -489,25 +462,17 @@ class Metabox {
 		$providers = Settings::get_providers();
 
 		foreach ( $providers as $key => $provider ) {
-			// Find class by network name.
 			$class = Core::get_network_class( $key );
 
-			if ( ! $class ) {
-				continue;
+			// Get network label by class.
+			$label = Core::get_network_label( $class );
+
+			if ( ! empty( $provider['title'] ) ) {
+				$label = $label . ': ' . $provider['title'];
 			}
 
-			// Append provider label.
-			if ( method_exists( $class, 'get_label' ) ) {
-				$label = $class::get_label();
+			$prepared[ $key ]['label'] = esc_attr( $label );
 
-				if ( $provider['title'] ) {
-					$label = $label . ': ' . $provider['title'];
-				}
-
-				$prepared[ $key ]['label'] = esc_attr( $label );
-			}
-
-			// Append message limit.
 			if ( method_exists( $class, 'get_limit' ) ) {
 				$prepared[ $key ]['limit'] = absint( $class::get_limit() );
 			}
@@ -526,13 +491,12 @@ class Metabox {
 	private static function prepare_results( $post_id ) {
 		$results = self::get_results( $post_id );
 
-		// Update sent value of resutls.
 		foreach ( $results as $key => $result ) {
 			if ( empty( $result['sent'] ) ) {
 				continue;
 			}
 
-			$results[ $key ]['sent'] = wp_date( self::time_format(), $result['sent'] );
+			$results[ $key ]['sent'] = wp_date( Core::time_format(), $result['sent'] );
 		}
 
 		return $results;
@@ -569,24 +533,10 @@ class Metabox {
 			$scheduled = Scheduler::get_scheduled_time( $key, $post_id );
 
 			if ( $scheduled ) {
-				$schedules[ $key ] = wp_date( self::time_format(), $scheduled );
+				$schedules[ $key ] = wp_date( Core::time_format(), $scheduled );
 			}
 		}
 
 		return $schedules;
-	}
-
-	/**
-	 * Get datetime format for tasks.
-	 */
-	private static function time_format() {
-		$format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
-
-		/**
-		 * Filters scheduled and sent datetime format.
-		 *
-		 * @param string $format Datetime format.
-		 */
-		return apply_filters( 'social_planner_time_format', $format );
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * Settinhs script handler.
+ * Settings script handler.
  */
 
 ( function () {

@@ -1,7 +1,5 @@
 <?php
 /**
- * Cyr-To-Lat
- *
  * Plugin Name: Social planner
  * Plugin URI: https://github.com/antonlukin/social-planner
  * Description: This plugin automatically publishes posts from your blog to your social media accounts on Facebook, Twitter, VK.com, Telegram.
@@ -70,6 +68,11 @@ require_once SOCIAL_PLANNER_DIR . '/classes/class-scheduler.php';
  * Include metabox handler.
  */
 require_once SOCIAL_PLANNER_DIR . '/classes/class-metabox.php';
+
+/**
+ * Include dashboard handler.
+ */
+require_once SOCIAL_PLANNER_DIR . '/classes/class-dashboard.php';
 
 /**
  * Start with core plugin method.

@@ -37,6 +37,9 @@ class Core {
 
 		// Init scheduler class.
 		Scheduler::add_hooks();
+
+		// Init dashboard class.
+		Dashboard::add_hooks();
 	}
 
 	/**
@@ -46,6 +49,8 @@ class Core {
 		$networks = array(
 			'Social_Planner\Network_Telegram' => SOCIAL_PLANNER_DIR . '/networks/class-network-telegram.php',
 			'Social_Planner\Network_Twitter'  => SOCIAL_PLANNER_DIR . '/networks/class-network-twitter.php',
+			'Social_Planner\Network_VK'       => SOCIAL_PLANNER_DIR . '/networks/class-network-vk.php',
+			'Social_Planner\Network_Facebook' => SOCIAL_PLANNER_DIR . '/networks/class-network-facebook.php',
 		);
 
 		/**
@@ -57,7 +62,7 @@ class Core {
 		$networks = apply_filters( 'social_planner_networks', $networks );
 
 		/**
-		 * For each filtered network
+		 * For each filtered network try to include its class.
 		 */
 		foreach ( $networks as $class => $path ) {
 			include_once $path;
@@ -80,8 +85,9 @@ class Core {
 
 	/**
 	 * Helper method to get network class by provider.
+	 * Parse network by provider key and return proper class.
 	 *
-	 * @param string $key Parse network by provider key and return proper class.
+	 * @param string $key Provider key.
 	 */
 	public static function get_network_class( $key ) {
 		$networks = self::$networks;
@@ -90,10 +96,48 @@ class Core {
 		preg_match( '/^(.+)-(\w+)$/', $key, $matches );
 
 		if ( empty( $networks[ $matches[1] ] ) ) {
-			return false;
+			return null;
 		}
 
-		// Find class by network name.
 		return $networks[ $matches[1] ];
+	}
+
+	/**
+	 * Helper method to get network label by class.
+	 *
+	 * @param string $class Network class name.
+	 */
+	public static function get_network_label( $class ) {
+		// Just to avoid fatal errors.
+		if ( ! defined( "$class::NETWORK_NAME" ) ) {
+			return __( 'Untitled', 'social-planner' );
+		}
+
+		$label = $class::NETWORK_NAME;
+
+		if ( method_exists( $class, 'get_label' ) ) {
+			$label = $class::get_label();
+		}
+
+		/**
+		 * Filters scheduled and sent datetime format.
+		 *
+		 * @param string $format Datetime format.
+		 */
+		return apply_filters( 'social_planner_network_label', $label );
+	}
+
+	/**
+	 * Default datetime format for tasks.
+	 */
+	public static function time_format() {
+		$format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
+
+		/**
+		 * Filters scheduled and sent datetime format.
+		 *
+		 * @param string $format Datetime format.
+		 */
+		return apply_filters( 'social_planner_time_format', $format );
 	}
 }

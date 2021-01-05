@@ -1,0 +1,39 @@
+.social-planner-heading {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+
+  margin: -10px;
+  padding: 12px 10px;
+  padding-right: 30px;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  span {
+    color: #666;
+  }
+
+  &::after {
+    content: "\f343";
+
+    position: absolute;
+    top: 12px;
+    right: 12px;
+
+    font-family: dashicons;
+    font-size: 18px;
+
+    color: #777;
+    transition: color 0.25s, transform 0.25s;
+  }
+
+  &:hover::after {
+    color: #0073aa;
+  }
+}

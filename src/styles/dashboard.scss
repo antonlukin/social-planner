@@ -1,0 +1,7 @@
+@import "includes/mixins";
+
+#social-planner-dashboard .inside {
+  position: relative;
+
+  @import "dashboard/*.scss";
+}

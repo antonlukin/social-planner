@@ -1,0 +1,21 @@
+.social-planner-time {
+  display: flex;
+  align-items: center;
+
+  margin-right: 10px;
+
+  input {
+    display: block;
+    width: 35px;
+
+    margin: 5px 0;
+
+    @media screen and (max-width: 782px) {
+      width: 42px;
+    }
+  }
+
+  span {
+    margin: 5px;
+  }
+}

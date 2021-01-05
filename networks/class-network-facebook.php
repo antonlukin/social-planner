@@ -1,6 +1,6 @@
 <?php
 /**
- * Telegram network handler for Social Planner plugin
+ * Facebook network handler for Social Planner plugin
  *
  * @package social-planner
  * @author  Anton Lukin
@@ -11,18 +11,17 @@ namespace Social_Planner;
 use WP_Error;
 
 /**
- * Telegram Social Planner class
+ * Facebook Social Planner class
  *
  * @since 1.0.0
  */
-class Network_Telegram {
+class Network_Facebook {
 	/**
 	 * Unique network slug.
-	 * Use latin alphanumeric characters and underscore only.
 	 *
 	 * @var string
 	 */
-	const NETWORK_NAME = 'telegram';
+	const NETWORK_NAME = 'facebook';
 
 	/**
 	 * Settings helper link.
@@ -32,10 +31,10 @@ class Network_Telegram {
 	const HELPER_LINK = 'http://example.com';
 
 	/**
-	 * Return human-readable network label
+	 * Return human-readable network label.
 	 */
 	public static function get_label() {
-		return _x( 'Telegram', 'network label', 'social-planner' );
+		return _x( 'Facebook', 'provider label', 'social-planner' );
 	}
 
 	/**
@@ -45,7 +44,7 @@ class Network_Telegram {
 		$helper = sprintf(
 			wp_kses(
 				// translators: %s is a link for current network help guide.
-				__( 'Read the <a href="%s" target="_blank">help guide</a> for configuring Telegram provider.', 'social-planner' ),
+				__( 'Read the <a href="%s" target="_blank">help guide</a> for configuring Facebook provider.', 'social-planner' ),
 				array(
 					'a' => array(
 						'href'   => array(),
@@ -65,19 +64,19 @@ class Network_Telegram {
 	public static function get_fields() {
 		$fields = array(
 			'token' => array(
-				'label'       => __( 'Bot token', 'social-planner' ),
-				'placeholder' => '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11',
-				'required'    => true,
+				'label'    => __( 'Access token', 'social-planner' ),
+				'required' => true,
 			),
 
 			'group' => array(
-				'label'    => __( 'Channel or group ID', 'social-planner' ),
+				'label'    => __( 'Community or profile ID', 'social-planner' ),
 				'required' => true,
+				'hint'     => __( 'Use a negative value to designate a community ID.', 'social-planner' ),
 			),
 
 			'title' => array(
 				'label' => __( 'Subtitle', 'social-planner' ),
-				'hint'  => __( 'Optional field. Used as an subtitle if there are multiple Telegram providers.', 'social-planner' ),
+				'hint'  => __( 'Optional field. Used as an subtitle if there are multiple Facebook providers.', 'social-planner' ),
 			),
 		);
 
@@ -91,66 +90,51 @@ class Network_Telegram {
 	 * @param array $settings Settings array from options.
 	 */
 	public static function send_message( $message, $settings ) {
-		if ( empty( $settings['token'] ) ) {
-			return new WP_Error( 'sending', esc_html__( 'Token parameter is empty', 'social-planner' ) );
-		}
-
-		// Get API URL using bot token from settings.
-		$url = 'https://api.telegram.org/bot' . $settings['token'];
-
 		if ( empty( $settings['group'] ) ) {
 			return new WP_Error( 'sending', esc_html__( 'Group parameter is not found', 'social-planner' ) );
 		}
 
-		$response = self::make_request( $message, $url, $settings['group'] );
+		// Get API URL using group id from settings.
+		$url = 'https://graph.facebook.com/v9.0/' . $settings['group'];
+
+		if ( empty( $settings['token'] ) ) {
+			return new WP_Error( 'sending', esc_html__( 'Token parameter is empty', 'social-planner' ) );
+		}
+
+		$response = self::make_request( $message, $url, $settings['token'] );
 
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
 
 		if ( empty( $response['body'] ) ) {
-			return new WP_Error( 'sending', esc_html__( 'Empty Telegram response', 'social-planner' ) );
+			return new WP_Error( 'sending', esc_html__( 'Empty Facebook response', 'social-planner' ) );
 		}
 
 		$response = json_decode( $response['body'], false );
 
-		if ( ! empty( $response->result->message_id ) ) {
-			$result = $response->result;
-
-			// Set message id as output.
-			$output = $result->message_id;
-
-			// Create link if chat username exists.
-			if ( ! empty( $result->chat->username ) ) {
-				$output = "https://t.me/{$result->chat->username}/{$output}";
-			}
-
-			return $output;
+		if ( ! empty( $response->id ) ) {
+			return 'https://facebook.com/' . $response->id;
 		}
 
-		if ( ! empty( $response->description ) ) {
-			return new WP_Error( 'sending', $response->description );
+		if ( ! empty( $response->error->message ) ) {
+			return new WP_Error( 'sending', $response->error->message );
 		}
 
-		return new WP_Error( 'sending', esc_html__( 'Unknown Telegram error', 'social-planner' ) );
+		return new WP_Error( 'sending', esc_html__( 'Unknown Facebook error', 'social-planner' ) );
 	}
 
 	/**
 	 * Prepare data and send request to remote API.
 	 *
-	 * @param array  $message List of message args.
+	 * @param array  $message Message data.
 	 * @param string $url     Remote API URL.
-	 * @param string $group   Group ID.
+	 * @param string $token   Access token from settings.
 	 */
-	private static function make_request( $message, $url, $group ) {
+	private static function make_request( $message, $url, $token ) {
 		$body = array(
-			'parse_mode' => 'HTML',
-			'chat_id'    => $group,
+			'access_token' => $token,
 		);
-
-		if ( ! empty( $message['preview'] ) ) {
-			$body['disable_web_page_preview'] = true;
-		}
 
 		$excerpt = self::prepare_message_excerpt( $message );
 
@@ -162,13 +146,13 @@ class Network_Telegram {
 			return new WP_Error( 'sending', esc_html__( 'Excerpt and poster are both empty', 'social-planner' ) );
 		}
 
-		$body['text'] = $excerpt;
+		$body['message'] = $excerpt;
 
-		return self::send_request( $url . '/sendMessage', $body );
+		return self::send_request( $url . '/feed', $body );
 	}
 
 	/**
-	 * Send poster with caption to Telegram.
+	 * Send poster with caption to Facebook.
 	 *
 	 * @param string $poster  Path to local image file.
 	 * @param string $url     Remote API URL.
@@ -183,7 +167,7 @@ class Network_Telegram {
 		}
 
 		// Generate multipart data body.
-		$body = self::prepare_multipart_data( $body, array( 'photo' => $poster ), $boundary );
+		$body = self::prepare_multipart_data( $body, array( 'source' => $poster ), $boundary );
 
 		if ( is_wp_error( $body ) ) {
 			return $body;
@@ -194,27 +178,7 @@ class Network_Telegram {
 			'Content-Length' => strlen( $body ),
 		);
 
-		return self::send_request( $url . '/sendPhoto', $body, $headers );
-	}
-
-	/**
-	 * Send request to remote server.
-	 *
-	 * @param string $url     Remote API URL.
-	 * @param array  $body    Request body.
-	 * @param array  $headers Optional. Request headers.
-	 */
-	private static function send_request( $url, $body, $headers = null ) {
-		$args = array(
-			'user-agent' => 'social-planner/' . SOCIAL_PLANNER_VERSION,
-			'body'       => $body,
-		);
-
-		if ( $headers ) {
-			$args['headers'] = $headers;
-		}
-
-		return wp_remote_post( $url, $args );
+		return self::send_request( $url . '/photos', $body, $headers );
 	}
 
 	/**
@@ -265,9 +229,6 @@ class Network_Telegram {
 		$excerpt = array();
 
 		if ( ! empty( $message['excerpt'] ) ) {
-			$message['excerpt'] = preg_replace( '/\*(.+?)\*/s', '<b>$1</b>', $message['excerpt'] );
-			$message['excerpt'] = preg_replace( '/_(.+?)_/s', '<i>$1</i>', $message['excerpt'] );
-
 			$excerpt[] = $message['excerpt'];
 		}
 
@@ -278,10 +239,30 @@ class Network_Telegram {
 		$excerpt = implode( "\n\n", $excerpt );
 
 		/**
-		 * Filter Telegram message excerpt right before sending.
+		 * Filter facebook message excerpt right before sending.
 		 *
-		 * @param string $excerpt VK.com message excerpt.
+		 * @param string $excerpt Facebook message excerpt.
 		 */
-		return apply_filters( 'social_planner_telegram_excerpt', $excerpt );
+		return apply_filters( 'social_planner_facebook_excerpt', $excerpt );
+	}
+
+	/**
+	 * Send request to remote server.
+	 *
+	 * @param string $url     Remote API URL.
+	 * @param array  $body    Request body.
+	 * @param array  $headers Optional. Request headers.
+	 */
+	private static function send_request( $url, $body, $headers = null ) {
+		$args = array(
+			'user-agent' => 'social-planner/' . SOCIAL_PLANNER_VERSION,
+			'body'       => $body,
+		);
+
+		if ( $headers ) {
+			$args['headers'] = $headers;
+		}
+
+		return wp_remote_post( $url, $args );
 	}
 }

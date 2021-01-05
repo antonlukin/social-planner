@@ -1,0 +1,25 @@
+.social-planner-scheduler {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  cursor: default;
+
+  min-height: 40px;
+  margin-top: 10px;
+
+  select {
+    margin: 5px 10px 5px 0;
+  }
+
+  strong {
+    margin: 0 5px;
+  }
+
+  .button-link {
+    margin: 0 5px;
+  }
+
+  .spinner {
+    margin-top: 0;
+  }
+}

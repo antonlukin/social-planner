@@ -1,0 +1,14 @@
+.social-planner-calendar {
+  display: block;
+  color: #888;
+
+  margin-right: 5px;
+
+  &::after {
+    content: "\f145";
+    display: block;
+
+    font-family: dashicons;
+    font-size: 20px;
+  }
+}

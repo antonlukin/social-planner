@@ -1,0 +1,32 @@
+.social-planner-remove {
+  display: block;
+  position: absolute;
+  top: 10px;
+  right: 0;
+  cursor: pointer;
+
+  padding: 1px;
+  font-size: 18px;
+  line-height: 1;
+  color: #a00;
+
+  background: transparent;
+  border: none;
+
+  &::after {
+    content: "\f182";
+    display: block;
+
+    font-family: dashicons;
+    line-height: 1;
+  }
+
+  &:focus {
+    @include link-focus;
+  }
+
+  &:disabled {
+    color: #aaa;
+    cursor: default;
+  }
+}

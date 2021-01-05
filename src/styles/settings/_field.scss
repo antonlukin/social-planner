@@ -1,0 +1,23 @@
+.social-planner-field {
+  display: block;
+
+  width: 100%;
+  margin: 14px 0 0;
+
+  & > strong {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  & > input {
+    display: block;
+    width: 100%;
+  }
+
+  small {
+    display: block;
+
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+}

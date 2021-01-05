@@ -716,7 +716,7 @@
 			}
 
 			// Set default message.
-			let message = __( 'Unknown sent error', 'social-planner' );
+			let message = __( 'The reason for this error is unknown', 'social-planner' );
 
 			// Update message if target in errors list.
 			if ( data.result.errors && data.result.errors[ key ] ) {
@@ -921,7 +921,7 @@
 	};
 
 	/**
-	 * Create tasks list.
+	 * Init metabox.
 	 */
 	const initMetabox = () => {
 		if ( ! config.meta || ! config.providers ) {

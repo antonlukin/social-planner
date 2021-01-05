@@ -1,0 +1,15 @@
+.social-planner-task {
+  display: block;
+  position: relative;
+
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: solid 1px #eee;
+
+  &:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+
+    border-bottom: none;
+  }
+}

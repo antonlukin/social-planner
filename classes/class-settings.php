@@ -177,17 +177,13 @@ class Settings {
 		foreach ( $networks as $name => $class ) {
 			$network = array();
 
-			// Add required network fields.
+			// Get network label by class.
+			$network['label'] = Core::get_network_label( $class );
+
 			if ( method_exists( $class, 'get_fields' ) ) {
 				$network['fields'] = $class::get_fields();
 			}
 
-			// Add required network label.
-			if ( method_exists( $class, 'get_label' ) ) {
-				$network['label'] = $class::get_label();
-			}
-
-			// Add network helper.
 			if ( method_exists( $class, 'get_helper' ) ) {
 				$network['helper'] = $class::get_helper();
 			}
@@ -195,7 +191,6 @@ class Settings {
 			$object['networks'][ $name ] = $network;
 		}
 
-		// Append list of providers from options.
 		$object['providers'] = self::get_providers();
 
 		/**
@@ -209,24 +204,25 @@ class Settings {
 	/**
 	 * Filters an option before its value is (maybe) serialized and updated.
 	 *
-	 * @param mixed  $value  The new, unserialized option value.
-	 * @param string $option Option name.
+	 * @param mixed  $value The new, unserialized option value.
+	 * @param string $name  Option name.
 	 * @return array
 	 */
-	public static function sanitize_option( $value, $option ) {
-		if ( self::OPTION_PROVIDERS !== $option ) {
+	public static function sanitize_option( $value, $name ) {
+		if ( self::OPTION_PROVIDERS !== $name ) {
 			return $value;
 		}
 
-		foreach ( $value as $key => $item ) {
-			// Sanitize task key.
+		$sanitized = array();
+
+		foreach ( $value as $key => $field ) {
 			$key = sanitize_key( $key );
 
-			// Sanitize post fields.
-			$new_value[ $key ] = array_map( 'sanitize_text_field', $item );
+			// Sanitize values.
+			$sanitized[ $key ] = array_map( 'sanitize_text_field', $field );
 		}
 
-		return $new_value;
+		return $sanitized;
 	}
 
 	/**

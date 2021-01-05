@@ -30,12 +30,6 @@ class Scheduler {
 	 */
 	public static function add_hooks() {
 		add_action( self::SCHEDULE_HOOK, array( __CLASS__, 'start_task' ), 10, 2 );
-
-		add_action( 'init', function() {
-			if ( isset( $_GET['task'] ) ) {
-				self::start_task( 'kj094ijj', 14 );
-			}
-		}, 15 );
 	}
 
 	/**
@@ -46,13 +40,11 @@ class Scheduler {
 	 */
 	public static function schedule_tasks( $tasks, $post ) {
 		foreach ( $tasks as $key => &$task ) {
-			// Get task planned time in GMT from metabox.
 			$planned = self::get_planned_time( $task );
 
 			// Remove all time keys from the task.
 			$task = array_diff_key( $task, array_flip( array( 'date', 'hour', 'minute' ) ) );
 
-			// Unschedule and skip tasks with empty targets.
 			if ( empty( $task['targets'] ) ) {
 				self::unschedule_task( $key, $post->ID );
 
@@ -112,7 +104,6 @@ class Scheduler {
 			return;
 		}
 
-		// Get results from post ID.
 		$results = Metabox::get_results( $post_id );
 
 		// Skip already sent tasks.
@@ -120,20 +111,20 @@ class Scheduler {
 			return;
 		}
 
-		// Loop through targets and send tasks.
 		foreach ( $task['targets'] as $target ) {
 			$output = self::send_task( $task, $target, $post_id );
 
 			if ( is_wp_error( $output ) ) {
-				$results[ $key ]['errors'][ $target ] = $output->get_error_message();
-			} else {
-				$results[ $key ]['links'][ $target ] = $output;
+				$results[ $key ]['errors'][ $target ] = sanitize_text_field( $output->get_error_message() );
+
+				continue;
 			}
+
+			$results[ $key ]['links'][ $target ] = sanitize_text_field( $output );
 		}
 
 		$results[ $key ]['sent'] = time();
 
-		// Update list of results.
 		Metabox::update_results( $post_id, $results );
 	}
 
@@ -231,27 +222,20 @@ class Scheduler {
 
 		$class = Core::get_network_class( $target );
 
-		if ( ! $class ) {
-			return new WP_Error( 'config', esc_html__( 'Network does not exist', 'social-planner' ) );
-		}
-
 		if ( ! method_exists( $class, 'send_message' ) ) {
-			return new WP_Error( 'config', esc_html__( 'Missed sending method in network', 'social-planner' ) );
+			return new WP_Error( 'config', esc_html__( 'Sending method is missed', 'social-planner' ) );
 		}
 
 		$message = array();
 
-		// Add excerpt to message.
 		if ( ! empty( $task['excerpt'] ) ) {
 			$message['excerpt'] = wp_specialchars_decode( $task['excerpt'] );
 		}
 
-		// Add attached file to message.
 		if ( ! empty( $task['attachment'] ) ) {
 			$message['poster'] = get_attached_file( $task['attachment'] );
 		}
 
-		// Add preview boolean.
 		if ( ! empty( $task['preview'] ) ) {
 			$message['preview'] = true;
 		}
@@ -269,7 +253,6 @@ class Scheduler {
 		 */
 		$message = apply_filters( 'social_poster_send_message', $message, $post_id, $target, $task );
 
-		// Ok let's send the message.
 		return $class::send_message( $message, $providers[ $target ] );
 	}
 

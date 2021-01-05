@@ -1,0 +1,200 @@
+<?php
+/**
+ * Dashboard class
+ *
+ * @package social-planner
+ * @author  Anton Lukin
+ */
+
+namespace Social_Planner;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	die;
+}
+
+/**
+ * Dashboard page class
+ */
+class Dashboard {
+	/**
+	 * Dashboard widget ID.
+	 *
+	 * @var string
+	 */
+	const DASHBOARD_ID = 'social-planner-dashboard';
+
+	/**
+	 * Add hooks for settings page.
+	 */
+	public static function add_hooks() {
+		// Add dashboard widget with scheduled tasks.
+		add_action( 'wp_dashboard_setup', array( __CLASS__, 'add_dashboard_widget' ) );
+	}
+
+	/**
+	 * Add dashboard widget with scheduled tasks
+	 */
+	public static function add_dashboard_widget() {
+		/**
+		 * Easy way to hide dashboard
+		 *
+		 * @param bool $hide_dashboard Set true to hide dashboard for all users.
+		 */
+		$hide_dashboard = apply_filters( 'social_planner_hide_dashboard', false );
+
+		if ( $hide_dashboard ) {
+			return;
+		}
+
+		wp_add_dashboard_widget(
+			self::DASHBOARD_ID,
+			esc_html__( 'Social Planner', 'knife-theme' ),
+			array( __CLASS__, 'display_widget' )
+		);
+
+		// Add required assets and objects.
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
+	}
+
+	/**
+	 * Display dashboard widget.
+	 */
+	public static function display_widget() {
+		do_action( 'social_planner_dashboard_before' );
+
+		printf(
+			'<p class="hide-if-js">%s</p>',
+			esc_html__( 'This dashboard requires JavaScript. Enable it in your browser settings, please.', 'social-planner' ),
+		);
+	}
+
+	/**
+	 * Enqueue dashboard styles.
+	 *
+	 * @param string $hook_suffix The current admin page.
+	 */
+	public static function enqueue_styles( $hook_suffix ) {
+		if ( 'index.php' !== $hook_suffix ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'social-planner-metabox',
+			SOCIAL_PLANNER_URL . '/assets/styles/dashboard.min.css',
+			array(),
+			SOCIAL_PLANNER_VERSION,
+			'all'
+		);
+	}
+
+	/**
+	 * Enqueue dashboard scripts.
+	 *
+	 * @param string $hook_suffix The current admin page.
+	 */
+	public static function enqueue_scripts( $hook_suffix ) {
+		if ( 'index.php' !== $hook_suffix ) {
+			return;
+		}
+
+		wp_enqueue_script(
+			'social-planner-dashboard',
+			SOCIAL_PLANNER_URL . '/assets/scripts/dashboard.min.js',
+			array( 'wp-i18n' ),
+			SOCIAL_PLANNER_VERSION,
+			true
+		);
+
+		wp_localize_script( 'social-planner-dashboard', 'socialPlannerDashboard', self::create_script_object() );
+	}
+
+	/**
+	 * Create scripts object to inject dashboard options.
+	 *
+	 * @return array
+	 */
+	private static function create_script_object() {
+		$object = array();
+
+		$tasks = self::get_scheduled_tasks();
+
+		$new = array();
+
+		$providers = Settings::get_providers();
+
+		foreach ( $tasks as $task ) {
+			$x = Metabox::get_tasks( $task['post_id'] );
+
+			$key = $task['key'];
+
+			if ( empty( $x[ $key ] ) ) {
+				continue;
+			}
+
+			$news = $x[ $key ];
+
+			$news['postlink'] = esc_url( get_permalink( $task['post_id'] ) );
+			$news['editlink'] = esc_url( get_edit_post_link( $task['post_id'] ) );
+
+			$news['scheduled'] = wp_date( Core::time_format(), $task['timestamp'] );
+
+			foreach ( $news['targets'] as $target ) {
+				$class = Core::get_network_class( $target );
+
+				$label = Core::get_network_label( $class );
+
+				if ( ! empty( $providers[ $target ]['title'] ) ) {
+					$label = $label . ': ' . $providers[ $target ]['title'];
+				}
+
+				$news['networks'][] = $label;
+			}
+
+			$object[] = $news;
+		}
+
+		/**
+		 * Filter dashboard scripts object.
+		 *
+		 * @param array $object Array of dashboard script object.
+		 */
+		return apply_filters( 'social_planner_dashboard_object', $object );
+	}
+
+	/**
+	 * Get scheduled Social Planner tasks.
+	 *
+	 * @return array $tasks List of scheduled tasks.
+	 */
+	private static function get_scheduled_tasks() {
+		$tasks = array();
+
+		// Get all crons jobs.
+		$crons = (array) _get_cron_array();
+
+		foreach ( $crons as $timestamp => $events ) {
+			$hook = Scheduler::SCHEDULE_HOOK;
+
+			foreach ( $events as $id => $event ) {
+				if ( $hook !== $id ) {
+					continue;
+				}
+
+				foreach ( $event as $key => $task ) {
+					if ( empty( $task['args'] ) || count( $task['args'] ) < 2 ) {
+						continue;
+					}
+
+					$tasks[] = array(
+						'timestamp' => $timestamp,
+						'key'       => $task['args'][0],
+						'post_id'   => $task['args'][1],
+					);
+				}
+			}
+		}
+
+		return $tasks;
+	}
+}

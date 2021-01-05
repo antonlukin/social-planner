@@ -1,0 +1,44 @@
+.social-planner-link {
+  display: flex;
+  align-items: center;
+
+  position: relative;
+  user-select: none;
+  cursor: pointer;
+  box-sizing: border-box;
+
+  height: 30px;
+  margin: 5px 10px 5px 0;
+  padding: 0 7px 0 25px;
+  opacity: 0.9;
+
+  color: #111;
+  background: #eee;
+
+  text-decoration: none;
+
+  border: solid 1px #ccc;
+  border-radius: 2px;
+
+  &::before {
+    content: "\f504";
+    display: block;
+
+    position: absolute;
+    top: 50%;
+    left: 5px;
+
+    font-family: dashicons;
+    font-size: 16px;
+    line-height: 1;
+
+    color: #0073aa;
+    transform: translateY(-50%);
+
+    -webkit-font-smoothing: antialiased;
+  }
+
+  &:focus {
+    @include label-focus;
+  }
+}

@@ -1,0 +1,23 @@
+.social-planner-remove {
+  display: block;
+  cursor: pointer;
+  outline: 1px dotted transparent;
+
+  margin: 16px 0 8px;
+  padding: 0;
+
+  color: #a00;
+  background: transparent;
+  border: none;
+  border-bottom: solid 1px;
+
+  transition: border 0.125s;
+
+  &:focus {
+    @include link-focus;
+  }
+
+  &:hover {
+    border-color: transparent;
+  }
+}

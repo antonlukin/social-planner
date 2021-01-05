@@ -1,0 +1,12 @@
+.social-planner-providers {
+  display: block;
+  box-sizing: border-box;
+
+  width: 100%;
+  max-width: 680px;
+  margin-top: 20px;
+
+  &.updated .social-planner-submit {
+    display: block;
+  }
+}

@@ -1,0 +1,25 @@
+.social-planner-header {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+
+  width: 100%;
+  margin-bottom: 10px;
+
+  &::before {
+    content: "\f469";
+    display: block;
+
+    margin-right: 5px;
+
+    font-family: dashicons;
+    font-size: 20px;
+
+    color: #888;
+  }
+
+  strong {
+    display: block;
+    margin-right: 15px;
+  }
+}

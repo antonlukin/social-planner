@@ -1,0 +1,16 @@
+.social-planner-append {
+  display: block;
+
+  width: 100%;
+  max-width: 680px;
+  margin: 20px 0;
+
+  select {
+    min-width: 200px;
+    margin-right: 8px;
+
+    @media screen and (max-width: 479px) {
+      min-width: auto;
+    }
+  }
+}

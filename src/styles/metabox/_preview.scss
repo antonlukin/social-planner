@@ -1,0 +1,34 @@
+.social-planner-preview {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  align-self: center;
+  cursor: default;
+
+  order: 2;
+  user-select: none;
+
+  margin-top: 10px;
+  margin-left: auto;
+
+  input {
+    margin: 0;
+  }
+
+  span {
+    cursor: default;
+  }
+
+  input[type="checkbox"]+span {
+    cursor: pointer;
+    padding-left: 8px;
+  }
+
+  @media screen and (max-width: 1279px) {
+    order: 0;
+
+    width: 100%;
+    margin-top: 15px;
+    margin-left: 0;
+  }
+}

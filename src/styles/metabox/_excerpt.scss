@@ -1,0 +1,14 @@
+.social-planner-excerpt {
+  display: block;
+
+  width: 100%;
+  margin: 0;
+  padding: 10px 120px 30px 10px;
+  max-width: 100%;
+  min-height: 120px;
+
+  @media screen and (max-width: 782px) {
+    padding: 8px 75px 20px 8px;
+    font-size: 13px;
+  }
+}

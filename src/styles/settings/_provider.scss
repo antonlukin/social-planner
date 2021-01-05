@@ -1,0 +1,35 @@
+.social-planner-provider {
+  display: block;
+  position: relative;
+
+  margin: 0 0 15px;
+  padding: 10px 10px;
+
+  background-color: #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+
+  border: 1px solid #ccd0d4;
+  border-radius: 4px;
+
+  &.is-collapsed {
+    cursor: pointer;
+
+    .social-planner-heading {
+      &::after {
+        transform: rotate(180deg);
+      }
+    }
+
+    .social-planner-helper {
+      display: none;
+    }
+
+    .social-planner-field {
+      display: none;
+    }
+
+    .social-planner-remove {
+      display: none;
+    }
+  }
+}
