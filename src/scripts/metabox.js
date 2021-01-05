@@ -21,7 +21,7 @@
 		return;
 	}
 
-	const config = window.socialPlannerMetabox;
+	const config = window.socialPlannerMetabox || {};
 
 	/**
 	 * Show warning message.

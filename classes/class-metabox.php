@@ -244,7 +244,7 @@ class Metabox {
 			}
 
 			if ( ! empty( $task['preview'] ) ) {
-				$sanitized[ $key ]['preview'] = absint( $task['preview'] );
+				$sanitized[ $key ]['preview'] = 1;
 			}
 
 			if ( ! empty( $task['attachment'] ) ) {
@@ -382,7 +382,7 @@ class Metabox {
 			'action'    => self::AJAX_ACTION,
 			'nonce'     => wp_create_nonce( self::AJAX_ACTION ),
 
-			'tasks'     => self::get_tasks( $post->ID ),
+			'tasks'     => self::prepare_tasks( $post->ID ),
 			'results'   => self::prepare_results( $post->ID ),
 			'offset'    => self::get_time_offset(),
 			'calendar'  => self::get_calendar_days(),
@@ -397,6 +397,29 @@ class Metabox {
 		 * @param array $object Array of metabox script object.
 		 */
 		return apply_filters( 'social_planner_metabox_object', $object );
+	}
+
+	/**
+	 * Get and prepare to show tasks.
+	 *
+	 * @param int $post_id Post ID.
+	 *
+	 * @return array
+	 */
+	private static function prepare_tasks( $post_id ) {
+		$tasks = self::get_tasks( $post_id );
+
+		foreach ( $tasks as $key => $task ) {
+			if ( ! empty( $task['thumbnail'] ) ) {
+				$tasks[ $key ]['thumbnail'] = esc_url( $task['thumbnail'] );
+			}
+
+			if ( ! empty( $task['attachment'] ) ) {
+				$tasks[ $key ]['attachment'] = absint( $task['attachment'] );
+			}
+		}
+
+		return $tasks;
 	}
 
 	/**

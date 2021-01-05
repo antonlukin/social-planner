@@ -115,44 +115,9 @@ class Dashboard {
 	 * @return array
 	 */
 	private static function create_script_object() {
-		$object = array();
-
-		$tasks = self::get_scheduled_tasks();
-
-		$new = array();
-
-		$providers = Settings::get_providers();
-
-		foreach ( $tasks as $task ) {
-			$x = Metabox::get_tasks( $task['post_id'] );
-
-			$key = $task['key'];
-
-			if ( empty( $x[ $key ] ) ) {
-				continue;
-			}
-
-			$news = $x[ $key ];
-
-			$news['postlink'] = esc_url( get_permalink( $task['post_id'] ) );
-			$news['editlink'] = esc_url( get_edit_post_link( $task['post_id'] ) );
-
-			$news['scheduled'] = wp_date( Core::time_format(), $task['timestamp'] );
-
-			foreach ( $news['targets'] as $target ) {
-				$class = Core::get_network_class( $target );
-
-				$label = Core::get_network_label( $class );
-
-				if ( ! empty( $providers[ $target ]['title'] ) ) {
-					$label = $label . ': ' . $providers[ $target ]['title'];
-				}
-
-				$news['networks'][] = $label;
-			}
-
-			$object[] = $news;
-		}
+		$object = array(
+			'tasks' => self::prepare_tasks(),
+		);
 
 		/**
 		 * Filter dashboard scripts object.
@@ -163,9 +128,93 @@ class Dashboard {
 	}
 
 	/**
-	 * Get scheduled Social Planner tasks.
+	 * Prepare tasks to show them in dashboard.
 	 *
-	 * @return array $tasks List of scheduled tasks.
+	 * @return array
+	 */
+	private static function prepare_tasks() {
+		$prepared = array();
+
+		// Get scheduled tasks from cron option.
+		$tasks = self::get_scheduled_tasks();
+
+		foreach ( $tasks as $task ) {
+			$key = $task['key'];
+
+			// Get all tasks for certain post id to find scheduled task data.
+			$data = Metabox::get_tasks( $task['post_id'] );
+
+			if ( empty( $data[ $key ] ) ) {
+				continue;
+			}
+
+			$prepared[] = self::compose_task( $task, $data[ $key ] );
+		}
+
+		return $prepared;
+	}
+
+	/**
+	 * Compose and filter scheduled task object.
+	 *
+	 * @param array $task Scheduled task object from cron list.
+	 * @param array $data Task data from post meta.
+	 *
+	 * @return array
+	 */
+	private static function compose_task( $task, $data ) {
+		$prepared = array(
+			'postlink'  => esc_url( get_permalink( $task['post_id'] ) ),
+			'editlink'  => esc_url( get_edit_post_link( $task['post_id'] ) ),
+			'scheduled' => wp_date( Core::time_format(), $task['timestamp'] ),
+		);
+
+		if ( ! empty( $data['excerpt'] ) ) {
+			$prepared['excerpt'] = wp_kses_post( wpautop( $data['excerpt'] ) );
+		}
+
+		if ( ! empty( $data['thumbnail'] ) ) {
+			$prepared['thumbnail'] = esc_url( $data['thumbnail'] );
+		}
+
+		$prepared['networks'] = self::get_task_networks( $data['targets'] );
+
+		return $prepared;
+	}
+
+	/**
+	 * Helper method to get task networks labels.
+	 *
+	 * @param array $targets List of task targets.
+	 *
+	 * @return array
+	 */
+	private static function get_task_networks( $targets ) {
+		$networks = array();
+
+		// Get all providers from settings.
+		$providers = Settings::get_providers();
+
+		foreach ( $targets as $target ) {
+			$class = Core::get_network_class( $target );
+
+			// Get network label by class.
+			$label = Core::get_network_label( $class );
+
+			if ( ! empty( $providers[ $target ]['title'] ) ) {
+				$label = $label . ': ' . $providers[ $target ]['title'];
+			}
+
+			$networks[] = $label;
+		}
+
+		return $networks;
+	}
+
+	/**
+	 * Get scheduled tasks from cron option.
+	 *
+	 * @return array
 	 */
 	private static function get_scheduled_tasks() {
 		$tasks = array();

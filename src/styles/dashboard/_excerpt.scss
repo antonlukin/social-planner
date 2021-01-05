@@ -1,4 +1,12 @@
 .social-planner-excerpt {
   display: block;
   flex: 1 auto;
+
+  p {
+    margin: 5px 0 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
 }

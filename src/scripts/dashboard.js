@@ -21,7 +21,7 @@
 		return;
 	}
 
-	const config = window.socialPlannerDashboard || [];
+	const config = window.socialPlannerDashboard || {};
 
 	/**
 	 * Show warning message.
@@ -80,7 +80,7 @@
 		if ( data.excerpt ) {
 			const excerpt = document.createElement( 'div' );
 			excerpt.classList.add( 'social-planner-excerpt' );
-			excerpt.textContent = data.excerpt;
+			excerpt.innerHTML = data.excerpt;
 
 			content.appendChild( excerpt );
 		}
@@ -143,16 +143,18 @@
 	 * Init dashboard.
 	 */
 	const initDashboard = () => {
-		if ( ! config ) {
+		if ( ! config.tasks ) {
 			return showWarning( dashboard, __( 'Nothing planned.', 'social-planner' ) );
 		}
+
+		config.tasks = config.tasks || [];
 
 		const list = document.createElement( 'div' );
 		list.classList.add( 'social-planner-list' );
 		dashboard.appendChild( list );
 
-		for ( let i = 0; i < config.length; i++ ) {
-			const task = createTask( config[ i ] );
+		for ( let i = 0; i < config.tasks.length; i++ ) {
+			const task = createTask( config.tasks[ i ] );
 
 			list.appendChild( task );
 		}
