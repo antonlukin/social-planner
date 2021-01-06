@@ -1,1 +1,156 @@
-"use strict";!function(){var a,d,l,s;"undefined"!=typeof wp&&(a=wp.i18n.__,null!==(d=document.querySelector("#social-planner-dashboard > .inside"))&&void 0!==window.socialPlannerDashboard&&(l=window.socialPlannerDashboard||{},s=function(e){var n=document.createElement("div");n.classList.add("social-planner-task");var t,a=(t=e,(d=document.createElement("div")).classList.add("social-planner-header"),t.scheduled&&((a=document.createElement("strong")).textContent=t.scheduled,d.appendChild(a)),t.postlink&&t.editlink&&((a=document.createElement("a")).setAttribute("href",t.editlink),a.textContent=t.postlink,d.appendChild(a)),d);n.appendChild(a);var d,l,a,a=(d=e,(a=document.createElement("div")).classList.add("social-planner-content"),d.excerpt&&((l=document.createElement("div")).classList.add("social-planner-excerpt"),l.innerHTML=d.excerpt,a.appendChild(l)),d.thumbnail&&((l=document.createElement("img")).classList.add("social-planner-thumbnail"),l.setAttribute("src",d.thumbnail),a.appendChild(l)),a);n.appendChild(a);e=function(e){var n=document.createElement("div");n.classList.add("social-planner-targets"),e.networks=e.networks||[];for(var t=0;t<e.networks.length;t++){var a=document.createElement("span");a.classList.add("social-planner-network"),a.textContent=e.networks[t],n.appendChild(a)}return n}(e);return n.appendChild(e),n},function(){if(!l.tasks)return function(e,n){var t=document.createElement("p");for(t.classList.add("social-planner-warning"),t.textContent=n;e.firstChild;)e.removeChild(e.lastChild);e.appendChild(t)}(d,a("Nothing planned.","social-planner"));l.tasks=l.tasks||[];var e=document.createElement("div");e.classList.add("social-planner-list"),d.appendChild(e);for(var n=0;n<l.tasks.length;n++){var t=s(l.tasks[n]);e.appendChild(t)}}()))}();
+"use strict";
+
+/**
+ * Dashboard script handler.
+ */
+(function () {
+  if ('undefined' === typeof wp) {
+    return;
+  }
+
+  var __ = wp.i18n.__; // Find dashboard element.
+
+  var dashboard = document.querySelector('#social-planner-dashboard > .inside'); // Stop if settings element not exists.
+
+  if (null === dashboard) {
+    return;
+  }
+
+  if ('undefined' === typeof window.socialPlannerDashboard) {
+    return;
+  }
+
+  var config = window.socialPlannerDashboard || {};
+  /**
+   * Show warning message.
+   *
+   * @param {HTMLElement} parent Parent DOM element.
+   * @param {string} message Error text message.
+   */
+
+  var showWarning = function showWarning(parent, message) {
+    var warning = document.createElement('p');
+    warning.classList.add('social-planner-warning');
+    warning.textContent = message;
+
+    while (parent.firstChild) {
+      parent.removeChild(parent.lastChild);
+    }
+
+    parent.appendChild(warning);
+  };
+  /**
+   * Create scheduled task header.
+   *
+   * @param {Object} data Task data from config.
+   */
+
+
+  var createTaskHeader = function createTaskHeader(data) {
+    var header = document.createElement('div');
+    header.classList.add('social-planner-header');
+
+    if (data.scheduled) {
+      var scheduled = document.createElement('strong');
+      scheduled.textContent = data.scheduled;
+      header.appendChild(scheduled);
+    }
+
+    if (data.postlink && data.editlink) {
+      var link = document.createElement('a');
+      link.setAttribute('href', data.editlink);
+      link.textContent = data.postlink;
+      header.appendChild(link);
+    }
+
+    return header;
+  };
+  /**
+   * Create scheduled task content.
+   *
+   * @param {Object} data Task data from config.
+   */
+
+
+  var createTaskContent = function createTaskContent(data) {
+    var content = document.createElement('div');
+    content.classList.add('social-planner-content');
+
+    if (data.excerpt) {
+      var excerpt = document.createElement('div');
+      excerpt.classList.add('social-planner-excerpt');
+      excerpt.innerHTML = data.excerpt;
+      content.appendChild(excerpt);
+    }
+
+    if (data.thumbnail) {
+      var thumbnail = document.createElement('img');
+      thumbnail.classList.add('social-planner-thumbnail');
+      thumbnail.setAttribute('src', data.thumbnail);
+      content.appendChild(thumbnail);
+    }
+
+    return content;
+  };
+  /**
+   * Create scheduled task targets.
+   *
+   * @param {Object} data Task data from config.
+   */
+
+
+  var createTaskTargets = function createTaskTargets(data) {
+    var targets = document.createElement('div');
+    targets.classList.add('social-planner-targets');
+    data.networks = data.networks || [];
+
+    for (var i = 0; i < data.networks.length; i++) {
+      var network = document.createElement('span');
+      network.classList.add('social-planner-network');
+      network.textContent = data.networks[i];
+      targets.appendChild(network);
+    }
+
+    return targets;
+  };
+  /**
+   * Create scheduled task.
+   *
+   * @param {Object} data Task data from config.
+   */
+
+
+  var createTask = function createTask(data) {
+    var task = document.createElement('div');
+    task.classList.add('social-planner-task');
+    var header = createTaskHeader(data);
+    task.appendChild(header);
+    var content = createTaskContent(data);
+    task.appendChild(content);
+    var targets = createTaskTargets(data);
+    task.appendChild(targets);
+    return task;
+  };
+  /**
+   * Init dashboard.
+   */
+
+
+  var initDashboard = function initDashboard() {
+    if (!config.tasks) {
+      return showWarning(dashboard, __('Nothing planned.', 'social-planner'));
+    }
+
+    config.tasks = config.tasks || [];
+    var list = document.createElement('div');
+    list.classList.add('social-planner-list');
+    dashboard.appendChild(list);
+
+    for (var i = 0; i < config.tasks.length; i++) {
+      var task = createTask(config.tasks[i]);
+      list.appendChild(task);
+    }
+  };
+
+  initDashboard();
+})();

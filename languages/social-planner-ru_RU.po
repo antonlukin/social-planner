@@ -1,0 +1,385 @@
+# Copyright (C) 2021 Anton Lukin
+# This file is distributed under the same license as the Social planner plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Social planner 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/social-planner\n"
+"Last-Translator: \n"
+"Language-Team: Русский\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-01-06T21:52:32+00:00\n"
+"PO-Revision-Date: 2021-01-06 23:22+0000\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Domain: social-planner\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
+"n%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
+"X-Loco-Version: 2.5.0; wp-5.6"
+
+#: networks/class-network-facebook.php:67 networks/class-network-twitter.php:90
+#: networks/class-network-vk.php:67
+msgid "Access token"
+msgstr "Access token"
+
+#: networks/class-network-twitter.php:95
+msgid "Access token secret"
+msgstr "Access token secret"
+
+#: assets/scripts/settings.js:193
+msgid "Add provider"
+msgstr "Добавить"
+
+#: assets/scripts/metabox.js:815
+msgid "Add task"
+msgstr "Добавить задачу"
+
+#. Author of the plugin
+msgid "Anton Lukin"
+msgstr "Anton Lukin"
+
+#: networks/class-network-telegram.php:68
+msgid "Bot token"
+msgstr "Токен бота"
+
+#: assets/scripts/metabox.js:390
+msgid "Cancel"
+msgstr "Отменить"
+
+#: networks/class-network-vk.php:280
+msgid "Cannot get upload server"
+msgstr "Невозможно получить сервер ддя загрузки постера"
+
+#: networks/class-network-telegram.php:74
+msgid "Channel or group ID"
+msgstr "ID канала или группы"
+
+#: assets/scripts/metabox.js:243
+msgid "Choose poster image"
+msgstr "Выбрать постер"
+
+#: networks/class-network-facebook.php:72 networks/class-network-vk.php:72
+msgid "Community or profile ID"
+msgstr "ID группы или профиля"
+
+#: networks/class-network-twitter.php:80
+msgid "Consumer API key"
+msgstr "Consumer API key"
+
+#: networks/class-network-twitter.php:85
+msgid "Consumer API secret key"
+msgstr "Consumer API secret key"
+
+#: assets/scripts/settings.js:157
+msgid "Delete provider"
+msgstr "Удалить"
+
+#: assets/scripts/metabox.js:495
+msgid "Disable preview"
+msgstr "Не формировать превью"
+
+#: assets/scripts/metabox.js:433
+msgid "Do not send automatically"
+msgstr "Не отправлять автоматически"
+
+#: networks/class-network-facebook.php:110
+msgid "Empty Facebook response"
+msgstr "Пустой ответ Facebook"
+
+#: networks/class-network-telegram.php:112
+msgid "Empty Telegram response"
+msgstr "Пустой ответ Telegram"
+
+#: networks/class-network-twitter.php:130
+#: networks/class-network-twitter.php:235
+msgid "Empty Twitter response"
+msgstr "Пустой ответ twitter"
+
+#: networks/class-network-vk.php:108 networks/class-network-vk.php:204
+#: networks/class-network-vk.php:252 networks/class-network-vk.php:274
+msgid "Empty VK.com response"
+msgstr "Пустой ответ от ВКонтакте"
+
+#: networks/class-network-facebook.php:145
+#: networks/class-network-telegram.php:162
+msgid "Excerpt and poster are both empty"
+msgstr "Отрывок и постер не могут быть пустыми оба"
+
+#: templates/settings.php:20
+msgid ""
+"General settings for auto-posting to social networks. Note that the plugin "
+"is designed for advanced users. Carefully read the instructions for "
+"configuring each provider."
+msgstr ""
+"Общие настройки автопостинга в социальные сети. Обратите внимание, что "
+"плагин создан преимущественно для продвинутых пользователей. Пожалуйста, "
+"внимательно прочитайте инструкции по настройке каждого провайдера."
+
+#: networks/class-network-facebook.php:93
+#: networks/class-network-telegram.php:102 networks/class-network-vk.php:98
+msgid "Group parameter is not found"
+msgstr "Параметр ID группы не найден"
+
+#. Plugin URI of the plugin
+msgid "https://github.com/antonlukin/social-planner"
+msgstr "https://github.com/antonlukin/social-planner"
+
+#. Author URI of the plugin
+msgid "https://lukin.me"
+msgstr "https://lukin.me"
+
+#: assets/scripts/metabox.js:54
+msgid "Incorrect configuration of metabox options."
+msgstr "Некорректная конфигурация метабокса."
+
+#: assets/scripts/metabox.js:893
+msgid "Need to configure the plugin on the settings page."
+msgstr "Необходимо сконфигурировать плагин на странице настроек."
+
+#: networks/class-network-telegram.php:38
+msgctxt "network label"
+msgid "Telegram"
+msgstr "Telegram"
+
+#: assets/scripts/settings.js:230
+msgid "Networks settings are not formatted correctly"
+msgstr "Настройки соцсетей заполнены некорректно"
+
+#: assets/scripts/dashboard.js:141
+msgid "Nothing planned."
+msgstr "Ничего не запланировано."
+
+#: networks/class-network-facebook.php:78
+msgid ""
+"Optional field. Used as an subtitle if there are multiple Facebook providers."
+msgstr ""
+"Необязательное поле. Используйте подзаголовок, если у вас несколько Facebook "
+"аккаунтов."
+
+#: networks/class-network-telegram.php:80
+msgid ""
+"Optional field. Used as an subtitle if there are multiple Telegram providers."
+msgstr ""
+"Необязательное поле. Используйте подзаголовок, если у вас несколько Telegram "
+"аккаунтов."
+
+#: networks/class-network-twitter.php:101
+msgid ""
+"Optional field. Used as an subtitle if there are multiple Twitter providers."
+msgstr ""
+"Необязательное поле. Используйте подзаголовок, если у вас несколько Twitter "
+"аккаунтов."
+
+#: networks/class-network-vk.php:79
+msgid ""
+"Optional field. Used as an subtitle if there are multiple VK.com providers."
+msgstr ""
+"Необязательное поле. Используйте подзаголовок, если у вас несколько "
+"аккаунтов ВКонтакте."
+
+#: networks/class-network-twitter.php:119
+msgid "Parameter is empty: "
+msgstr "Параметр не найден: "
+
+#: assets/scripts/metabox.js:60
+msgid "Post ID element is not defined."
+msgstr "Идентификатор записи не определен."
+
+#: assets/scripts/metabox.js:478
+msgid "Preview disabled"
+msgstr "Превью отключено"
+
+#: assets/scripts/metabox.js:483
+msgid "Preview enabled"
+msgstr "Превью включено"
+
+#: assets/scripts/settings.js:106
+msgid "Provider"
+msgstr "Провайдер"
+
+#: networks/class-network-facebook.php:37
+msgctxt "provider label"
+msgid "Facebook"
+msgstr "Facebook"
+
+#: networks/class-network-twitter.php:37
+msgctxt "provider label"
+msgid "Twitter"
+msgstr "Twitter"
+
+#: networks/class-network-vk.php:37
+msgctxt "provider label"
+msgid "VK.com"
+msgstr "ВКонтакте"
+
+#: classes/class-scheduler.php:220
+msgid "Provider settings not found"
+msgstr "Настройки провайдера не найдены"
+
+#: assets/scripts/metabox.js:435
+msgid "Publish immediately"
+msgstr "Отправить сразу"
+
+#. translators: %s is a link for current network help guide.
+#: networks/class-network-facebook.php:47
+msgid ""
+"Read the <a href=\"%s\" target=\"_blank\">help guide</a> for configuring "
+"Facebook provider."
+msgstr ""
+"Прочтите <a href=\"%s\" target=\"_blank\">справочное руководство</a> для "
+"настройки Facebook."
+
+#. translators: %s is a link for current network help guide.
+#: networks/class-network-telegram.php:48
+msgid ""
+"Read the <a href=\"%s\" target=\"_blank\">help guide</a> for configuring "
+"Telegram provider."
+msgstr ""
+"Прочтите <a href=\"%s\" target=\"_blank\">справочное руководство</a> для "
+"настройки Telegram."
+
+#. translators: %s is a link for current network help guide.
+#: networks/class-network-twitter.php:60
+msgid ""
+"Read the <a href=\"%s\" target=\"_blank\">help guide</a> for configuring "
+"Twitter provider."
+msgstr ""
+"Прочтите <a href=\"%s\" target=\"_blank\">справочное руководство</a> для "
+"настройки Twitter."
+
+#. translators: %s is a link for current network help guide.
+#: networks/class-network-vk.php:47
+msgid ""
+"Read the <a href=\"%s\" target=\"_blank\">help guide</a> for configuring VK."
+"com provider."
+msgstr ""
+"Прочтите <a href=\"%s\" target=\"_blank\">справочное руководство</a> для "
+"настройки ВКонтакте."
+
+#: assets/scripts/settings.js:218
+msgid "Save changes"
+msgstr "Сохранить"
+
+#: assets/scripts/metabox.js:383
+msgid "Scheduled for:"
+msgstr "Запланировано:"
+
+#: classes/class-scheduler.php:226
+msgid "Sending method is missed"
+msgstr "Отсутствует необходимый метод для отправки"
+
+#: assets/scripts/metabox.js:560
+msgid "Sent error:"
+msgstr "Ошибка отправки:"
+
+#: assets/scripts/metabox.js:609
+msgid "Sent message:"
+msgstr "Отправленное сообщение:"
+
+#: assets/scripts/metabox.js:332
+msgid "Sent:"
+msgstr "Отправлено:"
+
+#: classes/class-settings.php:78
+msgid "Settings"
+msgstr "Настройки"
+
+#: assets/scripts/settings.js:111
+msgid "settings"
+msgstr "настройки"
+
+#: assets/scripts/metabox.js:301
+msgid "Social networks summary"
+msgstr "Подводка для соцсети"
+
+#: classes/class-metabox.php:67 classes/class-settings.php:92
+msgid "Social Planner"
+msgstr "Social Planner"
+
+#. Plugin Name of the plugin
+msgid "Social planner"
+msgstr "Social planner"
+
+#: templates/settings.php:13
+msgid "Social Planner Settings"
+msgstr "Настройки Social Planner"
+
+#: classes/class-settings.php:91
+msgid "Social Planner settings"
+msgstr "Настройки Social Planner"
+
+#: assets/scripts/metabox.js:76 assets/scripts/metabox.js:83
+msgid "Something went wrong. Try to reload page."
+msgstr "Что-то пошло не так. Попробуйте обновить страницу."
+
+#: networks/class-network-facebook.php:77
+#: networks/class-network-telegram.php:79
+#: networks/class-network-twitter.php:100 networks/class-network-vk.php:78
+msgid "Subtitle"
+msgstr "Заголовок"
+
+#: assets/scripts/metabox.js:663
+msgid "The reason for this error is unknown"
+msgstr "Причина ошибки не известна"
+
+#: classes/class-dashboard.php:68
+msgid ""
+"This dashboard requires JavaScript. Enable it in your browser settings, "
+"please."
+msgstr ""
+"Этот виджет требует JavaScript. Пожалуйста, включите его поддержку в "
+"настройках браузера."
+
+#: classes/class-metabox.php:86
+msgid ""
+"This metabox requires JavaScript. Enable it in your browser settings, please."
+msgstr ""
+"Этот метабокс требует JavaScript. Пожалуйста, включите его поддержку в "
+"настройках браузера."
+
+#: templates/settings.php:16
+msgid ""
+"This page requires JavaScript. Enable it in your browser settings, please."
+msgstr ""
+"Эта страница использует JavaScript. Пожалуйста, включите его поддержку в "
+"настройках браузера."
+
+#. Description of the plugin
+msgid ""
+"This plugin automatically publishes posts from your blog to your social "
+"media accounts on Facebook, Twitter, VK.com, Telegram."
+msgstr ""
+"This plugin automatically publishes posts from your blog to your social "
+"media accounts on Facebook, Twitter, VK.com, Telegram.\n"
+"Плагин автоматически публикует записи из вашего блога в аккаунты социальных "
+"сетей Facebook, Twitter, ВКонтакте, Telegram."
+
+#: networks/class-network-facebook.php:100
+#: networks/class-network-telegram.php:95 networks/class-network-vk.php:94
+msgid "Token parameter is empty"
+msgstr "Параметр ключа не найден"
+
+#: networks/class-network-facebook.php:123
+msgid "Unknown Facebook error"
+msgstr "Неизвестная ошибка запроса к Facebook"
+
+#: networks/class-network-telegram.php:135
+msgid "Unknown Telegram error"
+msgstr "Неизвестная ошибка запроса к Telegram"
+
+#: networks/class-network-twitter.php:150
+msgid "Unknown Twitter error"
+msgstr "Неизвестная ошибка запроса к Twitter"
+
+#: networks/class-network-vk.php:124
+msgid "Unknown VK.com error"
+msgstr "Неизвестная ошибка запроса к ВКонтакте"
+
+#: classes/class-core.php:125
+msgid "Untitled"
+msgstr "Без названия"
+
+#: networks/class-network-vk.php:74
+msgid "Use a negative value to designate a community ID."
+msgstr "Используйте отрицательное значение для ID группы."

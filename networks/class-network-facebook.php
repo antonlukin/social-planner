@@ -71,7 +71,6 @@ class Network_Facebook {
 			'group' => array(
 				'label'    => __( 'Community or profile ID', 'social-planner' ),
 				'required' => true,
-				'hint'     => __( 'Use a negative value to designate a community ID.', 'social-planner' ),
 			),
 
 			'title' => array(

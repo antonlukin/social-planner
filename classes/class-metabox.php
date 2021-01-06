@@ -149,7 +149,7 @@ class Metabox {
 
 		wp_enqueue_style(
 			'social-planner-metabox',
-			SOCIAL_PLANNER_URL . '/assets/styles/metabox.min.css',
+			SOCIAL_PLANNER_URL . '/assets/styles/metabox.css',
 			array(),
 			SOCIAL_PLANNER_VERSION,
 			'all'
@@ -178,10 +178,16 @@ class Metabox {
 
 		wp_enqueue_script(
 			'social-planner-metabox',
-			SOCIAL_PLANNER_URL . '/assets/scripts/metabox.min.js',
+			SOCIAL_PLANNER_URL . '/assets/scripts/metabox.js',
 			array( 'wp-i18n', 'wp-data', 'wp-edit-post' ),
 			SOCIAL_PLANNER_VERSION,
 			true
+		);
+
+		wp_set_script_translations(
+			'social-planner-metabox',
+			'social-planner',
+			plugin_dir_path( SOCIAL_PLANNER_FILE ) . 'languages'
 		);
 
 		wp_localize_script( 'social-planner-metabox', 'socialPlannerMetabox', self::create_script_object( $post->ID ) );

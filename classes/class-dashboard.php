@@ -81,7 +81,7 @@ class Dashboard {
 
 		wp_enqueue_style(
 			'social-planner-metabox',
-			SOCIAL_PLANNER_URL . '/assets/styles/dashboard.min.css',
+			SOCIAL_PLANNER_URL . '/assets/styles/dashboard.css',
 			array(),
 			SOCIAL_PLANNER_VERSION,
 			'all'
@@ -100,10 +100,16 @@ class Dashboard {
 
 		wp_enqueue_script(
 			'social-planner-dashboard',
-			SOCIAL_PLANNER_URL . '/assets/scripts/dashboard.min.js',
+			SOCIAL_PLANNER_URL . '/assets/scripts/dashboard.js',
 			array( 'wp-i18n' ),
 			SOCIAL_PLANNER_VERSION,
 			true
+		);
+
+		wp_set_script_translations(
+			'social-planner-dashboard',
+			'social-planner',
+			plugin_dir_path( SOCIAL_PLANNER_FILE ) . 'languages'
 		);
 
 		wp_localize_script( 'social-planner-dashboard', 'socialPlannerDashboard', self::create_script_object() );
@@ -165,7 +171,7 @@ class Dashboard {
 	private static function compose_task( $task, $data ) {
 		$prepared = array(
 			'postlink'  => esc_url( get_permalink( $task['post_id'] ) ),
-			'editlink'  => esc_url( get_edit_post_link( $task['post_id'] ) ),
+			'editlink'  => get_edit_post_link( $task['post_id'], '' ),
 			'scheduled' => wp_date( Core::time_format(), $task['timestamp'] ),
 		);
 

@@ -50,7 +50,7 @@
 	 */
 	const sendRequest = ( parent, data, callback ) => {
 		if ( ! config.action || ! config.nonce ) {
-			return showWarning( parent, __( 'Incorrect configuration of metbox options.', 'social-planner' ) );
+			return showWarning( parent, __( 'Incorrect configuration of metabox options.', 'social-planner' ) );
 		}
 
 		const postID = document.getElementById( 'post_ID' );

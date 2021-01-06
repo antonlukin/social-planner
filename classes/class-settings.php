@@ -124,7 +124,7 @@ class Settings {
 
 		wp_enqueue_style(
 			'social-planner-settings',
-			SOCIAL_PLANNER_URL . '/assets/styles/settings.min.css',
+			SOCIAL_PLANNER_URL . '/assets/styles/settings.css',
 			array(),
 			SOCIAL_PLANNER_VERSION,
 			'all'
@@ -141,10 +141,16 @@ class Settings {
 
 		wp_enqueue_script(
 			'social-planner-settings',
-			SOCIAL_PLANNER_URL . '/assets/scripts/settings.min.js',
+			SOCIAL_PLANNER_URL . '/assets/scripts/settings.js',
 			array( 'wp-i18n' ),
 			SOCIAL_PLANNER_VERSION,
 			true
+		);
+
+		wp_set_script_translations(
+			'social-planner-settings',
+			'social-planner',
+			plugin_dir_path( SOCIAL_PLANNER_FILE ) . 'languages'
 		);
 
 		wp_localize_script( 'social-planner-settings', 'socialPlannerSettings', self::create_script_object() );

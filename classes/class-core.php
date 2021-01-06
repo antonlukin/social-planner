@@ -28,6 +28,7 @@ class Core {
 	 */
 	public static function add_hooks() {
 		add_action( 'init', array( __CLASS__, 'init_networks' ) );
+		add_action( 'plugins_loaded', array( __CLASS__, 'load_textdomain' ) );
 
 		// Init settings class.
 		Settings::add_hooks();
@@ -40,6 +41,17 @@ class Core {
 
 		// Init dashboard class.
 		Dashboard::add_hooks();
+	}
+
+	/**
+	 * Load i18n files.
+	 */
+	public static function load_textdomain() {
+		load_plugin_textdomain(
+			'social-planner',
+			false,
+			dirname( plugin_basename( SOCIAL_PLANNER_FILE ) ) . '/languages/'
+		);
 	}
 
 	/**

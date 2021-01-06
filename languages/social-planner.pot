@@ -1,0 +1,340 @@
+# Copyright (C) 2021 Anton Lukin
+# This file is distributed under the same license as the Social planner plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Social planner 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/social-planner\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-01-06T23:18:22+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.5.0-alpha-59d879d\n"
+"X-Domain: social-planner\n"
+
+#. Plugin Name of the plugin
+msgid "Social planner"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://github.com/antonlukin/social-planner"
+msgstr ""
+
+#. Description of the plugin
+msgid "This plugin automatically publishes posts from your blog to your social media accounts on Facebook, Twitter, VK.com, Telegram."
+msgstr ""
+
+#. Author of the plugin
+msgid "Anton Lukin"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://lukin.me"
+msgstr ""
+
+#: classes/class-core.php:125
+msgid "Untitled"
+msgstr ""
+
+#: classes/class-dashboard.php:68
+msgid "This dashboard requires JavaScript. Enable it in your browser settings, please."
+msgstr ""
+
+#: classes/class-metabox.php:67
+#: classes/class-settings.php:92
+msgid "Social Planner"
+msgstr ""
+
+#: classes/class-metabox.php:86
+msgid "This metabox requires JavaScript. Enable it in your browser settings, please."
+msgstr ""
+
+#: classes/class-scheduler.php:220
+msgid "Provider settings not found"
+msgstr ""
+
+#: classes/class-scheduler.php:226
+msgid "Sending method is missed"
+msgstr ""
+
+#: classes/class-settings.php:78
+msgid "Settings"
+msgstr ""
+
+#: classes/class-settings.php:91
+msgid "Social Planner settings"
+msgstr ""
+
+#: networks/class-network-facebook.php:37
+msgctxt "provider label"
+msgid "Facebook"
+msgstr ""
+
+#. translators: %s is a link for current network help guide.
+#: networks/class-network-facebook.php:47
+msgid "Read the <a href=\"%s\" target=\"_blank\">help guide</a> for configuring Facebook provider."
+msgstr ""
+
+#: networks/class-network-facebook.php:67
+#: networks/class-network-twitter.php:90
+#: networks/class-network-vk.php:67
+msgid "Access token"
+msgstr ""
+
+#: networks/class-network-facebook.php:72
+#: networks/class-network-vk.php:72
+msgid "Community or profile ID"
+msgstr ""
+
+#: networks/class-network-facebook.php:77
+#: networks/class-network-telegram.php:79
+#: networks/class-network-twitter.php:100
+#: networks/class-network-vk.php:78
+msgid "Subtitle"
+msgstr ""
+
+#: networks/class-network-facebook.php:78
+msgid "Optional field. Used as an subtitle if there are multiple Facebook providers."
+msgstr ""
+
+#: networks/class-network-facebook.php:93
+#: networks/class-network-telegram.php:102
+#: networks/class-network-vk.php:98
+msgid "Group parameter is not found"
+msgstr ""
+
+#: networks/class-network-facebook.php:100
+#: networks/class-network-telegram.php:95
+#: networks/class-network-vk.php:94
+msgid "Token parameter is empty"
+msgstr ""
+
+#: networks/class-network-facebook.php:110
+msgid "Empty Facebook response"
+msgstr ""
+
+#: networks/class-network-facebook.php:123
+msgid "Unknown Facebook error"
+msgstr ""
+
+#: networks/class-network-facebook.php:145
+#: networks/class-network-telegram.php:162
+msgid "Excerpt and poster are both empty"
+msgstr ""
+
+#: networks/class-network-telegram.php:38
+msgctxt "network label"
+msgid "Telegram"
+msgstr ""
+
+#. translators: %s is a link for current network help guide.
+#: networks/class-network-telegram.php:48
+msgid "Read the <a href=\"%s\" target=\"_blank\">help guide</a> for configuring Telegram provider."
+msgstr ""
+
+#: networks/class-network-telegram.php:68
+msgid "Bot token"
+msgstr ""
+
+#: networks/class-network-telegram.php:74
+msgid "Channel or group ID"
+msgstr ""
+
+#: networks/class-network-telegram.php:80
+msgid "Optional field. Used as an subtitle if there are multiple Telegram providers."
+msgstr ""
+
+#: networks/class-network-telegram.php:112
+msgid "Empty Telegram response"
+msgstr ""
+
+#: networks/class-network-telegram.php:135
+msgid "Unknown Telegram error"
+msgstr ""
+
+#: networks/class-network-twitter.php:37
+msgctxt "provider label"
+msgid "Twitter"
+msgstr ""
+
+#. translators: %s is a link for current network help guide.
+#: networks/class-network-twitter.php:60
+msgid "Read the <a href=\"%s\" target=\"_blank\">help guide</a> for configuring Twitter provider."
+msgstr ""
+
+#: networks/class-network-twitter.php:80
+msgid "Consumer API key"
+msgstr ""
+
+#: networks/class-network-twitter.php:85
+msgid "Consumer API secret key"
+msgstr ""
+
+#: networks/class-network-twitter.php:95
+msgid "Access token secret"
+msgstr ""
+
+#: networks/class-network-twitter.php:101
+msgid "Optional field. Used as an subtitle if there are multiple Twitter providers."
+msgstr ""
+
+#: networks/class-network-twitter.php:119
+msgid "Parameter is empty: "
+msgstr ""
+
+#: networks/class-network-twitter.php:130
+#: networks/class-network-twitter.php:235
+msgid "Empty Twitter response"
+msgstr ""
+
+#: networks/class-network-twitter.php:150
+msgid "Unknown Twitter error"
+msgstr ""
+
+#: networks/class-network-vk.php:37
+msgctxt "provider label"
+msgid "VK.com"
+msgstr ""
+
+#. translators: %s is a link for current network help guide.
+#: networks/class-network-vk.php:47
+msgid "Read the <a href=\"%s\" target=\"_blank\">help guide</a> for configuring VK.com provider."
+msgstr ""
+
+#: networks/class-network-vk.php:74
+msgid "Use a negative value to designate a community ID."
+msgstr ""
+
+#: networks/class-network-vk.php:79
+msgid "Optional field. Used as an subtitle if there are multiple VK.com providers."
+msgstr ""
+
+#: networks/class-network-vk.php:108
+#: networks/class-network-vk.php:204
+#: networks/class-network-vk.php:252
+#: networks/class-network-vk.php:274
+msgid "Empty VK.com response"
+msgstr ""
+
+#: networks/class-network-vk.php:124
+msgid "Unknown VK.com error"
+msgstr ""
+
+#: networks/class-network-vk.php:280
+msgid "Cannot get upload server"
+msgstr ""
+
+#: templates/settings.php:13
+msgid "Social Planner Settings"
+msgstr ""
+
+#: templates/settings.php:16
+msgid "This page requires JavaScript. Enable it in your browser settings, please."
+msgstr ""
+
+#: templates/settings.php:20
+msgid "General settings for auto-posting to social networks. Note that the plugin is designed for advanced users. Carefully read the instructions for configuring each provider."
+msgstr ""
+
+#: assets/scripts/dashboard.js:141
+msgid "Nothing planned."
+msgstr ""
+
+#: assets/scripts/metabox.js:54
+msgid "Incorrect configuration of metabox options."
+msgstr ""
+
+#: assets/scripts/metabox.js:60
+msgid "Post ID element is not defined."
+msgstr ""
+
+#: assets/scripts/metabox.js:76
+#: assets/scripts/metabox.js:83
+msgid "Something went wrong. Try to reload page."
+msgstr ""
+
+#: assets/scripts/metabox.js:243
+msgid "Choose poster image"
+msgstr ""
+
+#: assets/scripts/metabox.js:301
+msgid "Social networks summary"
+msgstr ""
+
+#: assets/scripts/metabox.js:332
+msgid "Sent:"
+msgstr ""
+
+#: assets/scripts/metabox.js:383
+msgid "Scheduled for:"
+msgstr ""
+
+#: assets/scripts/metabox.js:390
+msgid "Cancel"
+msgstr ""
+
+#: assets/scripts/metabox.js:433
+msgid "Do not send automatically"
+msgstr ""
+
+#: assets/scripts/metabox.js:435
+msgid "Publish immediately"
+msgstr ""
+
+#: assets/scripts/metabox.js:478
+msgid "Preview disabled"
+msgstr ""
+
+#: assets/scripts/metabox.js:483
+msgid "Preview enabled"
+msgstr ""
+
+#: assets/scripts/metabox.js:495
+msgid "Disable preview"
+msgstr ""
+
+#: assets/scripts/metabox.js:560
+msgid "Sent error:"
+msgstr ""
+
+#: assets/scripts/metabox.js:609
+msgid "Sent message:"
+msgstr ""
+
+#: assets/scripts/metabox.js:663
+msgid "The reason for this error is unknown"
+msgstr ""
+
+#: assets/scripts/metabox.js:815
+msgid "Add task"
+msgstr ""
+
+#: assets/scripts/metabox.js:893
+msgid "Need to configure the plugin on the settings page."
+msgstr ""
+
+#: assets/scripts/settings.js:106
+msgid "Provider"
+msgstr ""
+
+#: assets/scripts/settings.js:111
+msgid "settings"
+msgstr ""
+
+#: assets/scripts/settings.js:157
+msgid "Delete provider"
+msgstr ""
+
+#: assets/scripts/settings.js:193
+msgid "Add provider"
+msgstr ""
+
+#: assets/scripts/settings.js:218
+msgid "Save changes"
+msgstr ""
+
+#: assets/scripts/settings.js:230
+msgid "Networks settings are not formatted correctly"
+msgstr ""
