@@ -143,11 +143,11 @@
 	 * Init dashboard.
 	 */
 	const initDashboard = () => {
-		if ( ! config.tasks ) {
+		config.tasks = config.tasks || [];
+
+		if ( config.tasks.length < 1 ) {
 			return showWarning( dashboard, __( 'Nothing planned.', 'social-planner' ) );
 		}
-
-		config.tasks = config.tasks || [];
 
 		const list = document.createElement( 'div' );
 		list.classList.add( 'social-planner-list' );
