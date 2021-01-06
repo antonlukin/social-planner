@@ -172,43 +172,80 @@ class Metabox {
 			return;
 		}
 
+		$post = get_post();
+
 		wp_enqueue_media();
 
 		wp_enqueue_script(
 			'social-planner-metabox',
 			SOCIAL_PLANNER_URL . '/assets/scripts/metabox.min.js',
-			array( 'wp-i18n' ),
+			array( 'wp-i18n', 'wp-data', 'wp-edit-post' ),
 			SOCIAL_PLANNER_VERSION,
 			true
 		);
 
-		wp_localize_script( 'social-planner-metabox', 'socialPlannerMetabox', self::create_script_object() );
+		wp_localize_script( 'social-planner-metabox', 'socialPlannerMetabox', self::create_script_object( $post->ID ) );
 	}
 
 	/**
-	 * Process metabox ajax action.
+	 * Process metabox AJAX action.
 	 */
 	public static function process_ajax() {
 		check_ajax_referer( self::AJAX_ACTION, 'nonce' );
 
-		if ( empty( $_POST['handler'] ) || empty( $_POST['post'] ) ) {
+		if ( empty( $_POST['handler'] ) ) {
 			wp_send_json_error();
 		}
 
 		if ( 'cancel' === $_POST['handler'] ) {
-			$post_id = absint( $_POST['post'] );
-
-			if ( empty( $_POST['key'] ) ) {
-				wp_send_json_error();
-			}
-
-			$key = sanitize_key( $_POST['key'] );
-
-			// Nevermind if the task is not exists.
-			Scheduler::unschedule_task( $key, $post_id );
+			self::ajax_cancel_task( $_POST );
 		}
 
+		if ( 'update' === $_POST['handler'] ) {
+			self::ajax_update_script( $_POST );
+		}
+	}
+
+	/**
+	 * Cancel task from AJAX request.
+	 *
+	 * @param array $data Post request data.
+	 */
+	private static function ajax_cancel_task( $data ) {
+		if ( empty( $data['post'] ) ) {
+			wp_send_json_error();
+		}
+
+		$post_id = absint( $data['post'] );
+
+		if ( empty( $data['key'] ) ) {
+			wp_send_json_error();
+		}
+
+		$key = sanitize_key( $data['key'] );
+
+		// Nevermind if the task is not exists.
+		Scheduler::unschedule_task( $key, $post_id );
+
 		wp_send_json_success();
+	}
+
+	/**
+	 * Update script object for metabox via AJAX.
+	 *
+	 * @param array $data Post request data.
+	 */
+	private static function ajax_update_script( $data ) {
+		if ( empty( $data['post'] ) ) {
+			wp_send_json_error();
+		}
+
+		$post_id = absint( $data['post'] );
+
+		// Create new object using post id.
+		$object = self::create_script_object( $post_id );
+
+		wp_send_json_success( $object );
 	}
 
 	/**
@@ -235,6 +272,18 @@ class Metabox {
 				}
 			}
 
+			if ( ! empty( $task['date'] ) ) {
+				$sanitized[ $key ]['date'] = sanitize_text_field( $task['date'] );
+
+				if ( isset( $task['hour'] ) ) {
+					$sanitized[ $key ]['hour'] = sanitize_text_field( $task['hour'] );
+				}
+
+				if ( isset( $task['minute'] ) ) {
+					$sanitized[ $key ]['minute'] = sanitize_text_field( $task['minute'] );
+				}
+			}
+
 			if ( ! empty( $task['excerpt'] ) ) {
 				$sanitized[ $key ]['excerpt'] = sanitize_textarea_field( $task['excerpt'] );
 			}
@@ -249,18 +298,6 @@ class Metabox {
 
 			if ( ! empty( $task['attachment'] ) ) {
 				$sanitized[ $key ]['attachment'] = absint( $task['attachment'] );
-			}
-
-			if ( ! empty( $task['date'] ) ) {
-				$sanitized[ $key ]['date'] = sanitize_text_field( $task['date'] );
-
-				if ( isset( $task['hour'] ) ) {
-					$sanitized[ $key ]['hour'] = sanitize_text_field( $task['hour'] );
-				}
-
-				if ( isset( $task['minute'] ) ) {
-					$sanitized[ $key ]['minute'] = sanitize_text_field( $task['minute'] );
-				}
 			}
 		}
 
@@ -372,24 +409,24 @@ class Metabox {
 	/**
 	 * Create scripts object to inject with metabox.
 	 *
+	 * @param int $post_id Current post ID.
+	 *
 	 * @return array
 	 */
-	private static function create_script_object() {
-		$post = get_post();
-
+	private static function create_script_object( $post_id ) {
 		$object = array(
 			'meta'      => self::META_TASKS,
 			'action'    => self::AJAX_ACTION,
 			'nonce'     => wp_create_nonce( self::AJAX_ACTION ),
 
-			'tasks'     => self::prepare_tasks( $post->ID ),
-			'results'   => self::prepare_results( $post->ID ),
+			'tasks'     => self::prepare_tasks( $post_id ),
+			'results'   => self::prepare_results( $post_id ),
 			'offset'    => self::get_time_offset(),
 			'calendar'  => self::get_calendar_days(),
 			'providers' => self::prepare_providers(),
 		);
 
-		$object['schedules'] = self::get_schedules( $post->ID, $object['tasks'] );
+		$object['schedules'] = self::get_schedules( $post_id, $object['tasks'] );
 
 		/**
 		 * Filter metabox scripts object.

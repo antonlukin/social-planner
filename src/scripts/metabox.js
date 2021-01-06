@@ -21,7 +21,7 @@
 		return;
 	}
 
-	const config = window.socialPlannerMetabox || {};
+	let config = window.socialPlannerMetabox || {};
 
 	/**
 	 * Show warning message.
@@ -39,6 +39,57 @@
 		}
 
 		parent.appendChild( warning );
+	};
+
+	/**
+	 * Send AJAX request to server.
+	 *
+	 * @param {HTMLElement} parent Parent DOM element to replace and show warning.
+	 * @param {Object} data Additional data array.
+	 * @param {Function} callback Callback function on success only.
+	 */
+	const sendRequest = ( parent, data, callback ) => {
+		if ( ! config.action || ! config.nonce ) {
+			return showWarning( parent, __( 'Incorrect configuration of metbox options.', 'social-planner' ) );
+		}
+
+		const postID = document.getElementById( 'post_ID' );
+
+		if ( null === postID ) {
+			return showWarning( parent, __( 'Post ID element is not defined.', 'social-planner' ) );
+		}
+
+		const formData = new window.FormData();
+
+		formData.append( 'action', config.action );
+		formData.append( 'nonce', config.nonce );
+		formData.append( 'post', postID.value );
+
+		for ( const key in data ) {
+			formData.append( key, data[ key ] );
+		}
+
+		const xhr = new XMLHttpRequest();
+		xhr.open( 'POST', ajaxurl );
+
+		xhr.onerror = () => {
+			return showWarning( parent, __( 'Something went wrong. Try to reload page.', 'social-planner' ) );
+		};
+
+		xhr.onload = () => {
+			const response = JSON.parse( xhr.responseText );
+
+			if ( ! response.success ) {
+				return showWarning( parent, __( 'Something went wrong. Try to reload page.', 'social-planner' ) );
+			}
+
+			// Retrun callback if exists.
+			if ( typeof callback === 'function' ) {
+				callback( response );
+			}
+		};
+
+		xhr.send( formData );
 	};
 
 	/**
@@ -327,61 +378,23 @@
 	};
 
 	/**
-	 * Cancel task.
+	 * Cancel the task.
 	 *
 	 * @param {HTMLElement} parent Scheduler DOM element.
 	 * @param {string} index Unique task key.
-	 * @param {Function} callback Callback function.
+	 * @param {Function} callback Callback function on success .
 	 */
 	const cancelTask = ( parent, index, callback ) => {
-		if ( ! config.action || ! config.nonce ) {
-			return showWarning( parent, __( 'Incorrect configuration of metbox options.', 'social-planner' ) );
-		}
-
-		const postID = document.getElementById( 'post_ID' );
-
-		if ( null === postID ) {
-			return showWarning( parent, __( 'Post ID element is not defined.', 'social-planner' ) );
-		}
-
-		// Show the spinner.
 		const spinner = document.createElement( 'span' );
 		spinner.classList.add( 'spinner', 'is-active' );
 		parent.appendChild( spinner );
 
-		const formData = new window.FormData();
-
-		// This parameter reflects the action that we send to the server.
-		formData.append( 'handler', 'cancel' );
-
-		formData.append( 'action', config.action );
-		formData.append( 'nonce', config.nonce );
-
-		// Append current post id and task key.
-		formData.append( 'post', postID.value );
-		formData.append( 'key', index );
-
-		const xhr = new XMLHttpRequest();
-		xhr.open( 'POST', ajaxurl );
-
-		xhr.onerror = () => {
-			return showWarning( parent, __( 'Something went wrong.', 'social-planner' ) );
+		const data = {
+			handler: 'cancel',
+			key: index,
 		};
 
-		xhr.onload = () => {
-			const response = JSON.parse( xhr.responseText );
-
-			if ( ! response.success ) {
-				return showWarning( parent, __( 'Something went wrong.', 'social-planner' ) );
-			}
-
-			// Retrun callback if exists.
-			if ( typeof callback === 'function' ) {
-				callback();
-			}
-		};
-
-		xhr.send( formData );
+		sendRequest( parent, data, callback );
 	};
 
 	/**
@@ -403,10 +416,6 @@
 		const time = document.createElement( 'strong' );
 		time.textContent = data.schedule;
 		parent.appendChild( time );
-
-		if ( ! window.FormData ) {
-			return showWarning( parent, __( 'Your browser does not support the FormData feature.', 'social-planner' ) );
-		}
 
 		const cancel = document.createElement( 'button' );
 		cancel.classList.add( 'button-link' );
@@ -504,20 +513,20 @@
 		checkbox.value = 1;
 		preview.appendChild( checkbox );
 
-		// Create title.
 		const title = document.createElement( 'span' );
 		preview.appendChild( title );
 
+		// Preview should be hidden input for readonly tasks.
 		if ( data.result.sent || data.schedule ) {
 			checkbox.setAttribute( 'type', 'hidden' );
 
-			title.textContent = __( 'Preview enabled', 'social-planner' );
+			title.textContent = __( 'Preview disabled', 'social-planner' );
 
-			if ( data.task.preview ) {
+			if ( ! data.task.preview ) {
 				checkbox.value = 0;
 
 				// Set empty-preview title.
-				title.textContent = __( 'Preview disabled', 'social-planner' );
+				title.textContent = __( 'Preview enabled', 'social-planner' );
 			}
 
 			return;
@@ -921,6 +930,39 @@
 	};
 
 	/**
+	 * Get new config with AJAX call and reinit metabox.
+	 */
+	const reinitMetabox = () => {
+		const data = {
+			handler: 'update',
+		};
+
+		sendRequest( parent, data, ( response ) => {
+			config = response.data || {};
+
+			// Create new tasks list.
+			createTasksList();
+		} );
+	};
+
+	/**
+	 * Wait Gutenber post saving and reinit tasks list.
+	 */
+	const subscribeOnSaving = () => {
+		let wasSavingPost = wp.data.select( 'core/edit-post' ).isSavingMetaBoxes();
+
+		wp.data.subscribe( () => {
+			const isSavingPost = wp.data.select( 'core/edit-post' ).isSavingMetaBoxes();
+
+			if ( wasSavingPost && ! isSavingPost ) {
+				reinitMetabox();
+			}
+
+			wasSavingPost = isSavingPost;
+		} );
+	};
+
+	/**
 	 * Init metabox.
 	 */
 	const initMetabox = () => {
@@ -932,6 +974,9 @@
 
 		// Add append button.
 		createAppend( list );
+
+		// Subscribe and update on Gutenberg post saving.
+		subscribeOnSaving();
 	};
 
 	initMetabox();
