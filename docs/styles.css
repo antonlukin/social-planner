@@ -57,6 +57,19 @@ a:hover {
   border-bottom-color: transparent;
 }
 
+form {
+  margin: 1.75em 0;
+}
+
+input {
+  padding: 0.5em;
+}
+
+button {
+  cursor: pointer;
+  padding: 0.5em;
+}
+
 code {
   margin: 0;
   padding: 0.175em .375em;
@@ -72,24 +85,36 @@ code {
 
 figure {
   display: block;
+  position: relative;
+
   margin: 1.75em 0;
 }
 
-figcaption {
+figure > a {
   display: block;
-  margin: 0.25em 0;
-
-  font-size: 0.875em;
-  color: rgba(0, 0, 0, 0.5);
+  border: none;
 }
 
 figure img {
+  display: block;
+
   max-width: 100%;
   height: auto;
 
   box-shadow: 0 0 0.5em 0.125em rgba(0, 0, 0, 0.25);
-  border-radius: 0.5em;
+  border-radius: 0.375em;
 }
+
+figcaption {
+  display: block;
+  margin: 0.75em 0 0;
+
+  font-size: 0.875em;
+  line-height: 1.25;
+
+  color: rgba(0, 0, 0, 0.5);
+}
+
 
 h1, h2, h3 {
   display: flex;

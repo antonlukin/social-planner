@@ -28,7 +28,7 @@ class Network_VK {
 	 *
 	 * @var string
 	 */
-	const HELPER_LINK = 'http://example.com';
+	const HELPER_LINK = 'https://antonlukin.github.io/social-planner/#vk';
 
 	/**
 	 * Return human-readable network label

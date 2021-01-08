@@ -28,7 +28,7 @@ class Network_Twitter {
 	 *
 	 * @var string
 	 */
-	const HELPER_LINK = 'http://example.com';
+	const HELPER_LINK = 'https://antonlukin.github.io/social-planner/#twitter';
 
 	/**
 	 * Return human-readable network label

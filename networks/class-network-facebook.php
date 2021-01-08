@@ -28,7 +28,7 @@ class Network_Facebook {
 	 *
 	 * @var string
 	 */
-	const HELPER_LINK = 'http://example.com';
+	const HELPER_LINK = 'https://antonlukin.github.io/social-planner/#facebook';
 
 	/**
 	 * Return human-readable network label.

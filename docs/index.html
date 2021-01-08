@@ -40,7 +40,9 @@
         </p>
 
         <figure>
-            <img src="images/installation.png" alt="Social Planner WordPress plugin installation">
+            <a href="images/installation.png" target="_blank">
+                <img src="images/installation.png" alt="Social Planner WordPress plugin installation">
+            </a>
 
             <figcaption>The easiest way is to install the plugin from the official catalog.</figcaption>
         </figure>
@@ -50,7 +52,15 @@
         <h2 id="configuration">Configuration <a aria-hidden="true" href="#configuration">#</a></h2>
 
         <p>
+            Before using the plugin, you need to configure it.
+            Immediately after installation, go to the plugin page.
+            It is located in the <strong>Settings</strong> section.
+            Here you need to add options for the required providers.
+        </p>
 
+        <p>
+            Pay attention to the <strong>Subtitle</strong> optional field on each provider.
+            Fill it out if you want to use several accounts of the same social network or just for your convenience when sending.
         </p>
 
         <article>
@@ -62,7 +72,7 @@
             </p>
 
             <p>
-                Write to the <a href="https://t.me/BotFather" target="_blank">@BotFather</a> in Telegram in order to receive a token.
+                Write to the <a href="https://t.me/BotFather" target="_blank">@BotFather</a> in Telegram in order to receive a Token.
                 Follow the bot prompts, fill in all required fields and get an API Token.
             </p>
 
@@ -74,7 +84,9 @@
             </p>
 
             <figure>
-                <img src="images/telegram-1.png" alt="Social Planner Telegram configuration">
+                <a href="images/telegram-1.png" target="_blank">
+                    <img src="images/telegram-1.png" alt="Social Planner Telegram configuration">
+                </a>
 
                 <figcaption>Your settings should look something like this.</figcaption>
             </figure>
@@ -93,6 +105,69 @@
 
         <article>
             <h3 id="vk">VK.com <a aria-hidden="true" href="#vk">#</a></h3>
+
+            <p>
+                You can send messages both to your profile wall and to the community where you are an administrator.
+            </p>
+
+            <p>
+                Start by registering your app on the <a href="https://vk.com/editapp?act=create" target="_blank">developer page</a>.
+                Enter something in the title field and choose <strong>Standalone app</strong> platform.
+                Then confirm your action with phone call or push notification.
+            </p>
+
+            <figure>
+                <a href="images/vk-1.png" target="_blank">
+                    <img src="images/vk-1.png" alt="Social Planner VK.com configuration">
+                </a>
+            </figure>
+
+            <p>
+                Go to <strong>Settings</strong> tab and copy <strong>App ID</strong>.
+                Insert this ID to field bellow and push the button to generate your Token.
+            </p>
+
+            <form action="https://oauth.vk.com/authorize" method="GET" target="_blank">
+                <input type="text" name="client_id" value="" placeholder="7722553" required>
+
+                <input type="hidden" name="scope" value="offline,photos,wall">
+                <input type="hidden" name="response_type" value="token">
+                <input type="hidden" name="redirect_uri" value="https://oauth.vk.com/blank.html">
+                <input type="hidden" name="revoke" value="1">
+                <input type="hidden" name="v" value="5.125">
+
+                <button type="submit">Generate token</button>
+            </form>
+
+            <p>
+                After you agree to the terms and conditions, the page will be redirected to <code>oauth.vk.com</code> domain.
+                Your Token will be in <code>access_token</code> parameter.
+            </p>
+
+            <figure>
+                <a href="images/vk-2.png" target="_blank">
+                    <img src="images/vk-2.png" alt="Social Planner VK.com configuration">
+                </a>
+            </figure>
+
+            <p>
+                Please note that VK.com warns you not to transfer the Token to other sites.
+                So keep it secret and only use it on a trusted sites.
+                Social Planner <strong>does not send</strong> any user data to remote servers.
+            </p>
+
+            <p>
+                Now you need to get the profile or community ID.
+                You can find it in the links of your pages. Use a negative value to designate a community ID.
+            </p>
+
+            <figure>
+                <a href="images/vk-3.png" target="_blank">
+                    <img src="images/vk-3.png" alt="Social Planner VK.com configuration">
+                </a>
+
+                <figcaption>You can see the ID in the url on the stats page for example.</figcaption>
+            </figure>
         </article>
 
         <article>
