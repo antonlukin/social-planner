@@ -10,6 +10,7 @@
  * Version: 1.0.0
  *
  * Text Domain: social-planner
+ * Domain Path: /languages/
  *
  * @package social-planner
  * @author  Anton Lukin
