@@ -1,2 +1,125 @@
-<h1>Social Planner</h1>
-<p>Docs will be here someday.</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <title>Social Planner: documentation</title>
+
+    <meta name="description" content="Documentation for Social Planner — WordPress plugin for automatic posting to social media accounts">
+    <meta property="og:url" content="https://antonlukin.github.io/social-planner/">
+    <meta property="og:title" content="Social Planner / Documentation">
+    <meta property="og:description" content="Documentation for Social Planner — WordPress plugin for automatic posting to social media accounts">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <h1>Social Planner: documentation</h1>
+        <p>
+            <a href="https://github.com/antonlukin/social-planner" target="_blank">Social Planner</a> is a WordPress plugin for automatic posting to social media accounts.
+            It allows you to schedule announcements of your posts on social networks.
+            At the moment, 4 providers are supported, but you can easily add a new one yourself.
+        </p>
+
+        <p>
+            This documentation will help you install and configure the plugin.
+            Advanced developers can figure out how to extend functionality and write add-ons.
+            If you find a bug here or in the plugin itself, feel free to open an <a href="https://github.com/antonlukin/social-planner/issues" target="_blank">issue</a> on Github.
+            I will try to answer as soon as possible.
+        </p>
+    </header>
+
+    <section>
+        <h2 id="installation">Installation <a aria-hidden="true" href="#installation">#</a></h2>
+
+        <p>
+            Just search <code>social-planner</code> and activate plugin from your admin dashboard.
+            You can also manually upload latest release to <code>/wp-content/plugins</code> and activate it.
+        </p>
+
+        <figure>
+            <img src="images/installation.png" alt="Social Planner WordPress plugin installation">
+
+            <figcaption>The easiest way is to install the plugin from the official catalog.</figcaption>
+        </figure>
+    </section>
+
+    <section>
+        <h2 id="configuration">Configuration <a aria-hidden="true" href="#configuration">#</a></h2>
+
+        <p>
+
+        </p>
+
+        <article>
+            <h3 id="telegram">Telegram <a aria-hidden="true" href="#telegram">#</a></h3>
+
+            <p>
+                You can send messages to any group or channel.
+                To do this, you need to create and add special bot to the required chat with the ability to send messages.
+            </p>
+
+            <p>
+                Write to the <a href="https://t.me/BotFather" target="_blank">@BotFather</a> in Telegram in order to receive a token.
+                Follow the bot prompts, fill in all required fields and get an API Token.
+            </p>
+
+            <p>
+                Then you need to find out the group or channel ID.
+                If the chat has a <strong>public link</strong>, then you can use its <strong>username</strong> (in the format @channelusername).<br>
+                Otherwise you can write the message to <a href="username_to_id_bot" target="_blank">@username_to_id_bot</a> or use <a href="https://stackoverflow.com/a/56546442/8495047" target="_blank">this guide</a>.
+                Note that chat ID can be negative.
+            </p>
+
+            <figure>
+                <img src="images/telegram-1.png" alt="Social Planner Telegram configuration">
+
+                <figcaption>Your settings should look something like this.</figcaption>
+            </figure>
+
+            <p>
+                If you have an access error when sending a message, try to check the correctness of the API Token and the chat ID,
+                bypassing the plugin.
+            </p>
+
+            <p>You can find full help on Telegram Bot API on the <a href="https://core.telegram.org/bots/api" target="_blank">official website</a>.</p>
+        </article>
+
+        <article>
+            <h3 id="facebook">Facebook <a aria-hidden="true" href="#facebook">#</a></h3>
+        </article>
+
+        <article>
+            <h3 id="vk">VK.com <a aria-hidden="true" href="#vk">#</a></h3>
+        </article>
+
+        <article>
+            <h3 id="twitter">Twitter <a aria-hidden="true" href="#twitter">#</a></h3>
+        </article>
+    </section>
+
+    <section>
+        <h2>Custom providers</h2>
+
+        <p>This section still under construction.</p>
+    </section>
+
+    <section>
+        <h2>Actions and filters</h2>
+
+        <p>This section still under construction.</p>
+    </section>
+
+    <section>
+        <h2>Contribution</h2>
+
+        <p>This section still under construction.</p>
+    </section>
+
+    <footer>
+        <p>Made with love in Saint Petersburg by <a href="https://lukin.me" target="_blank">Anton Lukin</a></p>
+    </footer>
+</body>
+</html>
