@@ -966,8 +966,14 @@
 	 * Init metabox.
 	 */
 	const initMetabox = () => {
-		if ( ! config.meta || ! config.providers ) {
-			return showWarning( metabox, __( 'Need to configure the plugin on the settings page.', 'social-planner' ) );
+		if ( ! config.meta ) {
+			return showWarning( metabox, __( 'Required meta field is empty', 'social-planner' ) );
+		}
+
+		config.providers = config.providers || [];
+
+		if ( config.providers.length < 1 ) {
+			return showWarning( metabox, __( 'Add at least one provider on the settings page.', 'social-planner' ) );
 		}
 
 		const list = createTasksList();
