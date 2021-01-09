@@ -54,10 +54,6 @@ class Settings {
 		// Add settings link to plugins list.
 		add_filter( 'plugin_action_links', array( __CLASS__, 'add_settings_link' ), 10, 2 );
 
-		// Add required assets and objects.
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_styles' ) );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
-
 		// Sanitize options before save.
 		add_action( 'pre_update_option', array( __CLASS__, 'sanitize_option' ), 10, 2 );
 	}
@@ -86,6 +82,12 @@ class Settings {
 	 * Add plugin page in WordPress menu.
 	 */
 	public static function add_menu() {
+		$hide_settings = apply_filters( 'social_planner_hide_settings', false );
+
+		if ( $hide_settings ) {
+			return;
+		}
+
 		add_submenu_page(
 			'options-general.php',
 			esc_html__( 'Social Planner settings', 'social-planner' ),
@@ -94,6 +96,10 @@ class Settings {
 			SOCIAL_PLANNER_SLUG,
 			array( __CLASS__, 'display_settings' )
 		);
+
+		// Add required assets and objects.
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
 	}
 
 	/**
@@ -161,6 +167,11 @@ class Settings {
 	 */
 	public static function get_providers() {
 		$providers = get_option( self::OPTION_PROVIDERS, array() );
+
+		// Users can override providers settings with constant.
+		if ( defined( 'SOCIAL_PLANNER_PROVIDERS' ) ) {
+			$providers = SOCIAL_PLANNER_PROVIDERS;
+		}
 
 		/**
 		 * Filter list of providers from options.

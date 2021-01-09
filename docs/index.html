@@ -11,6 +11,7 @@
     <meta property="og:title" content="Social Planner / Documentation">
     <meta property="og:description" content="Documentation for Social Planner — WordPress plugin for automatic posting to social media accounts">
 
+    <link rel="stylesheet" href="highlight.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -60,7 +61,7 @@
 
         <p>
             Pay attention to the <strong>Subtitle</strong> optional field on each provider.
-            Fill it out if you want to use several accounts of the same social network or just for your convenience when sending.
+            Fill it out if you want to use several accounts of the same social network or just for your convenience when scheduling.
         </p>
 
         <article>
@@ -68,11 +69,11 @@
 
             <p>
                 You can send messages to any group or channel.
-                To do this, you need to create and add special bot to the required chat with the ability to send messages.
+                To do this, you need to create and add special Bot to the required chat with the ability to send messages.
             </p>
 
             <p>
-                Write to the <a href="https://t.me/BotFather" target="_blank">@BotFather</a> in Telegram in order to receive a Token.
+                Write to the <a href="https://t.me/BotFather" target="_blank">@BotFather</a> in Telegram and create new Bot.
                 Follow the bot prompts, fill in all required fields and get an API Token.
             </p>
 
@@ -101,6 +102,8 @@
 
         <article>
             <h3 id="facebook">Facebook <a aria-hidden="true" href="#facebook">#</a></h3>
+
+
         </article>
 
         <article>
@@ -176,15 +179,224 @@
     </section>
 
     <section>
-        <h2>Custom providers</h2>
+        <h2 id="task-scheduling">Task scheduling <a aria-hidden="true" href="#task-scheduling">#</a></h2>
 
         <p>This section still under construction.</p>
     </section>
 
     <section>
-        <h2>Actions and filters</h2>
+        <h2 id="custom-providers">Custom providers <a aria-hidden="true" href="#custom-providers">#</a></h2>
 
         <p>This section still under construction.</p>
+    </section>
+
+    <section>
+        <h2 id="actions-filters">Actions and filters <a aria-hidden="true" href="#actions-filters">#</a></h2>
+
+        <p>
+            Social Planner provides developers with a large number of hooks that can be used to change the behavior of the plugin.
+            Put the hook code in <code>functions.php</code> file of your theme or in your plugin.
+        </p>
+
+        <details>
+            <summary>social_planner_dashboard_before</summary>
+
+            <p>
+                Use this <strong>action</strong> to add something before dashboard widget.
+            </p>
+
+            <p>
+                Note that the content inside the widget is composed with js and if you want to change it,
+                you need to use the <code>social_planner_dashboard_object</code> filter.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    function my_dashboard_action() {
+                        echo 'This text will be displayed in the dashboard widget';
+                    }
+
+                    add_action( 'social_planner_dashboard_before', 'my_dashboard_action' );
+                </code>
+            </pre>
+
+        </details>
+
+        <details>
+            <summary>social_planner_metabox_before</summary>
+
+            <p>
+                Use this <strong>action</strong> to add something before metabox in post edition screen.
+            </p>
+
+            <p>
+                Note that the content inside the metabox is composed with js and if you want to change it,
+                you need to use the <code>social_planner_metabox_object</code> filter.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    function my_metabox_action() {
+                        echo 'This text will be displayed in the metabox';
+                    }
+
+                    add_action( 'social_planner_metabox_before', 'my_metabox_action' );
+                </code>
+            </pre>
+        </details>
+
+        <details>
+            <summary>social_planner_networks</summary>
+
+            <p>
+                The filter is used to add a custom social network for sending announcements.
+                Read more about this in the <a href="#custom-providers">Custom providers</a> section of this documentation.
+            </p>
+        </details>
+
+        <details>
+            <summary>social_planner_network_label</summary>
+
+            <p>
+                You can change network label in metabox and settings with this filter.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    function my_network_label( $label, $class ) {
+                        if ( 'Social_Planner\Network_Telegram' === $class ) {
+                            $label = 'My custom ' . $label;
+                        }
+
+                        return $label;
+                    }
+
+                    add_filter( 'social_planner_network_label', 'my_network_label', 10, 2 );
+                </code>
+            </pre>
+        </details>
+
+        <details>
+            <summary>social_planner_time_format</summary>
+
+            <p>
+                You can change the date format used by the plugin with this filter.
+                The default is the format from the WordPress settings.
+                Read more in <a href="https://wordpress.org/support/article/formatting-date-and-time/" target="_blank">codex article</a>.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    function my_time_format( $format ) {
+                        return 'F j, Y h:i';
+                    }
+
+                    add_filter( 'social_planner_time_format', 'my_time_format' );
+                </code>
+            </pre>
+        </details>
+
+        <details>
+            <summary>social_planner_hide_dashboard</summary>
+
+            <p>
+                You can use this filter to hide dashboard from some users or roles.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    function my_hide_dashboard( $hidden_dashboard ) {
+                        if ( ! current_user_can( 'manage_options' ) ) {
+                            $hidden_dashboard = true;
+                        }
+
+                        return $hidden_dashboard;
+                    }
+
+                    add_filter( 'social_planner_hide_dashboard', 'my_hide_dashboard' );
+                </code>
+            </pre>
+        </details>
+
+        <details>
+            <summary>social_planner_dashboard_object</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_sanitize_tasks</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_get_tasks</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_update_tasks</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_get_results</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_update_results</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_metabox_object</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_post_types</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_calendar_days</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_time_offset</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_post_statuses</summary>
+        </details>
+
+        <details>
+            <summary>social_poster_send_message</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_hide_settings</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_get_providers</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_settings_object</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_twitter_limit</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_twitter_status</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_facebook_excerpt</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_telegram_excerpt</summary>
+        </details>
+
+        <details>
+            <summary>social_planner_vk_excerpt</summary>
+        </details>
     </section>
 
     <section>
@@ -196,5 +408,19 @@
     <footer>
         <p>Made with love in Saint Petersburg by <a href="https://lukin.me" target="_blank">Anton Lukin</a></p>
     </footer>
+
+    <script src="highlight.js"></script>
+    <script>
+        document.querySelectorAll('pre code').forEach(element => {
+            var html = element.innerHTML;
+            var pattern = html.match(/\s*\n[\t\s]*/);
+
+            element.innerHTML = html.replace(new RegExp(pattern, "g"), "\n");
+        });
+
+        if (window.hljs) {
+            hljs.initHighlightingOnLoad();
+        }
+    </script>
 </body>
 </html>

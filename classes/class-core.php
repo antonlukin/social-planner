@@ -132,15 +132,16 @@ class Core {
 		}
 
 		/**
-		 * Filters scheduled and sent datetime format.
+		 * Filters network label.
 		 *
-		 * @param string $format Datetime format.
+		 * @param string $label Network label.
+		 * @param string $class Current network class.
 		 */
-		return apply_filters( 'social_planner_network_label', $label );
+		return apply_filters( 'social_planner_network_label', $label, $class );
 	}
 
 	/**
-	 * Default datetime format for tasks.
+	 * Default datetime format.
 	 */
 	public static function time_format() {
 		$format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );

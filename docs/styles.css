@@ -62,12 +62,29 @@ form {
 }
 
 input {
+  appearance: none;
+  -webkit-appearance: none;
+
   padding: 0.5em;
+  font-size: 1em;
+
+  border: solid 1px #999;
+  border-radius: 0.25em;
 }
 
 button {
+  appearance: none;
+  -webkit-appearance: none;
   cursor: pointer;
+
   padding: 0.5em;
+  font-size: 1em;
+
+  color: #111;
+  background-color:rgba(0, 0, 0, 0.075);
+
+  border: solid 1px #999;
+  border-radius: 0.25em;
 }
 
 code {
@@ -75,12 +92,53 @@ code {
   padding: 0.175em .375em;
 
   font-size: 0.9375em;
+  font-family: monospace;
 
   background-color: rgba(27, 31, 35, 0.05);
   border-radius: 0.25em;
 
   white-space: pre;
   word-break: normal;
+}
+
+pre {
+  line-height: 1.5;
+  overflow: auto;
+  padding: 0 1em;
+  white-space: normal;
+
+  background-color: rgb(246, 248, 250);
+  border-radius: 0.25em;
+}
+
+pre code {
+  display: inline;
+
+  margin: 0;
+  padding: 0;
+
+  overflow: visible;
+  line-height: inherit;
+
+  background-color: transparent;
+  border: 0;
+}
+
+details {
+  display: block;
+  position: relative;
+
+  margin: 1em 0;
+}
+
+details summary {
+  display: inline-block;
+
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+
+  font-weight: 600;
 }
 
 figure {
