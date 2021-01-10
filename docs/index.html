@@ -32,6 +32,28 @@
         </p>
     </header>
 
+    <aside>
+        <h2>Table of contents</h2>
+
+        <nav>
+            <a href="#installation">Installation</a>
+            <a href="#configuration">Configuration</a>
+
+            <nav>
+                <a href="#telegram">Telegram</a>
+                <a href="#facebook">Facebook</a>
+                <a href="#vk">VK.com</a>
+                <a href="#twitter">Twitter</a>
+            </nav>
+
+            <a href="#task-scheduling">Task scheduling</a>
+            <a href="#faq">FAQ</a>
+            <a href="#custom-providers">Custom providers</a>
+            <a href="#actions-filters">Actions and filters</a>
+            <a href="#contribution">Contribution</a>
+        </nav>
+    </aside>
+
     <section>
         <h2 id="installation">Installation <a aria-hidden="true" href="#installation">#</a></h2>
 
@@ -47,6 +69,13 @@
 
             <figcaption>The easiest way is to install the plugin from the official catalog.</figcaption>
         </figure>
+
+        <p>
+            Due to the peculiarities of the WordPress scheduling system, announcements on social networks may be delayed.
+            To avoid this, it is advisable to configure the work of the <strong>system cron</strong>.
+            If you are unable to implement it yourself, contact your hoster or system administrator.
+            Read more <a href="https://developer.wordpress.org/plugins/cron/hooking-wp-cron-into-the-system-task-scheduler/" target="_blank">here</a>.
+        </p>
     </section>
 
     <section>
@@ -64,7 +93,7 @@
             Fill it out if you want to use several accounts of the same social network or just for your convenience when scheduling.
         </p>
 
-        <article>
+        <section>
             <h3 id="telegram">Telegram <a aria-hidden="true" href="#telegram">#</a></h3>
 
             <p>
@@ -98,15 +127,15 @@
             </p>
 
             <p>You can find full help on Telegram Bot API on the <a href="https://core.telegram.org/bots/api" target="_blank">official website</a>.</p>
-        </article>
+        </section>
 
-        <article>
+        <section>
             <h3 id="facebook">Facebook <a aria-hidden="true" href="#facebook">#</a></h3>
 
 
-        </article>
+        </section>
 
-        <article>
+        <section>
             <h3 id="vk">VK.com <a aria-hidden="true" href="#vk">#</a></h3>
 
             <p>
@@ -171,23 +200,290 @@
 
                 <figcaption>You can see the ID in the url on the stats page for example.</figcaption>
             </figure>
-        </article>
+        </section>
 
-        <article>
+        <section>
             <h3 id="twitter">Twitter <a aria-hidden="true" href="#twitter">#</a></h3>
-        </article>
+        </section>
     </section>
 
     <section>
         <h2 id="task-scheduling">Task scheduling <a aria-hidden="true" href="#task-scheduling">#</a></h2>
 
-        <p>This section still under construction.</p>
+        <p>
+            Once you have configured the plugin, you can start scheduling social media announcements.
+            Go to the post edit page and scroll to the end of the screen. There you will see a metabox for scheduling.
+        </p>
+
+        <figure>
+            <a href="images/scheduling-1.png" target="_blank">
+                <img src="images/scheduling-1.png" alt="Social Planner task scheduling">
+            </a>
+
+            <figcaption>This is how the metabox you need looks like.</figcaption>
+        </figure>
+
+        <p>
+            Choose the time at which you want to schedule the release of the announcement,
+            social networks and enter the text.
+            If you want to attach a poster, click on the big button with a plus sign.
+        </p>
+
+        <p>
+            To delete the selected poster, click on the image again.
+        </p>
+
+        <p>
+            Some social networks allow you to generate a preview of the link and load the poster and other opengraph tags into the post.
+            You can disable this by enabling the checkbox on the bottom right.
+            Experiment with this behavior on test accounts to decide how you want to display links.
+        </p>
+
+        <p>
+            After filling in the meta box fields, update or publish the entry.
+            If the time was chosen for the announcement, then the task will be automatically scheduled.
+        </p>
+
+        <p>
+            If the publication date of the post itself is later than the date of the task,
+            then the announcement will be automatically rescheduled to the post release date.
+        </p>
+
+        <figure>
+            <a href="images/scheduling-2.png" target="_blank">
+                <img src="images/scheduling-2.png" alt="Social Planner task scheduling">
+            </a>
+
+            <figcaption>Scheduled task.</figcaption>
+        </figure>
+
+        <p>
+            After publishing, you will be able to see links to published posts in place of providers' checkboxes.
+            Or errors in the same place in case of problems with sending.
+        </p>
     </section>
 
     <section>
         <h2 id="custom-providers">Custom providers <a aria-hidden="true" href="#custom-providers">#</a></h2>
 
-        <p>This section still under construction.</p>
+        <p>
+            Only 4 social networks are available for posing now.
+            More likely to be added soon, but until that happens, you might want to write your own extension.
+            And it's not that hard to do.
+        </p>
+
+        <p>
+            You need to create a special social network class and connect to the plugin.
+            Below is an example of a non-existent network <code>Example</code>, copy it and replace the information in the methods.
+        </p>
+
+        <details>
+            <summary>Example network class</summary>
+
+            <pre>
+                <code class="language-php">
+                    &lt;?php
+
+                    class My_Network_Example {
+                        /**
+                        * Unique network slug.
+                        * Use latin alphanumeric characters and underscore only.
+                        */
+                        const NETWORK_NAME = 'example';
+
+                        /**
+                        * Return human-readable network label
+                        */
+                        public static function get_label() {
+                            return 'Example';
+                        }
+
+                        /**
+                        * Return network required settings fields
+                        */
+                        public static function get_fields() {
+                            $fields = array(
+                                'token' => array(
+                                    'label'       => 'Token',
+                                    'placeholder' => '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11',
+                                    'required'    => true,
+                                ),
+
+                                'group' => array(
+                                    'label'    => 'Group ID',
+                                    'required' => true,
+                                ),
+
+                                'title' => array(
+                                    'label' => 'Subtitle',
+                                    'hint'  => 'Optional field.'
+                                ),
+                            );
+
+                            return $fields;
+                        }
+
+                        /**
+                        * Send message method
+                        *
+                        * @param array $message  Message data.
+                        * @param array $settings Settings array from options.
+                        */
+                        public static function send_message( $message, $settings ) {
+                            // You should write this sending method using $message and $settings.
+                            $response = self::my_sending_method( $message, $settings );
+
+                            // If something went wrong you should return WP_Error.
+                            if ( empty( $response ) ) {
+                                return new WP_Error( 'sending', 'Example sending error' );
+                            }
+
+                            // If it is ok, you should return message link or ID.
+                            return 'https://example.com/' . $response;
+                        }
+                </code>
+            </pre>
+        </details>
+
+        <p>
+            Your class must provide <code>NETWORK_NAME</code> constant and public static <code>send_message</code> method.
+            You can see how the other classes of social networks of the plugin are implemented in the
+            <a href="https://github.com/antonlukin/social-planner/tree/master/networks" target="_blank">repository</a>.
+        </p>
+
+        <p>
+            Place your class file in your theme or plugin and connect with filter:
+        </p>
+
+        <pre>
+            <code class="language-php">
+                function add_example_network( $networks ) {
+                    $networks['My_Network_Example'] = get_template_directory() . '/inc/class-network-example.php';
+
+                    return $networks;
+                }
+
+                // This filter must execute before `init` event.
+                add_filter( 'social_planner_networks', 'add_example_network' );
+            </code>
+        </pre>
+
+        <p>
+            That's all you need. Now check if the new provider has appeared on the Settings page.
+        </p>
+    </section>
+
+    <section>
+        <h2 id="faq">FAQ <a aria-hidden="true" href="#faq">#</a></h2>
+
+        <p>
+            This section describes common problems when using the plugin and how to solve them.
+            If you haven't found your question, it is best to ask it in the official repository on
+            <a href="https://github.com/antonlukin/social-planner/issues" target="_blank">Github</a>.
+        </p>
+
+        <h3>Can I avoid storing social networks tokens in the database?</h3>
+        <p>
+            Yes, you can define a constant <code>SOCIAL_PLANNER_PROVIDERS</code> with your settings.
+            The best place for this constant is in the file <code>wp-config.php</code> or in the <code>functions.php</code>.
+        </p>
+
+        <details>
+            <summary>Show me an example</summary>
+
+            <p>
+                You should define provider key as <code>{network_name}-{index}</code>,
+                where <code>index</code> is something alphanumeric and unique.
+
+                You can see correct network name and all availible network fields in
+                <a href="https://github.com/antonlukin/social-planner/tree/master/networks" target="_blank">source code</a>.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    define( 'SOCIAL_PLANNER_PROVIDERS', array(
+                        'vk-1' => array(
+                            'token' => 'token',
+                            'group' => '-123',
+                        ),
+
+                        'telegram-1' => array(
+                            'token' => '123:token',
+                            'group' => '123',
+                        ),
+
+                        'facebook-1' => array(
+                            'token' => 'token',
+                            'group' => '123',
+                            'title' => 'Facebook',
+                        ),
+
+                        'twitter-1' => array(
+                            'consumer_key'    => 'key',
+                            'consumer_secret' => 'secret',
+                            'access_token'    => 'token',
+                            'access_secret'   => 'secret'
+                        )
+                    ) );
+                </code>
+            </pre>
+        </details>
+
+        <h3>How can I show the settings page only for some users?</h3>
+        <p>
+            You can use filter <code>social_planner_hide_settings</code>.
+        </p>
+        <details>
+            <summary>Show me an example</summary>
+
+            <pre>
+                <code class="language-php">
+                    function my_hide_settings( $hide_settings ) {
+                        $user = wp_get_current_user();
+
+                        if ( empty( $user->user_login ) || 'admin' !== $user->user_login ) {
+                            $hide_settings = true;
+                        }
+
+                        return $hide_settings;
+                    }
+
+                    add_filter( 'social_planner_hide_settings', 'my_hide_settings' );
+                </code>
+            </pre>
+        </details>
+
+        <h3>How to hide the metabox for custom post types?</h3>
+        <p>
+            Plugin shows metabox for all public post types except attachments.
+            You can override this behavior with <code>social_planner_post_types</code> filter.
+        </p>
+        <details>
+            <summary>Show me an example</summary>
+
+            <pre>
+                <code class="language-php">
+                    function my_post_types( $post_types ) {
+                        // Remove metabox from pages.
+                        foreach ( $post_types as $i => $name ) {
+                            if ( 'page' === $name ) {
+                                unset( $post_types[ $i ] );
+                            }
+                        }
+
+                        return $post_types;
+                    }
+
+                    add_filter( 'social_planner_post_types', 'my_post_types' );
+                </code>
+            </pre>
+        </details>
+
+        <h3>What happens when you delete the plugin?</h3>
+        <p>
+            By default, when uninstalling the plugin through the admin panel, all database options are deleted,
+            including data on submitted tasks. If you want to keep them uninstall the plugin indirectly via the filesystem.
+        </p>
     </section>
 
     <section>
@@ -282,7 +578,7 @@
             <p>
                 You can change the date format used by the plugin with this filter.
                 The default is the format from the WordPress settings.
-                Read more in <a href="https://wordpress.org/support/article/formatting-date-and-time/" target="_blank">codex article</a>.
+                Read more in <a href="https://wordpress.org/support/section/formatting-date-and-time/" target="_blank">codex section</a>.
             </p>
 
             <pre>
@@ -400,7 +696,7 @@
     </section>
 
     <section>
-        <h2>Contribution</h2>
+        <h2 id="contribution">Contribution <a aria-hidden="true" href="#contribution">#</a></h2>
 
         <p>This section still under construction.</p>
     </section>
