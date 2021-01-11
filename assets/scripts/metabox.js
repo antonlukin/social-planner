@@ -25,7 +25,7 @@
   /**
    * Show warning message.
    *
-   * @param {HTMLElement} parent Parent DOM element.
+   * @param {HTMLElement} parent Parent DOM element to show warning.
    * @param {string} message Error text message.
    */
 
@@ -114,14 +114,14 @@
   /**
    * Parse datetime string.
    *
-   * @param {HTMLElement} parent Parent element.
+   * @param {HTMLElement} time Time DOM element.
    * @param {string} index Unique task key.
    */
 
 
-  var createTime = function createTime(parent, index) {
+  var updateTime = function updateTime(time, index) {
     var date = getServerDate();
-    var time = {
+    var clock = {
       hour: ('0' + date.getHours()).slice(-2),
       minute: ('0' + date.getMinutes()).slice(-2)
     };
@@ -130,42 +130,42 @@
     var hour = document.createElement('input');
     hour.setAttribute('type', 'text');
     hour.setAttribute('name', meta + '[hour]');
-    hour.value = time.hour;
-    parent.appendChild(hour);
+    hour.value = clock.hour;
+    time.appendChild(hour);
     hour.addEventListener('change', function () {
       if (!hour.value.match(/^\d+$/)) {
-        return hour.value = time.hour;
+        return hour.value = clock.hour;
       }
 
       hour.value = ('0' + parseInt(hour.value)).slice(-2);
 
       if (hour.value > 23 || hour.value < 0) {
-        return hour.value = time.hour;
+        return hour.value = clock.hour;
       }
 
-      time.hour = hour.value;
+      clock.hour = hour.value;
     });
     var colon = document.createElement('span');
     colon.textContent = ':';
-    parent.appendChild(colon); // Create minute input.
+    time.appendChild(colon); // Create minute input.
 
     var minute = document.createElement('input');
     minute.setAttribute('type', 'text');
     minute.setAttribute('name', meta + '[minute]');
-    minute.value = time.minute;
-    parent.appendChild(minute);
+    minute.value = clock.minute;
+    time.appendChild(minute);
     minute.addEventListener('change', function () {
       if (!minute.value.match(/^\d+$/)) {
-        return minute.value = time.minute;
+        return minute.value = clock.minute;
       }
 
       minute.value = ('0' + minute.value).slice(-2);
 
       if (minute.value > 59 || minute.value < 0) {
-        return minute.value = time.minute;
+        return minute.value = clock.minute;
       }
 
-      time.minute = minute.value;
+      clock.minute = minute.value;
     });
   };
   /**
@@ -187,20 +187,20 @@
   /**
    * Create task snippet poster.
    *
-   * @param {HTMLElement} parent Snippet DOM element.
+   * @param {HTMLElement} snippet Snippet DOM element.
    * @param {string} index Unique task key.
    * @param {Object} data Task params.
    */
 
 
-  var createPoster = function createPoster(parent, index, data) {
+  var createPoster = function createPoster(snippet, index, data) {
     if (!wp.media) {
       return;
     }
 
     var poster = document.createElement('figure');
     poster.classList.add('social-planner-poster');
-    parent.appendChild(poster);
+    snippet.appendChild(poster);
     var meta = config.meta + '[' + index + ']'; // Create choose button.
 
     var choose = document.createElement('button');
@@ -284,16 +284,16 @@
   /**
    * Create task snippet poster.
    *
-   * @param {HTMLElement} parent Task DOM element.
+   * @param {HTMLElement} task Task DOM element.
    * @param {string} index Unique task key.
    * @param {Object} data Task params.
    */
 
 
-  var createSnippet = function createSnippet(parent, index, data) {
+  var createSnippet = function createSnippet(task, index, data) {
     var snippet = document.createElement('div');
     snippet.classList.add('social-planner-snippet');
-    parent.appendChild(snippet);
+    task.appendChild(snippet);
     var meta = config.meta + '[' + index + ']'; // Create excerpt textrea.
 
     var excerpt = document.createElement('textarea');
@@ -343,98 +343,119 @@
   /**
    * Draw task sent time.
    *
-   * @param {HTMLElement} parent Scheduler DOM element.
+   * @param {HTMLElement} scheduler Scheduler DOM element.
    * @param {Object} data Task params.
    */
 
 
-  var drawSentTime = function drawSentTime(parent, data) {
+  var drawSentTime = function drawSentTime(scheduler, data) {
     var icon = document.createElement('span');
     icon.classList.add('social-planner-calendar');
-    parent.appendChild(icon);
+    scheduler.appendChild(icon);
     var text = document.createElement('span');
     text.textContent = __('Sent:', 'social-planner');
-    parent.appendChild(text);
+    scheduler.appendChild(text);
     var time = document.createElement('strong');
     time.textContent = data.result.sent;
-    parent.appendChild(time);
+    scheduler.appendChild(time);
   };
   /**
-   * Remove task by index.
+   * Update task content with config data.
    *
+   * @param {HTMLElement} task Task DOM element.
    * @param {string} index Unique task key.
    */
 
 
-  var removeTask = function removeTask(index) {
-    delete config.tasks[index]; // Create new tasks list.
+  var updateTask = function updateTask(task, index) {
+    var list = task.parentNode; // Create updated task right before current.
 
-    createTasksList();
+    list.insertBefore(createTask(index), task); // Remove current task.
+
+    list.removeChild(task);
+  };
+  /**
+   * Remove task.
+   *
+   * @param {HTMLElement} task Task DOM element.
+   * @param {string} index Unique task key.
+   */
+
+
+  var removeTask = function removeTask(task, index) {
+    delete config.tasks[index];
+    var list = task.parentNode;
+    list.removeChild(task); // Append at least one task.
+
+    if (!list.hasChildNodes()) {
+      createEmptyTask(list);
+    }
   };
   /**
    * Cancel the task.
    *
-   * @param {HTMLElement} parent Scheduler DOM element.
+   * @param {HTMLElement} task Task DOM element.
    * @param {string} index Unique task key.
    * @param {Function} callback Callback function on success .
    */
 
 
-  var cancelTask = function cancelTask(parent, index, callback) {
+  var cancelTask = function cancelTask(task, index, callback) {
+    var scheduler = task.querySelector('.social-planner-scheduler');
     var spinner = document.createElement('span');
     spinner.classList.add('spinner', 'is-active');
-    parent.appendChild(spinner);
+    scheduler.appendChild(spinner);
     var data = {
       handler: 'cancel',
       key: index
     };
-    sendRequest(parent, data, callback);
+    sendRequest(scheduler, data, callback);
   };
   /**
    * Draw task scheduled time.
    *
-   * @param {HTMLElement} parent Scheduler DOM element.
+   * @param {HTMLElement} task Task DOM element.
+   * @param {HTMLElement} scheduler Scheduler DOM element.
    * @param {string} index Unique task key.
    * @param {Object} data Task params.
    */
 
 
-  var drawScheduledTime = function drawScheduledTime(parent, index, data) {
+  var drawScheduledTime = function drawScheduledTime(task, scheduler, index, data) {
     var icon = document.createElement('span');
     icon.classList.add('social-planner-clock');
-    parent.appendChild(icon);
+    scheduler.appendChild(icon);
     var text = document.createElement('span');
     text.textContent = __('Scheduled for:', 'social-planner');
-    parent.appendChild(text);
+    scheduler.appendChild(text);
     var time = document.createElement('strong');
     time.textContent = data.schedule;
-    parent.appendChild(time);
+    scheduler.appendChild(time);
     var cancel = document.createElement('button');
     cancel.classList.add('button-link');
     cancel.textContent = __('Cancel', 'social-planner');
     cancel.addEventListener('click', function (e) {
       e.preventDefault();
-      cancelTask(parent, index, function () {
-        delete config.schedules[index]; // Create new tasks list.
-
-        createTasksList();
+      cancelTask(task, index, function () {
+        delete config.schedules[index];
+        updateTask(task, index);
       });
     });
-    parent.appendChild(cancel);
+    scheduler.appendChild(cancel);
   };
   /**
    * Create task scheduler block.
    *
-   * @param {HTMLElement} parent Task DOM element.
+   * @param {HTMLElement} task Task DOM element.
    * @param {string} index Unique task key.
    * @param {Object} data Task params.
    */
 
 
-  var createScheduler = function createScheduler(parent, index, data) {
+  var createScheduler = function createScheduler(task, index, data) {
     var scheduler = document.createElement('div');
     scheduler.classList.add('social-planner-scheduler');
-    parent.appendChild(scheduler); // Check if task sent right away.
+    task.appendChild(scheduler); // Check if task sent right away.
 
     if (data.result.sent) {
       return drawSentTime(scheduler, data);
@@ -442,7 +463,7 @@
 
 
     if (data.schedule) {
-      return drawScheduledTime(scheduler, index, data);
+      return drawScheduledTime(task, scheduler, index, data);
     }
 
     var meta = config.meta + '[' + index + ']'; // Create delay select.
@@ -471,23 +492,23 @@
 
 
       if (date.value && date.value !== 'now') {
-        createTime(time, index);
+        updateTime(time, index);
       }
     });
   };
   /**
    * Create preview setting element.
    *
-   * @param {HTMLElement} parent Task DOM element.
+   * @param {HTMLElement} task Task DOM element.
    * @param {string} index Unique task key.
    * @param {Object} data Task params.
    */
 
 
-  var createPreview = function createPreview(parent, index, data) {
+  var createPreview = function createPreview(task, index, data) {
     var preview = document.createElement('label');
     preview.classList.add('social-planner-preview');
-    parent.appendChild(preview);
+    task.appendChild(preview);
     var meta = config.meta + '[' + index + ']'; // Create preview checkbox.
 
     var checkbox = document.createElement('input');
@@ -521,15 +542,15 @@
   /**
    * Create non-publihsed target.
    *
-   * @param {HTMLElement} parent Targets DOM element.
+   * @param {HTMLElement} targets Targets DOM element.
    * @param {Object} provider Provider object.
    */
 
 
-  var createTargetCheckbox = function createTargetCheckbox(parent, provider) {
+  var createTargetCheckbox = function createTargetCheckbox(targets, provider) {
     var label = document.createElement('label');
     label.classList.add('social-planner-checkbox');
-    parent.appendChild(label); // Create checkbox input.
+    targets.appendChild(label); // Create checkbox input.
 
     var input = document.createElement('input');
     input.setAttribute('type', 'checkbox');
@@ -542,15 +563,15 @@
   /**
    * Create scheduled target.
    *
-   * @param {HTMLElement} parent Targets DOM element.
+   * @param {HTMLElement} targets Targets DOM element.
    * @param {Object} provider Provider object.
    */
 
 
-  var createTargetScheduled = function createTargetScheduled(parent, provider) {
+  var createTargetScheduled = function createTargetScheduled(targets, provider) {
     var label = document.createElement('label');
     label.classList.add('social-planner-scheduled');
-    parent.appendChild(label); // Create checkbox input.
+    targets.appendChild(label); // Create checkbox input.
 
     var input = document.createElement('input');
     input.setAttribute('type', 'hidden');
@@ -563,23 +584,23 @@
   /**
    * Create target with error.
    *
-   * @param {HTMLElement} parent Targets DOM element.
+   * @param {HTMLElement} targets Targets DOM element.
    * @param {Object} message Link params.
    * @param {Object} provider Provider object.
    * @param {string} key Provider key.
    */
 
 
-  var createTargetError = function createTargetError(parent, message, provider, key) {
+  var createTargetError = function createTargetError(targets, message, provider, key) {
     var error = document.createElement('button');
     error.classList.add('social-planner-error');
     error.textContent = provider.label;
     error.addEventListener('click', function (e) {
       e.preventDefault();
-      var extended = parent.querySelector('.social-planner-extended');
+      var extended = targets.querySelector('.social-planner-extended');
 
       if (null !== extended) {
-        parent.removeChild(extended);
+        targets.removeChild(extended);
 
         if (key === extended.getAttribute('data-provider')) {
           return;
@@ -592,49 +613,49 @@
       extended.setAttribute('data-provider', key);
       extended.textContent = message;
       extended.innerHTML = content + extended.textContent;
-      parent.appendChild(extended);
+      targets.appendChild(extended);
     });
-    parent.appendChild(error);
+    targets.appendChild(error);
   };
   /**
    * Create target with link to sent message.
    *
-   * @param {HTMLElement} parent Targets DOM element.
+   * @param {HTMLElement} targets Targets DOM element.
    * @param {Object} message Link params.
    * @param {Object} provider Provider object.
    */
 
 
-  var createTargetLink = function createTargetLink(parent, message, provider) {
+  var createTargetLink = function createTargetLink(targets, message, provider) {
     var link = document.createElement('a');
     link.classList.add('social-planner-link');
     link.textContent = provider.label;
     link.setAttribute('href', message);
     link.setAttribute('target', '_blank');
     link.setAttribute('rel', 'noopener');
-    parent.appendChild(link);
+    targets.appendChild(link);
   };
   /**
    * Create target with sent message id.
    *
-   * @param {HTMLElement} parent Targets DOM element.
+   * @param {HTMLElement} targets Targets DOM element.
    * @param {Object} message Link params.
    * @param {Object} provider Provider object.
    * @param {string} key Provider key.
    */
 
 
-  var createTargetInfo = function createTargetInfo(parent, message, provider, key) {
+  var createTargetInfo = function createTargetInfo(targets, message, provider, key) {
     var info = document.createElement('button');
     info.classList.add('social-planner-info');
     info.textContent = provider.label;
     info.setAttribute('type', 'button');
     info.addEventListener('click', function (e) {
       e.preventDefault();
-      var extended = parent.querySelector('.social-planner-extended');
+      var extended = targets.querySelector('.social-planner-extended');
 
       if (null !== extended) {
-        parent.removeChild(extended);
+        targets.removeChild(extended);
 
         if (key === extended.getAttribute('data-provider')) {
           return;
@@ -647,24 +668,24 @@
       extended.setAttribute('data-provider', key);
       extended.textContent = message;
       extended.innerHTML = content + message;
-      parent.appendChild(extended);
+      targets.appendChild(extended);
     });
-    parent.appendChild(info);
+    targets.appendChild(info);
   };
   /**
    * Create target for sent tasks.
    *
-   * @param {HTMLElement} parent Targets DOM element.
+   * @param {HTMLElement} targets Targets DOM element.
    * @param {string} meta Task meta prefix.
    * @param {Object} data Task params.
    */
 
 
-  var createSentTargets = function createSentTargets(parent, meta, data) {
-    var targets = data.task.targets || [];
+  var createSentTargets = function createSentTargets(targets, meta, data) {
+    data.task.targets = data.task.targets || [];
 
-    for (var i = 0; i < targets.length; i++) {
-      var key = targets[i];
+    for (var i = 0; i < data.task.targets.length; i++) {
+      var key = data.task.targets[i];
 
       if (!config.providers[key]) {
         continue;
@@ -681,15 +702,15 @@
       input.value = key;
       input.setAttribute('type', 'hidden');
       input.setAttribute('name', meta + '[targets][]');
-      parent.appendChild(input); // If target in links list.
+      targets.appendChild(input); // If target in links list.
 
       if (data.result.links && data.result.links[key]) {
         var _message = data.result.links[key]; // Simple check if message is a link.
 
         if ('http' === _message.substring(0, 4)) {
-          createTargetLink(parent, _message, provider);
+          createTargetLink(targets, _message, provider);
         } else {
-          createTargetInfo(parent, _message, provider, key);
+          createTargetInfo(targets, _message, provider, key);
         }
 
         continue;
@@ -703,20 +724,20 @@
         message = data.result.errors[key];
       }
 
-      createTargetError(parent, message, provider, key);
+      createTargetError(targets, message, provider, key);
     }
   };
   /**
    * Create target for unsent tasks.
    *
-   * @param {HTMLElement} parent Targets DOM element.
+   * @param {HTMLElement} targets Targets DOM element.
    * @param {string} meta Task meta prefix.
    * @param {Object} data Task params.
    */
 
 
-  var createUnsentTargets = function createUnsentTargets(parent, meta, data) {
-    var targets = data.task.targets || [];
+  var createUnsentTargets = function createUnsentTargets(targets, meta, data) {
+    data.task.targets = data.task.targets || [];
 
     for (var key in config.providers) {
       var provider = config.providers[key];
@@ -727,11 +748,11 @@
 
 
       if (!data.schedule) {
-        var input = createTargetCheckbox(parent, provider);
+        var input = createTargetCheckbox(targets, provider);
         input.setAttribute('name', meta + '[targets][]');
         input.value = key; // Check if provider key in targets array.
 
-        if (targets.indexOf(key) >= 0) {
+        if (data.task.targets.indexOf(key) >= 0) {
           input.setAttribute('checked', 'checked');
         }
 
@@ -739,8 +760,8 @@
       } // Create hidden inputs for scheduled tasks.
 
 
-      if (targets.indexOf(key) >= 0) {
-        var _input = createTargetScheduled(parent, provider);
+      if (data.task.targets.indexOf(key) >= 0) {
+        var _input = createTargetScheduled(targets, provider);
 
         _input.setAttribute('name', meta + '[targets][]');
 
@@ -751,16 +772,16 @@
   /**
    * Create targets element.
    *
-   * @param {HTMLElement} parent Task DOM element.
+   * @param {HTMLElement} task Task DOM element.
    * @param {string} index Unique task key.
    * @param {Object} data Task params.
    */
 
 
-  var createTargets = function createTargets(parent, index, data) {
+  var createTargets = function createTargets(task, index, data) {
     var targets = document.createElement('div');
     targets.classList.add('social-planner-targets');
-    parent.appendChild(targets);
+    task.appendChild(targets);
     var meta = config.meta + '[' + index + ']'; // Show target for sent tasks.
 
     if (data.result.sent) {
@@ -772,28 +793,26 @@
   /**
    * Generate new index and create empty task.
    *
-   * @param {HTMLElement} parent List DOM element.
+   * @param {HTMLElement} list List DOM element.
    */
 
 
-  var createEmptyTask = function createEmptyTask(parent) {
+  var createEmptyTask = function createEmptyTask(list) {
     // Generate unique task index from timestamp.
     var index = new Date().getTime().toString(36);
-    appendTask(parent, index);
+    list.appendChild(createTask(index));
   };
   /**
-   * Append task.
+   * Create new task.
    *
-   * @param {HTMLElement} parent List DOM element.
    * @param {string} index Unique task key.
    */
 
 
-  var appendTask = function appendTask(parent, index) {
+  var createTask = function createTask(index) {
     var data = {};
     var task = document.createElement('fieldset');
     task.classList.add('social-planner-task');
-    parent.appendChild(task);
     data.task = {}; // Append task data.
 
     if (config.tasks && config.tasks[index]) {
@@ -821,13 +840,12 @@
     task.appendChild(remove);
     remove.addEventListener('click', function () {
       if (!data.schedule) {
-        return removeTask(index);
-      }
+        return removeTask(task, index);
+      } // Cancel this task first.
 
-      var scheduler = task.querySelector('.social-planner-scheduler'); // Cancel this task first.
 
-      cancelTask(scheduler, index, function () {
-        return removeTask(index);
+      cancelTask(task, index, function () {
+        return removeTask(task, index);
       });
     }); // Add snippet element.
 
@@ -836,6 +854,7 @@
     createPreview(task, index, data); // Add scheduler element.
 
     createScheduler(task, index, data);
+    return task;
   };
   /**
    * Create button to append new task.
@@ -877,7 +896,7 @@
     config.tasks = config.tasks || {};
 
     for (var index in config.tasks) {
-      appendTask(list, index);
+      list.appendChild(createTask(index));
     } // Append at least one task.
 
 
@@ -896,7 +915,7 @@
     var data = {
       handler: 'update'
     };
-    sendRequest(parent, data, function (response) {
+    sendRequest(metabox, data, function (response) {
       config = response.data || {}; // Create new tasks list.
 
       createTasksList();
