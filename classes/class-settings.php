@@ -31,14 +31,14 @@ class Settings {
 	const PAGE = 'social-planner';
 
 	/**
-	 * Social planner providers options group.
+	 * Social Planner providers options group.
 	 *
 	 * @var string
 	 */
 	const GROUP_PROVIDERS = 'social_planner_providers';
 
 	/**
-	 * Social planner providers options name.
+	 * Social Planner providers options name.
 	 *
 	 * @var string
 	 */

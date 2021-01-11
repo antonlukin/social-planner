@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-01-06T21:52:32+00:00\n"
-"PO-Revision-Date: 2021-01-09 14:43+0000\n"
+"PO-Revision-Date: 2021-01-11 15:11+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: social-planner\n"
 "Language: ru_RU\n"
@@ -18,20 +18,24 @@ msgstr ""
 "n%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
 "X-Loco-Version: 2.5.0; wp-5.6"
 
-#: networks/class-network-facebook.php:67 networks/class-network-twitter.php:90
+#: networks/class-network-facebook.php:67 networks/class-network-twitter.php:77
 #: networks/class-network-vk.php:67
 msgid "Access token"
 msgstr "Access token"
 
-#: networks/class-network-twitter.php:95
+#: networks/class-network-twitter.php:82
 msgid "Access token secret"
 msgstr "Access token secret"
+
+#: assets/scripts/metabox.js:915
+msgid "Add at least one provider on the settings page."
+msgstr "Добавьте как минимум один провайдер на странице настроек."
 
 #: assets/scripts/settings.js:193
 msgid "Add provider"
 msgstr "Добавить"
 
-#: assets/scripts/metabox.js:815
+#: assets/scripts/metabox.js:831
 msgid "Add task"
 msgstr "Добавить задачу"
 
@@ -43,7 +47,7 @@ msgstr "Anton Lukin"
 msgid "Bot token"
 msgstr "Токен бота"
 
-#: assets/scripts/metabox.js:390
+#: assets/scripts/metabox.js:406
 msgid "Cancel"
 msgstr "Отменить"
 
@@ -63,11 +67,11 @@ msgstr "Выбрать постер"
 msgid "Community or profile ID"
 msgstr "ID группы или профиля"
 
-#: networks/class-network-twitter.php:80
+#: networks/class-network-twitter.php:67
 msgid "Consumer API key"
 msgstr "Consumer API key"
 
-#: networks/class-network-twitter.php:85
+#: networks/class-network-twitter.php:72
 msgid "Consumer API secret key"
 msgstr "Consumer API secret key"
 
@@ -75,11 +79,11 @@ msgstr "Consumer API secret key"
 msgid "Delete provider"
 msgstr "Удалить"
 
-#: assets/scripts/metabox.js:495
+#: assets/scripts/metabox.js:511
 msgid "Disable preview"
 msgstr "Не формировать превью"
 
-#: assets/scripts/metabox.js:433
+#: assets/scripts/metabox.js:449
 msgid "Do not send automatically"
 msgstr "Не отправлять автоматически"
 
@@ -91,8 +95,8 @@ msgstr "Пустой ответ Facebook"
 msgid "Empty Telegram response"
 msgstr "Пустой ответ Telegram"
 
-#: networks/class-network-twitter.php:130
-#: networks/class-network-twitter.php:235
+#: networks/class-network-twitter.php:117
+#: networks/class-network-twitter.php:222
 msgid "Empty Twitter response"
 msgstr "Пустой ответ twitter"
 
@@ -133,10 +137,6 @@ msgstr "https://lukin.me"
 msgid "Incorrect configuration of metabox options."
 msgstr "Некорректная конфигурация метабокса."
 
-#: assets/scripts/metabox.js:893
-msgid "Need to configure the plugin on the settings page."
-msgstr "Необходимо сконфигурировать плагин на странице настроек."
-
 #: networks/class-network-telegram.php:38
 msgctxt "network label"
 msgid "Telegram"
@@ -146,7 +146,7 @@ msgstr "Telegram"
 msgid "Networks settings are not formatted correctly"
 msgstr "Настройки соцсетей заполнены некорректно"
 
-#: assets/scripts/dashboard.js:141
+#: assets/scripts/dashboard.js:143
 msgid "Nothing planned."
 msgstr "Ничего не запланировано."
 
@@ -164,7 +164,7 @@ msgstr ""
 "Необязательное поле. Используйте подзаголовок, если у вас несколько Telegram "
 "аккаунтов."
 
-#: networks/class-network-twitter.php:101
+#: networks/class-network-twitter.php:88
 msgid ""
 "Optional field. Used as an subtitle if there are multiple Twitter providers."
 msgstr ""
@@ -178,7 +178,7 @@ msgstr ""
 "Необязательное поле. Используйте подзаголовок, если у вас несколько "
 "аккаунтов ВКонтакте."
 
-#: networks/class-network-twitter.php:119
+#: networks/class-network-twitter.php:106
 msgid "Parameter is empty: "
 msgstr "Параметр не найден: "
 
@@ -186,11 +186,11 @@ msgstr "Параметр не найден: "
 msgid "Post ID element is not defined."
 msgstr "Идентификатор записи не определен."
 
-#: assets/scripts/metabox.js:478
+#: assets/scripts/metabox.js:494
 msgid "Preview disabled"
 msgstr "Превью отключено"
 
-#: assets/scripts/metabox.js:483
+#: assets/scripts/metabox.js:499
 msgid "Preview enabled"
 msgstr "Превью включено"
 
@@ -217,7 +217,7 @@ msgstr "ВКонтакте"
 msgid "Provider settings not found"
 msgstr "Настройки провайдера не найдены"
 
-#: assets/scripts/metabox.js:435
+#: assets/scripts/metabox.js:451
 msgid "Publish immediately"
 msgstr "Отправить сразу"
 
@@ -240,7 +240,7 @@ msgstr ""
 "настройки Telegram."
 
 #. translators: %s is a link for current network help guide.
-#: networks/class-network-twitter.php:60
+#: networks/class-network-twitter.php:47
 msgid ""
 "Read the <a href=\"%s\" target=\"_blank\">help guide</a> for configuring "
 "Twitter provider."
@@ -257,11 +257,15 @@ msgstr ""
 "Прочтите <a href=\"%s\" target=\"_blank\">справочное руководство</a> для "
 "настройки ВКонтакте."
 
+#: assets/scripts/metabox.js:909
+msgid "Required meta field is empty"
+msgstr "Поле meta не должно быть пустым"
+
 #: assets/scripts/settings.js:218
 msgid "Save changes"
 msgstr "Сохранить"
 
-#: assets/scripts/metabox.js:383
+#: assets/scripts/metabox.js:399
 msgid "Scheduled for:"
 msgstr "Запланировано:"
 
@@ -269,19 +273,19 @@ msgstr "Запланировано:"
 msgid "Sending method is missed"
 msgstr "Отсутствует необходимый метод для отправки"
 
-#: assets/scripts/metabox.js:560
+#: assets/scripts/metabox.js:576
 msgid "Sent error:"
 msgstr "Ошибка отправки:"
 
-#: assets/scripts/metabox.js:609
+#: assets/scripts/metabox.js:625
 msgid "Sent message:"
 msgstr "Отправленное сообщение:"
 
-#: assets/scripts/metabox.js:332
+#: assets/scripts/metabox.js:348
 msgid "Sent:"
 msgstr "Отправлено:"
 
-#: classes/class-settings.php:78
+#: classes/class-settings.php:74
 msgid "Settings"
 msgstr "Настройки"
 
@@ -293,19 +297,16 @@ msgstr "настройки"
 msgid "Social networks summary"
 msgstr "Подводка для соцсети"
 
-#: classes/class-metabox.php:67 classes/class-settings.php:92
+#. Plugin Name of the plugin
+#: classes/class-metabox.php:67 classes/class-settings.php:94
 msgid "Social Planner"
 msgstr "Social Planner"
-
-#. Plugin Name of the plugin
-msgid "Social planner"
-msgstr "Social planner"
 
 #: templates/settings.php:13
 msgid "Social Planner Settings"
 msgstr "Настройки Social Planner"
 
-#: classes/class-settings.php:91
+#: classes/class-settings.php:93
 msgid "Social Planner settings"
 msgstr "Настройки Social Planner"
 
@@ -314,12 +315,12 @@ msgid "Something went wrong. Try to reload page."
 msgstr "Что-то пошло не так. Попробуйте обновить страницу."
 
 #: networks/class-network-facebook.php:77
-#: networks/class-network-telegram.php:79
-#: networks/class-network-twitter.php:100 networks/class-network-vk.php:78
+#: networks/class-network-telegram.php:79 networks/class-network-twitter.php:87
+#: networks/class-network-vk.php:78
 msgid "Subtitle"
 msgstr "Заголовок"
 
-#: assets/scripts/metabox.js:663
+#: assets/scripts/metabox.js:679
 msgid "The reason for this error is unknown"
 msgstr "Причина ошибки не известна"
 
@@ -368,7 +369,7 @@ msgstr "Неизвестная ошибка запроса к Facebook"
 msgid "Unknown Telegram error"
 msgstr "Неизвестная ошибка запроса к Telegram"
 
-#: networks/class-network-twitter.php:150
+#: networks/class-network-twitter.php:137
 msgid "Unknown Twitter error"
 msgstr "Неизвестная ошибка запроса к Twitter"
 

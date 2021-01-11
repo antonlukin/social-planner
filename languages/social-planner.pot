@@ -1,21 +1,23 @@
 # Copyright (C) 2021 Anton Lukin
-# This file is distributed under the same license as the Social planner plugin.
+# This file is distributed under the same license as the Social Planner plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Social planner 1.0.0\n"
+"Project-Id-Version: Social Planner 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/social-planner\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-01-06T23:18:22+00:00\n"
+"POT-Creation-Date: 2021-01-11T14:50:10+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0-alpha-59d879d\n"
 "X-Domain: social-planner\n"
 
 #. Plugin Name of the plugin
-msgid "Social planner"
+#: classes/class-metabox.php:67
+#: classes/class-settings.php:94
+msgid "Social Planner"
 msgstr ""
 
 #. Plugin URI of the plugin
@@ -42,11 +44,6 @@ msgstr ""
 msgid "This dashboard requires JavaScript. Enable it in your browser settings, please."
 msgstr ""
 
-#: classes/class-metabox.php:67
-#: classes/class-settings.php:92
-msgid "Social Planner"
-msgstr ""
-
 #: classes/class-metabox.php:86
 msgid "This metabox requires JavaScript. Enable it in your browser settings, please."
 msgstr ""
@@ -59,11 +56,11 @@ msgstr ""
 msgid "Sending method is missed"
 msgstr ""
 
-#: classes/class-settings.php:78
+#: classes/class-settings.php:74
 msgid "Settings"
 msgstr ""
 
-#: classes/class-settings.php:91
+#: classes/class-settings.php:93
 msgid "Social Planner settings"
 msgstr ""
 
@@ -78,7 +75,7 @@ msgid "Read the <a href=\"%s\" target=\"_blank\">help guide</a> for configuring 
 msgstr ""
 
 #: networks/class-network-facebook.php:67
-#: networks/class-network-twitter.php:90
+#: networks/class-network-twitter.php:77
 #: networks/class-network-vk.php:67
 msgid "Access token"
 msgstr ""
@@ -90,7 +87,7 @@ msgstr ""
 
 #: networks/class-network-facebook.php:77
 #: networks/class-network-telegram.php:79
-#: networks/class-network-twitter.php:100
+#: networks/class-network-twitter.php:87
 #: networks/class-network-vk.php:78
 msgid "Subtitle"
 msgstr ""
@@ -160,36 +157,36 @@ msgid "Twitter"
 msgstr ""
 
 #. translators: %s is a link for current network help guide.
-#: networks/class-network-twitter.php:60
+#: networks/class-network-twitter.php:47
 msgid "Read the <a href=\"%s\" target=\"_blank\">help guide</a> for configuring Twitter provider."
 msgstr ""
 
-#: networks/class-network-twitter.php:80
+#: networks/class-network-twitter.php:67
 msgid "Consumer API key"
 msgstr ""
 
-#: networks/class-network-twitter.php:85
+#: networks/class-network-twitter.php:72
 msgid "Consumer API secret key"
 msgstr ""
 
-#: networks/class-network-twitter.php:95
+#: networks/class-network-twitter.php:82
 msgid "Access token secret"
 msgstr ""
 
-#: networks/class-network-twitter.php:101
+#: networks/class-network-twitter.php:88
 msgid "Optional field. Used as an subtitle if there are multiple Twitter providers."
 msgstr ""
 
-#: networks/class-network-twitter.php:119
+#: networks/class-network-twitter.php:106
 msgid "Parameter is empty: "
 msgstr ""
 
-#: networks/class-network-twitter.php:130
-#: networks/class-network-twitter.php:235
+#: networks/class-network-twitter.php:117
+#: networks/class-network-twitter.php:222
 msgid "Empty Twitter response"
 msgstr ""
 
-#: networks/class-network-twitter.php:150
+#: networks/class-network-twitter.php:137
 msgid "Unknown Twitter error"
 msgstr ""
 
@@ -238,7 +235,7 @@ msgstr ""
 msgid "General settings for auto-posting to social networks. Note that the plugin is designed for advanced users. Carefully read the instructions for configuring each provider."
 msgstr ""
 
-#: assets/scripts/dashboard.js:141
+#: assets/scripts/dashboard.js:143
 msgid "Nothing planned."
 msgstr ""
 
@@ -263,56 +260,60 @@ msgstr ""
 msgid "Social networks summary"
 msgstr ""
 
-#: assets/scripts/metabox.js:332
+#: assets/scripts/metabox.js:348
 msgid "Sent:"
 msgstr ""
 
-#: assets/scripts/metabox.js:383
+#: assets/scripts/metabox.js:399
 msgid "Scheduled for:"
 msgstr ""
 
-#: assets/scripts/metabox.js:390
+#: assets/scripts/metabox.js:406
 msgid "Cancel"
 msgstr ""
 
-#: assets/scripts/metabox.js:433
+#: assets/scripts/metabox.js:449
 msgid "Do not send automatically"
 msgstr ""
 
-#: assets/scripts/metabox.js:435
+#: assets/scripts/metabox.js:451
 msgid "Publish immediately"
 msgstr ""
 
-#: assets/scripts/metabox.js:478
+#: assets/scripts/metabox.js:494
 msgid "Preview disabled"
 msgstr ""
 
-#: assets/scripts/metabox.js:483
+#: assets/scripts/metabox.js:499
 msgid "Preview enabled"
 msgstr ""
 
-#: assets/scripts/metabox.js:495
+#: assets/scripts/metabox.js:511
 msgid "Disable preview"
 msgstr ""
 
-#: assets/scripts/metabox.js:560
+#: assets/scripts/metabox.js:576
 msgid "Sent error:"
 msgstr ""
 
-#: assets/scripts/metabox.js:609
+#: assets/scripts/metabox.js:625
 msgid "Sent message:"
 msgstr ""
 
-#: assets/scripts/metabox.js:663
+#: assets/scripts/metabox.js:679
 msgid "The reason for this error is unknown"
 msgstr ""
 
-#: assets/scripts/metabox.js:815
+#: assets/scripts/metabox.js:831
 msgid "Add task"
 msgstr ""
 
-#: assets/scripts/metabox.js:893
-msgid "Need to configure the plugin on the settings page."
+#: assets/scripts/metabox.js:909
+msgid "Required meta field is empty"
+msgstr ""
+
+#: assets/scripts/metabox.js:915
+msgid "Add at least one provider on the settings page."
 msgstr ""
 
 #: assets/scripts/settings.js:106
