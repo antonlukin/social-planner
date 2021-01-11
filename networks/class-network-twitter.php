@@ -38,19 +38,6 @@ class Network_Twitter {
 	}
 
 	/**
-	 * Get message limit.
-	 */
-	public static function get_limit() {
-		/**
-		 * Filter twitter message limit.
-		 * Subtracting a few characters for the link and break line.
-		 *
-		 * @param int $limit Twitter message limit.
-		 */
-		return apply_filters( 'social_planner_twitter_limit', 255 );
-	}
-
-	/**
 	 * Get network helper link
 	 */
 	public static function get_helper() {
@@ -158,7 +145,7 @@ class Network_Twitter {
 	 */
 	private static function make_request( $message, $settings ) {
 		$body = array(
-			'status' => self::prepare_message_status( $message ),
+			'status' => self::prepare_message_excerpt( $message ),
 		);
 
 		$oauth = array(
@@ -296,25 +283,26 @@ class Network_Twitter {
 	 *
 	 * @param array $message List of message args.
 	 */
-	private static function prepare_message_status( $message ) {
-		$status = array();
+	private static function prepare_message_excerpt( $message ) {
+		$excerpt = array();
 
 		if ( ! empty( $message['excerpt'] ) ) {
-			$status[] = $message['excerpt'];
+			$excerpt[] = $message['excerpt'];
 		}
 
 		if ( ! empty( $message['link'] ) ) {
-			$status[] = $message['link'];
+			$excerpt[] = $message['link'];
 		}
 
-		$status = implode( "\n\n", $status );
+		$excerpt = implode( "\n\n", $excerpt );
 
 		/**
-		 * Filter twitter message status right before sending.
+		 * Filter message right before sending.
 		 *
-		 * @param string $status Twitter status message.
+		 * @param string $excerpt Message excerpt.
+		 * @param string $network Network name.
 		 */
-		return apply_filters( 'social_planner_twitter_status', $status );
+		return apply_filters( 'social_planner_prepare_excerpt', $excerpt, self::NETWORK_NAME );
 	}
 
 	/**

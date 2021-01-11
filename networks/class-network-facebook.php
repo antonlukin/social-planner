@@ -238,11 +238,12 @@ class Network_Facebook {
 		$excerpt = implode( "\n\n", $excerpt );
 
 		/**
-		 * Filter facebook message excerpt right before sending.
+		 * Filter message excerpt right before sending.
 		 *
-		 * @param string $excerpt Facebook message excerpt.
+		 * @param string $excerpt Message excerpt.
+		 * @param string $network Network name.
 		 */
-		return apply_filters( 'social_planner_facebook_excerpt', $excerpt );
+		return apply_filters( 'social_planner_prepare_excerpt', $excerpt, self::NETWORK_NAME );
 	}
 
 	/**

@@ -299,7 +299,23 @@
     var excerpt = document.createElement('textarea');
     excerpt.classList.add('social-planner-excerpt');
     excerpt.setAttribute('placeholder', __('Social networks summary', 'social-planner'));
-    excerpt.setAttribute('name', meta + '[excerpt]');
+    excerpt.setAttribute('name', meta + '[excerpt]'); // Create statusbar with textarea value length.
+
+    var statusbar = document.createElement('span');
+    statusbar.classList.add('social-planner-statusbar');
+
+    var updateStatusbar = function updateStatusbar() {
+      statusbar.classList.add('is-hidden');
+      statusbar.textContent = excerpt.value.length;
+
+      if (excerpt.value.length > 0) {
+        statusbar.classList.remove('is-hidden');
+      }
+    };
+
+    excerpt.addEventListener('keyup', updateStatusbar);
+    excerpt.addEventListener('paste', updateStatusbar);
+    snippet.appendChild(statusbar);
 
     if (data.result.sent) {
       excerpt.setAttribute('readonly', 'readonly');

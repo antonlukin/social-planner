@@ -538,10 +538,6 @@ class Metabox {
 			}
 
 			$prepared[ $key ]['label'] = esc_attr( $label );
-
-			if ( method_exists( $class, 'get_limit' ) ) {
-				$prepared[ $key ]['limit'] = absint( $class::get_limit() );
-			}
 		}
 
 		return $prepared;

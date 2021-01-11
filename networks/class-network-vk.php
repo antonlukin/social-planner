@@ -341,11 +341,12 @@ class Network_VK {
 		$excerpt = implode( "\n\n", $excerpt );
 
 		/**
-		 * Filter VK.com message excerpt right before sending.
+		 * Filter message excerpt right before sending.
 		 *
-		 * @param string $excerpt VK.com message excerpt.
+		 * @param string $excerpt Message excerpt.
+		 * @param string $network Network name.
 		 */
-		return apply_filters( 'social_planner_vk_excerpt', $excerpt );
+		return apply_filters( 'social_planner_prepare_excerpt', $excerpt, self::NETWORK_NAME );
 	}
 
 	/**

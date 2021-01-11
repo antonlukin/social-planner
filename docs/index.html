@@ -71,7 +71,7 @@
         </figure>
 
         <p>
-            Due to the peculiarities of the WordPress scheduling system, announcements on social networks may be delayed.
+            Due to the restrictions of the WordPress scheduling system, announcements on social networks may be delayed.
             To avoid this, it is advisable to configure the work of the <strong>system cron</strong>.
             If you are unable to implement it yourself, contact your hoster or system administrator.
             Read more <a href="https://developer.wordpress.org/plugins/cron/hooking-wp-cron-into-the-system-task-scheduler/" target="_blank">here</a>.
@@ -453,6 +453,12 @@
             </pre>
         </details>
 
+        <h3>Can I use html in the summary field when scheduling new task?</h3>
+        <p>
+            You can use only Markdown <code>**text here**</code> for <strong>bold</strong> and
+            <code>__text here__</code> for <em>italic</em> to beatify Telegram announcements.
+        </p>
+
         <h3>How to hide the metabox for custom post types?</h3>
         <p>
             Plugin shows metabox for all public post types except attachments.
@@ -601,12 +607,12 @@
 
             <pre>
                 <code class="language-php">
-                    function my_hide_dashboard( $hidden_dashboard ) {
+                    function my_hide_dashboard( $hide_dashboard ) {
                         if ( ! current_user_can( 'manage_options' ) ) {
-                            $hidden_dashboard = true;
+                            $hide_dashboard = true;
                         }
 
-                        return $hidden_dashboard;
+                        return $hide_dashboard;
                     }
 
                     add_filter( 'social_planner_hide_dashboard', 'my_hide_dashboard' );
@@ -659,7 +665,7 @@
         </details>
 
         <details>
-            <summary>social_poster_send_message</summary>
+            <summary>social_poster_prepare_message</summary>
         </details>
 
         <details>

@@ -90,7 +90,7 @@
     width: 100%;
     max-width: 680px;
     margin-top: 20px; }
-    #social-planner-settings .social-planner-providers.updated .social-planner-submit {
+    #social-planner-settings .social-planner-providers.is-updated .social-planner-submit {
       display: block; }
   #social-planner-settings .social-planner-remove {
     display: block;

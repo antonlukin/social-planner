@@ -101,7 +101,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
     args.data = args.data || {}; // Set form not empty class to show submit button.
 
-    parent.classList.add('updated'); // Find label in config by network.
+    parent.classList.add('is-updated'); // Find label in config by network.
 
     var label = args.network.label || __('Provider', 'social-planner'); // Create provider heading.
 
