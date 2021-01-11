@@ -299,23 +299,7 @@
     var excerpt = document.createElement('textarea');
     excerpt.classList.add('social-planner-excerpt');
     excerpt.setAttribute('placeholder', __('Social networks summary', 'social-planner'));
-    excerpt.setAttribute('name', meta + '[excerpt]'); // Create statusbar with textarea value length.
-
-    var statusbar = document.createElement('span');
-    statusbar.classList.add('social-planner-statusbar');
-
-    var updateStatusbar = function updateStatusbar() {
-      statusbar.classList.add('is-hidden');
-      statusbar.textContent = excerpt.value.length;
-
-      if (excerpt.value.length > 0) {
-        statusbar.classList.remove('is-hidden');
-      }
-    };
-
-    excerpt.addEventListener('keyup', updateStatusbar);
-    excerpt.addEventListener('paste', updateStatusbar);
-    snippet.appendChild(statusbar);
+    excerpt.setAttribute('name', meta + '[excerpt]');
 
     if (data.result.sent) {
       excerpt.setAttribute('readonly', 'readonly');
@@ -330,6 +314,30 @@
     }
 
     snippet.appendChild(excerpt);
+
+    var createStatusbar = function createStatusbar() {
+      if (excerpt.hasAttribute('readonly')) {
+        return;
+      }
+
+      var statusbar = snippet.querySelector('.social-planner-statusbar');
+
+      if (null === statusbar) {
+        statusbar = document.createElement('span');
+        statusbar.classList.add('social-planner-statusbar');
+        snippet.appendChild(statusbar);
+      }
+
+      statusbar.classList.add('is-hidden');
+      statusbar.textContent = excerpt.value.length;
+
+      if (excerpt.value.length > 0) {
+        statusbar.classList.remove('is-hidden');
+      }
+    };
+
+    excerpt.addEventListener('keyup', createStatusbar);
+    excerpt.addEventListener('paste', createStatusbar);
     createPoster(snippet, index, data);
   };
   /**
@@ -558,10 +566,11 @@
    * @param {HTMLElement} parent Targets DOM element.
    * @param {Object} message Link params.
    * @param {Object} provider Provider object.
+   * @param {string} key Provider key.
    */
 
 
-  var createTargetError = function createTargetError(parent, message, provider) {
+  var createTargetError = function createTargetError(parent, message, provider, key) {
     var error = document.createElement('button');
     error.classList.add('social-planner-error');
     error.textContent = provider.label;
@@ -570,12 +579,17 @@
       var extended = parent.querySelector('.social-planner-extended');
 
       if (null !== extended) {
-        return parent.removeChild(extended);
+        parent.removeChild(extended);
+
+        if (key === extended.getAttribute('data-provider')) {
+          return;
+        }
       }
 
       var content = '<strong>' + __('Sent error:', 'social-planner') + '</strong>';
       extended = document.createElement('p');
       extended.classList.add('social-planner-extended');
+      extended.setAttribute('data-provider', key);
       extended.textContent = message;
       extended.innerHTML = content + extended.textContent;
       parent.appendChild(extended);
@@ -606,10 +620,11 @@
    * @param {HTMLElement} parent Targets DOM element.
    * @param {Object} message Link params.
    * @param {Object} provider Provider object.
+   * @param {string} key Provider key.
    */
 
 
-  var createTargetInfo = function createTargetInfo(parent, message, provider) {
+  var createTargetInfo = function createTargetInfo(parent, message, provider, key) {
     var info = document.createElement('button');
     info.classList.add('social-planner-info');
     info.textContent = provider.label;
@@ -619,12 +634,17 @@
       var extended = parent.querySelector('.social-planner-extended');
 
       if (null !== extended) {
-        return parent.removeChild(extended);
+        parent.removeChild(extended);
+
+        if (key === extended.getAttribute('data-provider')) {
+          return;
+        }
       }
 
       var content = '<strong>' + __('Sent message:', 'social-planner') + '</strong>';
       extended = document.createElement('p');
       extended.classList.add('social-planner-extended');
+      extended.setAttribute('data-provider', key);
       extended.textContent = message;
       extended.innerHTML = content + message;
       parent.appendChild(extended);
@@ -669,7 +689,7 @@
         if ('http' === _message.substring(0, 4)) {
           createTargetLink(parent, _message, provider);
         } else {
-          createTargetInfo(parent, _message, provider);
+          createTargetInfo(parent, _message, provider, key);
         }
 
         continue;
@@ -683,7 +703,7 @@
         message = data.result.errors[key];
       }
 
-      createTargetError(parent, message, provider);
+      createTargetError(parent, message, provider, key);
     }
   };
   /**

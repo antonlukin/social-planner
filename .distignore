@@ -1,0 +1,29 @@
+# A set of files and directories you probably don't want in your WordPress.org distribution
+
+# Files
+.DS_Store
+.distignore
+.eslintrc.js
+.gitignore
+.travis.yml
+CHANGELOG.md
+README.md
+yarn.lock
+package.json
+gulpfile.json
+composer.json
+composer.lock
+Thumbs.db
+*.sql
+*.tar.gz
+*.zip
+
+# Directories
+.git
+.github
+.vscode
+node_modules
+vendor
+src
+docs
+

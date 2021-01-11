@@ -328,24 +328,6 @@
 		excerpt.setAttribute( 'placeholder', __( 'Social networks summary', 'social-planner' ) );
 		excerpt.setAttribute( 'name', meta + '[excerpt]' );
 
-		// Create statusbar with textarea value length.
-		const statusbar = document.createElement( 'span' );
-		statusbar.classList.add( 'social-planner-statusbar' );
-
-		const updateStatusbar = () => {
-			statusbar.classList.add( 'is-hidden' );
-			statusbar.textContent = excerpt.value.length;
-
-			if ( excerpt.value.length > 0 ) {
-				statusbar.classList.remove( 'is-hidden' );
-			}
-		};
-
-		excerpt.addEventListener( 'keyup', updateStatusbar );
-		excerpt.addEventListener( 'paste', updateStatusbar );
-
-		snippet.appendChild( statusbar );
-
 		if ( data.result.sent ) {
 			excerpt.setAttribute( 'readonly', 'readonly' );
 		}
@@ -359,6 +341,31 @@
 		}
 
 		snippet.appendChild( excerpt );
+
+		const createStatusbar = () => {
+			if ( excerpt.hasAttribute( 'readonly' ) ) {
+				return;
+			}
+
+			let statusbar = snippet.querySelector( '.social-planner-statusbar' );
+
+			if ( null === statusbar ) {
+				statusbar = document.createElement( 'span' );
+				statusbar.classList.add( 'social-planner-statusbar' );
+
+				snippet.appendChild( statusbar );
+			}
+
+			statusbar.classList.add( 'is-hidden' );
+			statusbar.textContent = excerpt.value.length;
+
+			if ( excerpt.value.length > 0 ) {
+				statusbar.classList.remove( 'is-hidden' );
+			}
+		};
+
+		excerpt.addEventListener( 'keyup', createStatusbar );
+		excerpt.addEventListener( 'paste', createStatusbar );
 
 		createPoster( snippet, index, data );
 	};
@@ -611,8 +618,9 @@
 	 * @param {HTMLElement} parent Targets DOM element.
 	 * @param {Object} message Link params.
 	 * @param {Object} provider Provider object.
+	 * @param {string} key Provider key.
 	 */
-	const createTargetError = ( parent, message, provider ) => {
+	const createTargetError = ( parent, message, provider, key ) => {
 		const error = document.createElement( 'button' );
 
 		error.classList.add( 'social-planner-error' );
@@ -624,13 +632,18 @@
 			let extended = parent.querySelector( '.social-planner-extended' );
 
 			if ( null !== extended ) {
-				return parent.removeChild( extended );
+				parent.removeChild( extended );
+
+				if ( key === extended.getAttribute( 'data-provider' ) ) {
+					return;
+				}
 			}
 
 			const content = '<strong>' + __( 'Sent error:', 'social-planner' ) + '</strong>';
 
 			extended = document.createElement( 'p' );
 			extended.classList.add( 'social-planner-extended' );
+			extended.setAttribute( 'data-provider', key );
 			extended.textContent = message;
 			extended.innerHTML = content + extended.textContent;
 
@@ -666,8 +679,9 @@
 	 * @param {HTMLElement} parent Targets DOM element.
 	 * @param {Object} message Link params.
 	 * @param {Object} provider Provider object.
+	 * @param {string} key Provider key.
 	 */
-	const createTargetInfo = ( parent, message, provider ) => {
+	const createTargetInfo = ( parent, message, provider, key ) => {
 		const info = document.createElement( 'button' );
 
 		info.classList.add( 'social-planner-info' );
@@ -681,13 +695,18 @@
 			let extended = parent.querySelector( '.social-planner-extended' );
 
 			if ( null !== extended ) {
-				return parent.removeChild( extended );
+				parent.removeChild( extended );
+
+				if ( key === extended.getAttribute( 'data-provider' ) ) {
+					return;
+				}
 			}
 
 			const content = '<strong>' + __( 'Sent message:', 'social-planner' ) + '</strong>';
 
 			extended = document.createElement( 'p' );
 			extended.classList.add( 'social-planner-extended' );
+			extended.setAttribute( 'data-provider', key );
 			extended.textContent = message;
 			extended.innerHTML = content + message;
 			parent.appendChild( extended );
@@ -736,7 +755,7 @@
 				if ( 'http' === message.substring( 0, 4 ) ) {
 					createTargetLink( parent, message, provider );
 				} else {
-					createTargetInfo( parent, message, provider );
+					createTargetInfo( parent, message, provider, key );
 				}
 
 				continue;
@@ -750,7 +769,7 @@
 				message = data.result.errors[ key ];
 			}
 
-			createTargetError( parent, message, provider );
+			createTargetError( parent, message, provider, key );
 		}
 	};
 
