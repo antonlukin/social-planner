@@ -36,9 +36,9 @@ class Dashboard {
 	 */
 	public static function add_dashboard_widget() {
 		/**
-		 * Easy way to hide dashboard
+		 * Easy way to hide dashboard.
 		 *
-		 * @param bool $hide_dashboard Set true to hide dashboard for all users.
+		 * @param bool $hide_dashboard Set true to hide dashboard.
 		 */
 		$hide_dashboard = apply_filters( 'social_planner_hide_dashboard', false );
 

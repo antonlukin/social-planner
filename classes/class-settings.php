@@ -79,9 +79,14 @@ class Settings {
 	}
 
 	/**
-	 * Add plugin page in WordPress menu.
+	 * Add plugin settings page in WordPress menu.
 	 */
 	public static function add_menu() {
+		/**
+		 * Easy way to hide settings page.
+		 *
+		 * @param bool $hide_settings Set true to hide settings page.
+		 */
 		$hide_settings = apply_filters( 'social_planner_hide_settings', false );
 
 		if ( $hide_settings ) {
@@ -176,7 +181,7 @@ class Settings {
 		/**
 		 * Filter list of providers from options.
 		 *
-		 * @param array $providers List of provders.
+		 * @param array $providers List of provders options.
 		 */
 		return apply_filters( 'social_planner_get_providers', $providers );
 	}
@@ -211,9 +216,9 @@ class Settings {
 		$object['providers'] = self::get_providers();
 
 		/**
-		 * Filter settings scripts object.
+		 * Filter settings script object.
 		 *
-		 * @param array $object Array of settings scripts object.
+		 * @param array $object Array of settings script object.
 		 */
 		return apply_filters( 'social_planner_settings_object', $object );
 	}

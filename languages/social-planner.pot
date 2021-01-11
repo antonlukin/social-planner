@@ -2,21 +2,21 @@
 # This file is distributed under the same license as the Social Planner plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Social Planner 1.0.0\n"
+"Project-Id-Version: Social Planner 1.0.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/social-planner\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-01-11T14:50:10+00:00\n"
+"POT-Creation-Date: 2021-01-11T23:33:01+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0-alpha-59d879d\n"
 "X-Domain: social-planner\n"
 
 #. Plugin Name of the plugin
-#: classes/class-metabox.php:67
-#: classes/class-settings.php:94
+#: classes/class-metabox.php:78
+#: classes/class-settings.php:99
 msgid "Social Planner"
 msgstr ""
 
@@ -44,7 +44,7 @@ msgstr ""
 msgid "This dashboard requires JavaScript. Enable it in your browser settings, please."
 msgstr ""
 
-#: classes/class-metabox.php:86
+#: classes/class-metabox.php:97
 msgid "This metabox requires JavaScript. Enable it in your browser settings, please."
 msgstr ""
 
@@ -60,7 +60,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: classes/class-settings.php:93
+#: classes/class-settings.php:98
 msgid "Social Planner settings"
 msgstr ""
 
@@ -260,59 +260,59 @@ msgstr ""
 msgid "Social networks summary"
 msgstr ""
 
-#: assets/scripts/metabox.js:348
+#: assets/scripts/metabox.js:356
 msgid "Sent:"
 msgstr ""
 
-#: assets/scripts/metabox.js:399
+#: assets/scripts/metabox.js:429
 msgid "Scheduled for:"
 msgstr ""
 
-#: assets/scripts/metabox.js:406
+#: assets/scripts/metabox.js:436
 msgid "Cancel"
 msgstr ""
 
-#: assets/scripts/metabox.js:449
+#: assets/scripts/metabox.js:478
 msgid "Do not send automatically"
 msgstr ""
 
-#: assets/scripts/metabox.js:451
+#: assets/scripts/metabox.js:480
 msgid "Publish immediately"
 msgstr ""
 
-#: assets/scripts/metabox.js:494
+#: assets/scripts/metabox.js:523
 msgid "Preview disabled"
 msgstr ""
 
-#: assets/scripts/metabox.js:499
+#: assets/scripts/metabox.js:528
 msgid "Preview enabled"
 msgstr ""
 
-#: assets/scripts/metabox.js:511
+#: assets/scripts/metabox.js:540
 msgid "Disable preview"
 msgstr ""
 
-#: assets/scripts/metabox.js:576
+#: assets/scripts/metabox.js:610
 msgid "Sent error:"
 msgstr ""
 
-#: assets/scripts/metabox.js:625
+#: assets/scripts/metabox.js:665
 msgid "Sent message:"
 msgstr ""
 
-#: assets/scripts/metabox.js:679
+#: assets/scripts/metabox.js:720
 msgid "The reason for this error is unknown"
 msgstr ""
 
-#: assets/scripts/metabox.js:831
+#: assets/scripts/metabox.js:870
 msgid "Add task"
 msgstr ""
 
-#: assets/scripts/metabox.js:909
+#: assets/scripts/metabox.js:948
 msgid "Required meta field is empty"
 msgstr ""
 
-#: assets/scripts/metabox.js:915
+#: assets/scripts/metabox.js:954
 msgid "Add at least one provider on the settings page."
 msgstr ""
 

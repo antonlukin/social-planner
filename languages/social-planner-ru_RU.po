@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-01-06T21:52:32+00:00\n"
-"PO-Revision-Date: 2021-01-11 16:29+0000\n"
+"PO-Revision-Date: 2021-01-11 23:33+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: social-planner\n"
 "Language: ru_RU\n"
@@ -27,7 +27,7 @@ msgstr "Access token"
 msgid "Access token secret"
 msgstr "Access token secret"
 
-#: assets/scripts/metabox.js:915
+#: assets/scripts/metabox.js:954
 msgid "Add at least one provider on the settings page."
 msgstr "Добавьте как минимум один провайдер на странице настроек."
 
@@ -35,7 +35,7 @@ msgstr "Добавьте как минимум один провайдер на 
 msgid "Add provider"
 msgstr "Добавить"
 
-#: assets/scripts/metabox.js:831
+#: assets/scripts/metabox.js:870
 msgid "Add task"
 msgstr "Добавить задачу"
 
@@ -47,7 +47,7 @@ msgstr "Anton Lukin"
 msgid "Bot token"
 msgstr "Токен бота"
 
-#: assets/scripts/metabox.js:406
+#: assets/scripts/metabox.js:436
 msgid "Cancel"
 msgstr "Отменить"
 
@@ -79,11 +79,11 @@ msgstr "Consumer API secret key"
 msgid "Delete provider"
 msgstr "Удалить"
 
-#: assets/scripts/metabox.js:511
+#: assets/scripts/metabox.js:540
 msgid "Disable preview"
 msgstr "Не формировать превью"
 
-#: assets/scripts/metabox.js:449
+#: assets/scripts/metabox.js:478
 msgid "Do not send automatically"
 msgstr "Не отправлять автоматически"
 
@@ -186,11 +186,11 @@ msgstr "Параметр не найден: "
 msgid "Post ID element is not defined."
 msgstr "Идентификатор записи не определен."
 
-#: assets/scripts/metabox.js:494
+#: assets/scripts/metabox.js:523
 msgid "Preview disabled"
 msgstr "Превью отключено"
 
-#: assets/scripts/metabox.js:499
+#: assets/scripts/metabox.js:528
 msgid "Preview enabled"
 msgstr "Превью включено"
 
@@ -217,7 +217,7 @@ msgstr "ВКонтакте"
 msgid "Provider settings not found"
 msgstr "Настройки провайдера не найдены"
 
-#: assets/scripts/metabox.js:451
+#: assets/scripts/metabox.js:480
 msgid "Publish immediately"
 msgstr "Отправить сразу"
 
@@ -257,7 +257,7 @@ msgstr ""
 "Прочтите <a href=\"%s\" target=\"_blank\">справочное руководство</a> для "
 "настройки ВКонтакте."
 
-#: assets/scripts/metabox.js:909
+#: assets/scripts/metabox.js:948
 msgid "Required meta field is empty"
 msgstr "Поле meta не должно быть пустым"
 
@@ -265,7 +265,7 @@ msgstr "Поле meta не должно быть пустым"
 msgid "Save changes"
 msgstr "Сохранить"
 
-#: assets/scripts/metabox.js:399
+#: assets/scripts/metabox.js:429
 msgid "Scheduled for:"
 msgstr "Запланировано:"
 
@@ -273,15 +273,15 @@ msgstr "Запланировано:"
 msgid "Sending method is missed"
 msgstr "Отсутствует необходимый метод для отправки"
 
-#: assets/scripts/metabox.js:576
+#: assets/scripts/metabox.js:610
 msgid "Sent error:"
 msgstr "Ошибка отправки:"
 
-#: assets/scripts/metabox.js:625
+#: assets/scripts/metabox.js:665
 msgid "Sent message:"
 msgstr "Отправленное сообщение:"
 
-#: assets/scripts/metabox.js:348
+#: assets/scripts/metabox.js:356
 msgid "Sent:"
 msgstr "Отправлено:"
 
@@ -298,7 +298,7 @@ msgid "Social networks summary"
 msgstr "Подводка для соцсети"
 
 #. Plugin Name of the plugin
-#: classes/class-metabox.php:67 classes/class-settings.php:94
+#: classes/class-metabox.php:78 classes/class-settings.php:99
 msgid "Social Planner"
 msgstr "Social Planner"
 
@@ -306,7 +306,7 @@ msgstr "Social Planner"
 msgid "Social Planner Settings"
 msgstr "Настройки Social Planner"
 
-#: classes/class-settings.php:93
+#: classes/class-settings.php:98
 msgid "Social Planner settings"
 msgstr "Настройки Social Planner"
 
@@ -320,7 +320,7 @@ msgstr "Что-то пошло не так. Попробуйте обновит�
 msgid "Subtitle"
 msgstr "Заголовок"
 
-#: assets/scripts/metabox.js:679
+#: assets/scripts/metabox.js:720
 msgid "The reason for this error is unknown"
 msgstr "Причина ошибки не известна"
 
@@ -332,7 +332,7 @@ msgstr ""
 "Этот виджет требует JavaScript. Пожалуйста, включите его поддержку в "
 "настройках браузера."
 
-#: classes/class-metabox.php:86
+#: classes/class-metabox.php:97
 msgid ""
 "This metabox requires JavaScript. Enable it in your browser settings, please."
 msgstr ""

@@ -297,12 +297,13 @@ class Network_Twitter {
 		$excerpt = implode( "\n\n", $excerpt );
 
 		/**
-		 * Filter message right before sending.
+		 * Filter message excerpt right before sending.
 		 *
 		 * @param string $excerpt Message excerpt.
+		 * @param array  $message Original message array.
 		 * @param string $network Network name.
 		 */
-		return apply_filters( 'social_planner_prepare_excerpt', $excerpt, self::NETWORK_NAME );
+		return apply_filters( 'social_planner_prepare_excerpt', $excerpt, $message, self::NETWORK_NAME );
 	}
 
 	/**

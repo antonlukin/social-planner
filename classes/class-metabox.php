@@ -62,6 +62,17 @@ class Metabox {
 	 * Add plugin page in WordPress menu.
 	 */
 	public static function add_metabox() {
+		/**
+		 * Easy way to hide metabox.
+		 *
+		 * @param bool $hide_metabox Set true to hide metabox.
+		 */
+		$hide_metabox = apply_filters( 'social_planner_hide_metabox', false );
+
+		if ( $hide_metabox ) {
+			return;
+		}
+
 		add_meta_box(
 			self::METABOX_ID,
 			esc_html__( 'Social Planner', 'social-planner' ),
@@ -310,9 +321,10 @@ class Metabox {
 		/**
 		 * Filter tasks while saving metabox.
 		 *
-		 * @param array $tasks List of tasks.
+		 * @param array $sanitized List of tasks after sanitization.
+		 * @param array $tasks     List of tasks before sanitization.
 		 */
-		return apply_filters( 'social_planner_sanitize_tasks', array_filter( $sanitized ) );
+		return apply_filters( 'social_planner_sanitize_tasks', array_filter( $sanitized ), $tasks );
 	}
 
 	/**
@@ -346,8 +358,8 @@ class Metabox {
 		/**
 		 * Filter tasks before update post meta.
 		 *
-		 * @param array $tasks   List of tasks from post meta.
-		 * @param int   $post_id Post ID.
+		 * @param array  $tasks   List of tasks from post meta.
+		 * @param int    $post_id Post ID.
 		 */
 		$tasks = apply_filters( 'social_planner_update_tasks', $tasks, $post_id );
 
@@ -437,9 +449,10 @@ class Metabox {
 		/**
 		 * Filter metabox scripts object.
 		 *
-		 * @param array $object Array of metabox script object.
+		 * @param array $object  Array of metabox script object.
+		 * @param int   $post_id Current post ID.
 		 */
-		return apply_filters( 'social_planner_metabox_object', $object );
+		return apply_filters( 'social_planner_metabox_object', $object, $post_id );
 	}
 
 	/**
@@ -578,6 +591,8 @@ class Metabox {
 
 		/**
 		 * Filter time offset in seconds from UTC.
+		 *
+		 * @param int $offset Time offset in seconds from UTC
 		 */
 		return apply_filters( 'social_planner_time_offset', $offset );
 	}

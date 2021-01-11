@@ -264,116 +264,6 @@
     </section>
 
     <section>
-        <h2 id="custom-providers">Custom providers <a aria-hidden="true" href="#custom-providers">#</a></h2>
-
-        <p>
-            Only 4 social networks are available for posing now.
-            More likely to be added soon, but until that happens, you might want to write your own extension.
-            And it's not that hard to do.
-        </p>
-
-        <p>
-            You need to create a special social network class and connect to the plugin.
-            Below is an example of a non-existent network <code>Example</code>, copy it and replace the information in the methods.
-        </p>
-
-        <details>
-            <summary>Example network class</summary>
-
-            <pre>
-                <code class="language-php">
-                    &lt;?php
-
-                    class My_Network_Example {
-                        /**
-                        * Unique network slug.
-                        * Use latin alphanumeric characters and underscore only.
-                        */
-                        const NETWORK_NAME = 'example';
-
-                        /**
-                        * Return human-readable network label
-                        */
-                        public static function get_label() {
-                            return 'Example';
-                        }
-
-                        /**
-                        * Return network required settings fields
-                        */
-                        public static function get_fields() {
-                            $fields = array(
-                                'token' => array(
-                                    'label'       => 'Token',
-                                    'placeholder' => '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11',
-                                    'required'    => true,
-                                ),
-
-                                'group' => array(
-                                    'label'    => 'Group ID',
-                                    'required' => true,
-                                ),
-
-                                'title' => array(
-                                    'label' => 'Subtitle',
-                                    'hint'  => 'Optional field.'
-                                ),
-                            );
-
-                            return $fields;
-                        }
-
-                        /**
-                        * Send message method
-                        *
-                        * @param array $message  Message data.
-                        * @param array $settings Settings array from options.
-                        */
-                        public static function send_message( $message, $settings ) {
-                            // You should write this sending method using $message and $settings.
-                            $response = self::my_sending_method( $message, $settings );
-
-                            // If something went wrong you should return WP_Error.
-                            if ( empty( $response ) ) {
-                                return new WP_Error( 'sending', 'Example sending error' );
-                            }
-
-                            // If it is ok, you should return message link or ID.
-                            return 'https://example.com/' . $response;
-                        }
-                </code>
-            </pre>
-        </details>
-
-        <p>
-            Your class must provide <code>NETWORK_NAME</code> constant and public static <code>send_message</code> method.
-            You can see how the other classes of social networks of the plugin are implemented in the
-            <a href="https://github.com/antonlukin/social-planner/tree/master/networks" target="_blank">repository</a>.
-        </p>
-
-        <p>
-            Place your class file in your theme or plugin and connect with filter:
-        </p>
-
-        <pre>
-            <code class="language-php">
-                function add_example_network( $networks ) {
-                    $networks['My_Network_Example'] = get_template_directory() . '/inc/class-network-example.php';
-
-                    return $networks;
-                }
-
-                // This filter must execute before `init` event.
-                add_filter( 'social_planner_networks', 'add_example_network' );
-            </code>
-        </pre>
-
-        <p>
-            That's all you need. Now check if the new provider has appeared on the Settings page.
-        </p>
-    </section>
-
-    <section>
         <h2 id="faq">FAQ <a aria-hidden="true" href="#faq">#</a></h2>
 
         <p>
@@ -492,6 +382,117 @@
         </p>
     </section>
 
+
+    <section>
+        <h2 id="custom-providers">Custom providers <a aria-hidden="true" href="#custom-providers">#</a></h2>
+
+        <p>
+            Only 4 social networks are available for posing now.
+            More likely to be added soon, but until that happens, you might want to write your own extension.
+            And it's not that hard to do.
+        </p>
+
+        <p>
+            You need to create a special social network class and connect to the plugin.
+            Below is an example of a non-existent network <code>Example</code>, copy it and replace the information in the methods.
+        </p>
+
+        <details>
+            <summary>Example network class</summary>
+
+            <pre>
+                <code class="language-php">
+                    &lt;?php
+
+                    class My_Network_Example {
+                        /**
+                        * Unique network slug.
+                        * Use latin alphanumeric characters and underscore only.
+                        */
+                        const NETWORK_NAME = 'example';
+
+                        /**
+                        * Return human-readable network label
+                        */
+                        public static function get_label() {
+                            return 'Example';
+                        }
+
+                        /**
+                        * Return network required settings fields
+                        */
+                        public static function get_fields() {
+                            $fields = array(
+                                'token' => array(
+                                    'label'       => 'Token',
+                                    'placeholder' => '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11',
+                                    'required'    => true,
+                                ),
+
+                                'group' => array(
+                                    'label'    => 'Group ID',
+                                    'required' => true,
+                                ),
+
+                                'title' => array(
+                                    'label' => 'Subtitle',
+                                    'hint'  => 'Optional field.'
+                                ),
+                            );
+
+                            return $fields;
+                        }
+
+                        /**
+                        * Send message method
+                        *
+                        * @param array $message  Message data.
+                        * @param array $settings Settings array from options.
+                        */
+                        public static function send_message( $message, $settings ) {
+                            // You should write this sending method using $message and $settings.
+                            $response = self::my_sending_method( $message, $settings );
+
+                            // If something went wrong you should return WP_Error.
+                            if ( empty( $response ) ) {
+                                return new WP_Error( 'sending', 'Example sending error' );
+                            }
+
+                            // If it is ok, you should return message link or ID.
+                            return 'https://example.com/' . $response;
+                        }
+                </code>
+            </pre>
+        </details>
+
+        <p>
+            Your class must provide <code>NETWORK_NAME</code> constant and public static <code>send_message</code> method.
+            You can see how the other classes of social networks of the plugin are implemented in the
+            <a href="https://github.com/antonlukin/social-planner/tree/master/networks" target="_blank">repository</a>.
+        </p>
+
+        <p>
+            Place your class file in your theme or plugin and connect with filter:
+        </p>
+
+        <pre>
+            <code class="language-php">
+                function add_example_network( $networks ) {
+                    $networks['My_Network_Example'] = get_template_directory() . '/inc/class-network-example.php';
+
+                    return $networks;
+                }
+
+                // This filter must execute before `init` event.
+                add_filter( 'social_planner_networks', 'add_example_network' );
+            </code>
+        </pre>
+
+        <p>
+            That's all you need. Now check if the new provider has appeared on the Settings page.
+        </p>
+    </section>
+
     <section>
         <h2 id="actions-filters">Actions and filters <a aria-hidden="true" href="#actions-filters">#</a></h2>
 
@@ -565,6 +566,10 @@
 
             <pre>
                 <code class="language-php">
+                    /**
+                     * @param string $label Network label.
+                     * @param string $class Current network class.
+                     */
                     function my_network_label( $label, $class ) {
                         if ( 'Social_Planner\Network_Telegram' === $class ) {
                             $label = 'My custom ' . $label;
@@ -589,6 +594,9 @@
 
             <pre>
                 <code class="language-php">
+                    /**
+                     * @param string $format Datetime format.
+                     */
                     function my_time_format( $format ) {
                         return 'F j, Y h:i';
                     }
@@ -607,6 +615,9 @@
 
             <pre>
                 <code class="language-php">
+                    /**
+                     * @param bool $hide_dashboard Set true to hide dashboard.
+                     */
                     function my_hide_dashboard( $hide_dashboard ) {
                         if ( ! current_user_can( 'manage_options' ) ) {
                             $hide_dashboard = true;
@@ -622,82 +633,443 @@
 
         <details>
             <summary>social_planner_dashboard_object</summary>
+
+            <p>
+                This filter allows you to manage an object with dashboard settings.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    /**
+                     * @param array $object Array of dashboard script object.
+                     */
+                    function my_dashboard_object( $object ) {
+                        $object['tasks'] = my_dashboard_handler( 'tasks' );
+
+                        return $object;
+                    }
+
+                    add_filter( 'social_planner_dashboard_object', 'my_dashboard_object' );
+                </code>
+            </pre>
         </details>
 
         <details>
             <summary>social_planner_sanitize_tasks</summary>
+
+            <p>You can update tasks right after sanitization on metabox saving with this filter.</p>
+
+            <pre>
+                <code class="language-php">
+                    /**
+                     * @param array $sanitized List of tasks after sanitization.
+                     * @param array $tasks     List of tasks before sanitization.
+                     */
+                    function my_sanitize_tasks( $sanitized_tasks, $tasks ) {
+                        return my_tasks_sanitization( $tasks );
+                    }
+
+                    add_filter( 'social_planner_sanitize_tasks', 'my_sanitize_tasks', 10, 2 );
+                </code>
+            </pre>
         </details>
 
         <details>
             <summary>social_planner_get_tasks</summary>
+
+            <p>
+                This filter allows you to change the array with tasks during the get_post_meta request.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    /**
+                     * @param array $tasks   List of tasks from post meta.
+		             * @param int   $post_id Post ID.
+		             */
+                    function my_get_tasks( $tasks, $post_id ) {
+                        if ( 0 === $post_id ) {
+                            $tasks = array();
+                        }
+
+                        return $tasks;
+                    }
+
+                    add_filter( 'social_planner_get_tasks', 'my_get_tasks', 10, 2 );
+                </code>
+            </pre>
         </details>
 
         <details>
             <summary>social_planner_update_tasks</summary>
+
+            <p>
+                This filter allows you to change the array with tasks right before the update_post_meta request.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    /**
+                     * @param array  $tasks   List of tasks from post meta.
+                     * @param int    $post_id Post ID.
+                    function my_update_tasks( $tasks, $post_id ) {
+                        if ( 0 === $post_id ) {
+                            $tasks = array();
+                        }
+
+                        return $tasks;
+                    }
+
+                    add_filter( 'social_planner_update_tasks', 'my_update_tasks', 10, 2 );
+                </code>
+            </pre>
         </details>
 
         <details>
             <summary>social_planner_get_results</summary>
+
+            <p>
+                This filter allows you to change the array with results during the get_post_meta request.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    /**
+                     * @param array $results List of results from post meta.
+                     * @param int   $post_id Post ID.
+                    function my_get_results( $results, $post_id ) {
+                        if ( 0 === $post_id ) {
+                            $results = array();
+                        }
+
+                        return $results;
+                    }
+
+                    add_filter( 'social_planner_get_results', 'my_get_results', 10, 2 );
+                </code>
+            </pre>
         </details>
 
         <details>
             <summary>social_planner_update_results</summary>
+
+            <p>
+                This filter allows you to change the array with results right before the update_post_meta request.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    /**
+                     * @param array $results List of tasks from post meta.
+                     * @param int   $post_id Post ID.
+                     */
+                    function my_update_results( $results, $post_id ) {
+                        if ( 0 === $post_id ) {
+                            $results = array();
+                        }
+
+                        return $results;
+                    }
+
+                    add_filter( 'social_planner_update_results', 'my_update_results', 10, 2 );
+                </code>
+            </pre>
         </details>
 
         <details>
             <summary>social_planner_metabox_object</summary>
+
+            <p>
+                This filter allows you to manage an object with metabox settings.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    /**
+                     * @param array $object  Array of metabox script object.
+                     * @param int   $post_id Current post ID.
+                     */
+                    function my_metabox_object( $object, $post_id ) {
+                        $object = array(
+                            'meta'      => my_metabox_handler( 'meta' ),
+                            'action'    => my_metabox_handler( 'action' ),
+                            'nonce'     => my_metabox_handler( 'nonce' ),
+                            'tasks'     => my_metabox_handler( 'tasks' ),
+                            'results'   => my_metabox_handler( 'results' ),
+                            'offset'    => my_metabox_handler( 'offset' ),
+                            'calendar'  => my_metabox_handler( 'calendar' ),
+                            'providers' => my_metabox_handler( 'providers' ),
+                            'schedules' => my_metabox_handler( 'schedules' ),
+                        );
+
+                        return $object;
+                    }
+
+                    add_filter( 'social_planner_metabox_object', 'my_metabox_object', 10, 2 );
+                </code>
+            </pre>
+        </details>
+
+        <details>
+            <summary>social_planner_hide_metabox</summary>
+
+            <p>
+                You can use this filter to hide metabox from some users or roles.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    /**
+                     * @param bool $hide_metabox Set true to hide metabox.
+                     */
+                     function my_hide_metabox( $hide_metabox ) {
+                        if ( ! current_user_can( 'manage_options' ) ) {
+                            $hide_metabox = true;
+                        }
+
+                        return $hide_metabox;
+                    }
+
+                    add_filter( 'social_planner_hide_metabox', 'my_hide_metabox' );
+                </code>
+            </pre>
         </details>
 
         <details>
             <summary>social_planner_post_types</summary>
+
+            <p>
+                By default, plugin shows metabox for all public post types except attachments.
+                You can override this behavior with this filter.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    /**
+                     * @param array $post_types Array of post types for which the metabox is displayed.
+                     */
+                    function my_post_types( $post_types ) {
+                        $post_types[] = 'my_hidden_type';
+
+                        foreach ( $post_types as $i => $name ) {
+                            if ( 'page' === $name ) {
+                                unset( $post_types[ $i ] );
+                            }
+                        }
+
+                        return $post_types;
+                    }
+
+                    add_filter( 'social_planner_post_types', 'my_post_types' );
+                </code>
+            </pre>
         </details>
 
         <details>
             <summary>social_planner_calendar_days</summary>
+
+            <p>
+                This filter manage number of future days in schedule select box.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    /**
+                     * @param int $days_count Number of days in task calendar select box.
+                     */
+                    function my_calendar_days( $days_number ) {
+                        return 7;
+                    }
+
+                    add_filter( 'social_planner_calendar_days', 'my_calendar_days' );
+                </code>
+            </pre>
         </details>
 
         <details>
             <summary>social_planner_time_offset</summary>
+
+            <p>
+                This filter set time offset. By default, it is a value between UTC and WordPress time in seconds.
+                This offset used in admin-side metabox to choose the time for planning.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    /**
+                     * @param int $offset Time offset in seconds from UTC.
+                     */
+                    function my_time_offset( $offset ) {
+                        $offset = timezone_offset_get( wp_timezone(), date_create( 'now' ) );
+
+                        return $offset;
+                    }
+
+                    add_filter( 'social_planner_time_offset', 'my_time_offset' );
+                </code>
+            </pre>
         </details>
 
         <details>
             <summary>social_planner_post_statuses</summary>
+
+            <p>
+                This filter set post statuses that can be scheduled.
+                By default, we can schedule only posts with statuses 'publish' or 'future'.
+                You can add change this behavior here.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    /**
+                     * @param array $statuses List of post statuses.
+                     */
+                    function my_post_statuses( $statuses ) {
+                        $statuses = array( 'private', 'pending', 'future', 'publish' );
+
+                        return $statuses;
+                    }
+
+                    add_filter( 'social_planner_post_statuses', 'my_post_statuses' );
+                </code>
+            </pre>
         </details>
 
         <details>
             <summary>social_poster_prepare_message</summary>
+
+            <p>
+                This filter allows to update message array right before network sending method execution.
+                This is a great place, for example, to add some text to the excerpt field or replace a post link.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    /**
+                     * @param array  $message Sending message data.
+                     * @param string $target  Target provider name.
+                     * @param array  $task    Scheduled task data.
+                     */
+                    function my_prepare_message( $message, $target, $task ) {
+                        $message['link'] = my_message_link( $message['post_id'] );
+
+                        if ( ! empty( $message['excerpt'] ) ) {
+                            $message['excerpt'] = $message['excerpt'] . "\n\n" . '#some_hashtag';
+                        }
+
+                        return $message;
+                    }
+
+                    add_filter( 'social_poster_prepare_message', 'my_prepare_message', 10, 3 );
+                </code>
+            </pre>
         </details>
 
         <details>
             <summary>social_planner_hide_settings</summary>
+
+            <p>
+                You can use this filter to hide settings page from some users or roles.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    /**
+                     * @param bool $hide_settings Set true to hide settings page.
+                     */
+                     function my_hide_settings( $hide_settings ) {
+                        $user = wp_get_current_user();
+
+                        if ( empty( $user->user_login ) || 'admin' !== $user->user_login ) {
+                            $hide_settings = true;
+                        }
+
+                        return $hide_settings;
+                    }
+
+                    add_filter( 'social_planner_hide_settings', 'my_hide_settings' );
+                </code>
+            </pre>
         </details>
 
         <details>
             <summary>social_planner_get_providers</summary>
+
+            <p>
+                You can filter list of providers from options. It can be handy to use options bypassing the settings page.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    /**
+                     * @param array $providers List of provders options.
+                     */
+                     function my_get_providers( $providers ) {
+                        $providers = array(
+                            'facebook-1' => array(
+                                'token' => 'token',
+                                'group' => 'group',
+                            ),
+                        );
+
+                        return $providers;
+                    }
+
+                    add_filter( 'social_planner_get_providers', 'my_get_providers' );
+                </code>
+            </pre>
         </details>
 
         <details>
             <summary>social_planner_settings_object</summary>
+
+            <p>
+                This filter allows you to manage settings script object.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    /**
+                     * @param array $object Array of settings script object.
+                     */
+                    function my_settings_object( $object ) {
+                        $object = array(
+                            'option'    => my_settings_handler( 'option' ),
+                            'networks'  => my_settings_handler( 'networks' ),
+                            'providers' => my_settings_handler( 'providers' ),
+                        );
+
+                        return $object;
+                    }
+
+                    add_filter( 'social_planner_settings_object', 'my_settings_object' );
+                </code>
+            </pre>
         </details>
 
         <details>
-            <summary>social_planner_twitter_limit</summary>
-        </details>
+            <summary>social_planner_prepare_excerpt</summary>
 
-        <details>
-            <summary>social_planner_twitter_status</summary>
-        </details>
+            <p>The last chance to filter message excerpt before sending to social network account.</p>
 
-        <details>
-            <summary>social_planner_facebook_excerpt</summary>
-        </details>
+            <pre>
+                <code class="language-php">
+                    /**
+                     * @param string $excerpt Message excerpt.
+                     * @param array  $message Original message array.
+		             * @param string $network Network name.
+                     */
+                    function my_prepare_excerpt( $excerpt, $message, $network ) {
+                        if ( empty( $excerpt ) ) {
+                            $excerpt = get_the_title( $message[ $post_id ] );
+                        }
 
-        <details>
-            <summary>social_planner_telegram_excerpt</summary>
-        </details>
+                        return $message;
+                    }
 
-        <details>
-            <summary>social_planner_vk_excerpt</summary>
+                    add_filter( 'social_planner_prepare_excerpt', 'my_prepare_excerpt', 10, 3 );
+                </code>
+            </pre>
         </details>
     </section>
 

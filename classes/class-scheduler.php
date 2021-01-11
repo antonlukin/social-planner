@@ -243,15 +243,17 @@ class Scheduler {
 		// Current post ID permalink.
 		$message['link'] = esc_url( get_permalink( $post_id ) );
 
+		// Add post ID to message array to leave filtering right before sending.
+		$message['post_id'] = $post_id;
+
 		/**
 		 * Filter sending message array.
 		 *
 		 * @param array  $message Sending message data.
-		 * @param int    $post_id Current post ID.
 		 * @param string $target  Target provider name.
 		 * @param array  $task    Scheduled task data.
 		 */
-		$message = apply_filters( 'social_poster_prepare_message', $message, $post_id, $target, $task );
+		$message = apply_filters( 'social_poster_prepare_message', $message, $target, $task );
 
 		return $class::send_message( $message, $providers[ $target ] );
 	}
