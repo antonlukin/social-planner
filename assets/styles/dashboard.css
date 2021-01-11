@@ -64,3 +64,6 @@
     height: 60px;
     border: solid 1px #ccc;
     border-radius: 3px; }
+  #social-planner-dashboard .inside .social-planner-warning {
+    color: #72777c;
+    margin: 10px 0; }

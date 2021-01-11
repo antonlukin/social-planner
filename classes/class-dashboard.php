@@ -80,7 +80,7 @@ class Dashboard {
 		}
 
 		wp_enqueue_style(
-			'social-planner-metabox',
+			'social-planner-dashboard',
 			SOCIAL_PLANNER_URL . '/assets/styles/dashboard.css',
 			array(),
 			SOCIAL_PLANNER_VERSION,
