@@ -1008,10 +1008,16 @@
 	 * Wait Gutenberg post saving and reinit tasks list.
 	 */
 	const subscribeOnSaving = () => {
-		let wasSavingPost = wp.data.select( 'core/edit-post' ).isSavingMetaBoxes();
+		const editPost = wp.data.select( 'core/edit-post' );
+
+		if ( null === editPost ) {
+			return;
+		}
+
+		let wasSavingPost = editPost.isSavingMetaBoxes();
 
 		wp.data.subscribe( () => {
-			const isSavingPost = wp.data.select( 'core/edit-post' ).isSavingMetaBoxes();
+			const isSavingPost = editPost.isSavingMetaBoxes();
 
 			if ( wasSavingPost && ! isSavingPost ) {
 				reinitMetabox();
@@ -1039,6 +1045,9 @@
 
 		// Add append button.
 		createAppend( list );
+
+		// Subscribe and update on Gutenberg post saving.
+		subscribeOnSaving();
 	};
 
 	initMetabox();
