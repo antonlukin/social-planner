@@ -148,7 +148,7 @@ class Network_Telegram {
 			'chat_id'    => $group,
 		);
 
-		if ( ! empty( $message['preview'] ) ) {
+		if ( empty( $message['preview'] ) ) {
 			$body['disable_web_page_preview'] = true;
 		}
 
