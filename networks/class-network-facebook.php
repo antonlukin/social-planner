@@ -258,6 +258,7 @@ class Network_Facebook {
 		$args = array(
 			'user-agent' => 'social-planner/' . SOCIAL_PLANNER_VERSION,
 			'body'       => $body,
+			'timeout'    => 15,
 		);
 
 		if ( $headers ) {

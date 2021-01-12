@@ -111,6 +111,10 @@ class Metabox {
 			return;
 		}
 
+		if ( wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
 		if ( ! isset( $_POST[ self::METABOX_NONCE ] ) ) {
 			return;
 		}

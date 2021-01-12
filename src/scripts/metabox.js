@@ -569,13 +569,13 @@
 		if ( data.result.sent || data.schedule ) {
 			checkbox.setAttribute( 'type', 'hidden' );
 
-			title.textContent = __( 'Preview disabled', 'social-planner' );
+			title.textContent = __( 'Preview enabled', 'social-planner' );
 
 			if ( ! data.task.preview ) {
 				checkbox.value = 0;
 
 				// Set empty-preview title.
-				title.textContent = __( 'Preview enabled', 'social-planner' );
+				title.textContent = __( 'Preview disabled', 'social-planner' );
 			}
 
 			return;
@@ -587,7 +587,7 @@
 			checkbox.setAttribute( 'checked', 'checked' );
 		}
 
-		title.textContent = __( 'Disable preview', 'social-planner' );
+		title.textContent = __( 'Enable preview', 'social-planner' );
 	};
 
 	/**
