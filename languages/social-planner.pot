@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Social Planner plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Social Planner 1.0.3\n"
+"Project-Id-Version: Social Planner 1.0.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/social-planner\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-01-12T12:41:07+00:00\n"
+"POT-Creation-Date: 2021-01-12T16:08:27+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0-alpha-59d879d\n"
 "X-Domain: social-planner\n"
@@ -48,11 +48,11 @@ msgstr ""
 msgid "This metabox requires JavaScript. Enable it in your browser settings, please."
 msgstr ""
 
-#: classes/class-scheduler.php:220
+#: classes/class-scheduler.php:228
 msgid "Provider settings not found"
 msgstr ""
 
-#: classes/class-scheduler.php:226
+#: classes/class-scheduler.php:234
 msgid "Sending method is missed"
 msgstr ""
 
@@ -116,7 +116,7 @@ msgstr ""
 msgid "Unknown Facebook error"
 msgstr ""
 
-#: networks/class-network-facebook.php:145
+#: networks/class-network-facebook.php:149
 #: networks/class-network-telegram.php:162
 msgid "Excerpt and poster are both empty"
 msgstr ""
@@ -252,67 +252,71 @@ msgstr ""
 msgid "Something went wrong. Try to reload page."
 msgstr ""
 
-#: assets/scripts/metabox.js:243
+#: assets/scripts/metabox.js:244
 msgid "Choose poster image"
 msgstr ""
 
-#: assets/scripts/metabox.js:301
+#: assets/scripts/metabox.js:303
 msgid "Social networks summary"
 msgstr ""
 
-#: assets/scripts/metabox.js:356
+#: assets/scripts/metabox.js:354
 msgid "Sent:"
 msgstr ""
 
-#: assets/scripts/metabox.js:429
+#: assets/scripts/metabox.js:372
+msgid "Task in progress right now"
+msgstr ""
+
+#: assets/scripts/metabox.js:442
 msgid "Scheduled for:"
 msgstr ""
 
-#: assets/scripts/metabox.js:436
+#: assets/scripts/metabox.js:449
 msgid "Cancel"
 msgstr ""
 
-#: assets/scripts/metabox.js:478
+#: assets/scripts/metabox.js:496
 msgid "Do not send automatically"
 msgstr ""
 
-#: assets/scripts/metabox.js:480
+#: assets/scripts/metabox.js:498
 msgid "Publish immediately"
 msgstr ""
 
-#: assets/scripts/metabox.js:523
+#: assets/scripts/metabox.js:542
 msgid "Preview enabled"
 msgstr ""
 
-#: assets/scripts/metabox.js:528
+#: assets/scripts/metabox.js:547
 msgid "Preview disabled"
 msgstr ""
 
-#: assets/scripts/metabox.js:540
+#: assets/scripts/metabox.js:559
 msgid "Enable preview"
 msgstr ""
 
-#: assets/scripts/metabox.js:610
+#: assets/scripts/metabox.js:629
 msgid "Sent error:"
 msgstr ""
 
-#: assets/scripts/metabox.js:665
+#: assets/scripts/metabox.js:684
 msgid "Sent message:"
 msgstr ""
 
-#: assets/scripts/metabox.js:720
+#: assets/scripts/metabox.js:739
 msgid "The reason for this error is unknown"
 msgstr ""
 
-#: assets/scripts/metabox.js:870
+#: assets/scripts/metabox.js:895
 msgid "Add task"
 msgstr ""
 
-#: assets/scripts/metabox.js:948
+#: assets/scripts/metabox.js:979
 msgid "Required meta field is empty"
 msgstr ""
 
-#: assets/scripts/metabox.js:954
+#: assets/scripts/metabox.js:985
 msgid "Add at least one provider on the settings page."
 msgstr ""
 

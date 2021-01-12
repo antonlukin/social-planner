@@ -201,8 +201,9 @@
 	 * @param {HTMLElement} snippet Snippet DOM element.
 	 * @param {string} index Unique task key.
 	 * @param {Object} data Task params.
+	 * @param {boolean} readonly Indicates whether the task is closed from editing.
 	 */
-	const createPoster = ( snippet, index, data ) => {
+	const createPoster = ( snippet, index, data, readonly ) => {
 		if ( ! wp.media ) {
 			return;
 		}
@@ -220,7 +221,7 @@
 		choose.textContent = '+';
 
 		// Append choose button only for new tasks.
-		if ( ! data.result.sent && ! data.schedule ) {
+		if ( ! readonly ) {
 			poster.appendChild( choose );
 		}
 
@@ -290,7 +291,7 @@
 		remove.setAttribute( 'type', 'button' );
 
 		// Append remove button only for new tasks.
-		if ( ! data.result.sent && ! data.schedule ) {
+		if ( ! readonly ) {
 			poster.appendChild( remove );
 		}
 
@@ -314,8 +315,9 @@
 	 * @param {HTMLElement} task Task DOM element.
 	 * @param {string} index Unique task key.
 	 * @param {Object} data Task params.
+	 * @param {boolean} readonly Indicates whether the task is closed from editing.
 	 */
-	const createSnippet = ( task, index, data ) => {
+	const createSnippet = ( task, index, data, readonly ) => {
 		const snippet = document.createElement( 'div' );
 		snippet.classList.add( 'social-planner-snippet' );
 		task.appendChild( snippet );
@@ -328,11 +330,7 @@
 		excerpt.setAttribute( 'placeholder', __( 'Social networks summary', 'social-planner' ) );
 		excerpt.setAttribute( 'name', meta + '[excerpt]' );
 
-		if ( data.result.sent ) {
-			excerpt.setAttribute( 'readonly', 'readonly' );
-		}
-
-		if ( data.schedule ) {
+		if ( readonly ) {
 			excerpt.setAttribute( 'readonly', 'readonly' );
 		}
 
@@ -367,7 +365,7 @@
 		excerpt.addEventListener( 'keyup', createStatusbar );
 		excerpt.addEventListener( 'paste', createStatusbar );
 
-		createPoster( snippet, index, data );
+		createPoster( snippet, index, data, readonly );
 	};
 
 	/**
@@ -388,6 +386,21 @@
 		const time = document.createElement( 'strong' );
 		time.textContent = data.result.sent;
 		scheduler.appendChild( time );
+	};
+
+	/**
+	 * Draw locked task scheduler.
+	 *
+	 * @param {HTMLElement} scheduler Scheduler DOM element.
+	 */
+	const drawLockedTime = ( scheduler ) => {
+		const icon = document.createElement( 'span' );
+		icon.classList.add( 'social-planner-clock' );
+		scheduler.appendChild( icon );
+
+		const text = document.createElement( 'span' );
+		text.textContent = __( 'Task in progress right now', 'social-planner' );
+		scheduler.appendChild( text );
 	};
 
 	/**
@@ -501,6 +514,11 @@
 			return drawSentTime( scheduler, data );
 		}
 
+		// Check if task locked.
+		if ( data.result.locked ) {
+			return drawLockedTime( scheduler );
+		}
+
 		// Don't create scheduler for already planned tasks.
 		if ( data.schedule ) {
 			return drawScheduledTime( task, scheduler, index, data );
@@ -548,8 +566,9 @@
 	 * @param {HTMLElement} task Task DOM element.
 	 * @param {string} index Unique task key.
 	 * @param {Object} data Task params.
+	 * @param {boolean} readonly Indicates whether the task is closed from editing.
 	 */
-	const createPreview = ( task, index, data ) => {
+	const createPreview = ( task, index, data, readonly ) => {
 		const preview = document.createElement( 'label' );
 		preview.classList.add( 'social-planner-preview' );
 		task.appendChild( preview );
@@ -565,8 +584,7 @@
 		const title = document.createElement( 'span' );
 		preview.appendChild( title );
 
-		// Preview should be hidden input for readonly tasks.
-		if ( data.result.sent || data.schedule ) {
+		if ( readonly ) {
 			checkbox.setAttribute( 'type', 'hidden' );
 
 			title.textContent = __( 'Preview enabled', 'social-planner' );
@@ -814,8 +832,8 @@
 				continue;
 			}
 
-			// For not scheduled tasks.
-			if ( ! data.schedule ) {
+			// For new tasks only.
+			if ( ! data.schedule && ! data.result.locked ) {
 				const input = createTargetCheckbox( targets, provider );
 
 				input.setAttribute( 'name', meta + '[targets][]' );
@@ -829,7 +847,7 @@
 				continue;
 			}
 
-			// Create hidden inputs for scheduled tasks.
+			// Create hidden inputs for scheduled and locked tasks.
 			if ( data.task.targets.indexOf( key ) >= 0 ) {
 				const input = createTargetScheduled( targets, provider );
 
@@ -925,11 +943,18 @@
 			} );
 		} );
 
+		let readonly = false;
+
+		// For sent scheduled and locked tasks we should create readonly fields.
+		if ( data.result.locked || data.result.sent || data.schedule ) {
+			readonly = true;
+		}
+
 		// Add snippet element.
-		createSnippet( task, index, data );
+		createSnippet( task, index, data, readonly );
 
 		// Add advanced settings element.
-		createPreview( task, index, data );
+		createPreview( task, index, data, readonly );
 
 		// Add scheduler element.
 		createScheduler( task, index, data );

@@ -190,10 +190,11 @@
    * @param {HTMLElement} snippet Snippet DOM element.
    * @param {string} index Unique task key.
    * @param {Object} data Task params.
+   * @param {boolean} readonly Indicates whether the task is closed from editing.
    */
 
 
-  var createPoster = function createPoster(snippet, index, data) {
+  var createPoster = function createPoster(snippet, index, data, readonly) {
     if (!wp.media) {
       return;
     }
@@ -208,7 +209,7 @@
     choose.setAttribute('type', 'button');
     choose.textContent = '+'; // Append choose button only for new tasks.
 
-    if (!data.result.sent && !data.schedule) {
+    if (!readonly) {
       poster.appendChild(choose);
     } // Create image object.
 
@@ -267,7 +268,7 @@
     remove.classList.add('remove');
     remove.setAttribute('type', 'button'); // Append remove button only for new tasks.
 
-    if (!data.result.sent && !data.schedule) {
+    if (!readonly) {
       poster.appendChild(remove);
     } // Remove button listener.
 
@@ -287,10 +288,11 @@
    * @param {HTMLElement} task Task DOM element.
    * @param {string} index Unique task key.
    * @param {Object} data Task params.
+   * @param {boolean} readonly Indicates whether the task is closed from editing.
    */
 
 
-  var createSnippet = function createSnippet(task, index, data) {
+  var createSnippet = function createSnippet(task, index, data, readonly) {
     var snippet = document.createElement('div');
     snippet.classList.add('social-planner-snippet');
     task.appendChild(snippet);
@@ -301,11 +303,7 @@
     excerpt.setAttribute('placeholder', __('Social networks summary', 'social-planner'));
     excerpt.setAttribute('name', meta + '[excerpt]');
 
-    if (data.result.sent) {
-      excerpt.setAttribute('readonly', 'readonly');
-    }
-
-    if (data.schedule) {
+    if (readonly) {
       excerpt.setAttribute('readonly', 'readonly');
     }
 
@@ -338,7 +336,7 @@
 
     excerpt.addEventListener('keyup', createStatusbar);
     excerpt.addEventListener('paste', createStatusbar);
-    createPoster(snippet, index, data);
+    createPoster(snippet, index, data, readonly);
   };
   /**
    * Draw task sent time.
@@ -358,6 +356,21 @@
     var time = document.createElement('strong');
     time.textContent = data.result.sent;
     scheduler.appendChild(time);
+  };
+  /**
+   * Draw locked task scheduler.
+   *
+   * @param {HTMLElement} scheduler Scheduler DOM element.
+   */
+
+
+  var drawLockedTime = function drawLockedTime(scheduler) {
+    var icon = document.createElement('span');
+    icon.classList.add('social-planner-clock');
+    scheduler.appendChild(icon);
+    var text = document.createElement('span');
+    text.textContent = __('Task in progress right now', 'social-planner');
+    scheduler.appendChild(text);
   };
   /**
    * Update task content with config data.
@@ -459,6 +472,11 @@
 
     if (data.result.sent) {
       return drawSentTime(scheduler, data);
+    } // Check if task locked.
+
+
+    if (data.result.locked) {
+      return drawLockedTime(scheduler);
     } // Don't create scheduler for already planned tasks.
 
 
@@ -502,10 +520,11 @@
    * @param {HTMLElement} task Task DOM element.
    * @param {string} index Unique task key.
    * @param {Object} data Task params.
+   * @param {boolean} readonly Indicates whether the task is closed from editing.
    */
 
 
-  var createPreview = function createPreview(task, index, data) {
+  var createPreview = function createPreview(task, index, data, readonly) {
     var preview = document.createElement('label');
     preview.classList.add('social-planner-preview');
     task.appendChild(preview);
@@ -516,9 +535,9 @@
     checkbox.value = 1;
     preview.appendChild(checkbox);
     var title = document.createElement('span');
-    preview.appendChild(title); // Preview should be hidden input for readonly tasks.
+    preview.appendChild(title);
 
-    if (data.result.sent || data.schedule) {
+    if (readonly) {
       checkbox.setAttribute('type', 'hidden');
       title.textContent = __('Preview enabled', 'social-planner');
 
@@ -744,10 +763,10 @@
 
       if (!provider.label) {
         continue;
-      } // For not scheduled tasks.
+      } // For new tasks only.
 
 
-      if (!data.schedule) {
+      if (!data.schedule && !data.result.locked) {
         var input = createTargetCheckbox(targets, provider);
         input.setAttribute('name', meta + '[targets][]');
         input.value = key; // Check if provider key in targets array.
@@ -757,7 +776,7 @@
         }
 
         continue;
-      } // Create hidden inputs for scheduled tasks.
+      } // Create hidden inputs for scheduled and locked tasks.
 
 
       if (data.task.targets.indexOf(key) >= 0) {
@@ -847,11 +866,17 @@
       cancelTask(task, index, function () {
         return removeTask(task, index);
       });
-    }); // Add snippet element.
+    });
+    var readonly = false; // For sent scheduled and locked tasks we should create readonly fields.
 
-    createSnippet(task, index, data); // Add advanced settings element.
+    if (data.result.locked || data.result.sent || data.schedule) {
+      readonly = true;
+    } // Add snippet element.
 
-    createPreview(task, index, data); // Add scheduler element.
+
+    createSnippet(task, index, data, readonly); // Add advanced settings element.
+
+    createPreview(task, index, data, readonly); // Add scheduler element.
 
     createScheduler(task, index, data);
     return task;

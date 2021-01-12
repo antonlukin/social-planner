@@ -111,6 +111,11 @@ class Scheduler {
 			return;
 		}
 
+		$results[ $key ]['locked'] = 1;
+
+		// We must lock the task while it is being sent.
+		Metabox::update_results( $post_id, $results );
+
 		foreach ( $task['targets'] as $target ) {
 			$output = self::send_task( $task, $target, $post_id );
 
@@ -122,6 +127,9 @@ class Scheduler {
 
 			$results[ $key ]['links'][ $target ] = sanitize_text_field( $output );
 		}
+
+		// Remove locked after sending.
+		unset( $results[ $key ]['locked'] );
 
 		$results[ $key ]['sent'] = time();
 

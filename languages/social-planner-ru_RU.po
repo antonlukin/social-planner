@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-01-06T21:52:32+00:00\n"
-"PO-Revision-Date: 2021-01-12 12:42+0000\n"
+"PO-Revision-Date: 2021-01-12 16:08+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: social-planner\n"
 "Language: ru_RU\n"
@@ -27,7 +27,7 @@ msgstr "Access token"
 msgid "Access token secret"
 msgstr "Access token secret"
 
-#: assets/scripts/metabox.js:954
+#: assets/scripts/metabox.js:985
 msgid "Add at least one provider on the settings page."
 msgstr "Добавьте как минимум один провайдер на странице настроек."
 
@@ -35,7 +35,7 @@ msgstr "Добавьте как минимум один провайдер на 
 msgid "Add provider"
 msgstr "Добавить"
 
-#: assets/scripts/metabox.js:870
+#: assets/scripts/metabox.js:895
 msgid "Add task"
 msgstr "Добавить задачу"
 
@@ -47,7 +47,7 @@ msgstr "Anton Lukin"
 msgid "Bot token"
 msgstr "Токен бота"
 
-#: assets/scripts/metabox.js:436
+#: assets/scripts/metabox.js:449
 msgid "Cancel"
 msgstr "Отменить"
 
@@ -59,7 +59,7 @@ msgstr "Невозможно получить сервер ддя загрузк
 msgid "Channel or group ID"
 msgstr "ID канала или группы"
 
-#: assets/scripts/metabox.js:243
+#: assets/scripts/metabox.js:244
 msgid "Choose poster image"
 msgstr "Выбрать постер"
 
@@ -79,7 +79,7 @@ msgstr "Consumer API secret key"
 msgid "Delete provider"
 msgstr "Удалить"
 
-#: assets/scripts/metabox.js:478
+#: assets/scripts/metabox.js:496
 msgid "Do not send automatically"
 msgstr "Не отправлять автоматически"
 
@@ -101,12 +101,12 @@ msgstr "Пустой ответ twitter"
 msgid "Empty VK.com response"
 msgstr "Пустой ответ от ВКонтакте"
 
-#: assets/scripts/metabox.js:540
+#: assets/scripts/metabox.js:559
 #| msgid "Disable preview"
 msgid "Enable preview"
 msgstr "Сформировать превью"
 
-#: networks/class-network-facebook.php:145
+#: networks/class-network-facebook.php:149
 #: networks/class-network-telegram.php:162
 msgid "Excerpt and poster are both empty"
 msgstr "Отрывок и постер не могут быть пустыми оба"
@@ -187,11 +187,11 @@ msgstr "Параметр не найден: "
 msgid "Post ID element is not defined."
 msgstr "Идентификатор записи не определен."
 
-#: assets/scripts/metabox.js:528
+#: assets/scripts/metabox.js:547
 msgid "Preview disabled"
 msgstr "Превью отключено"
 
-#: assets/scripts/metabox.js:523
+#: assets/scripts/metabox.js:542
 msgid "Preview enabled"
 msgstr "Превью включено"
 
@@ -214,11 +214,11 @@ msgctxt "provider label"
 msgid "VK.com"
 msgstr "ВКонтакте"
 
-#: classes/class-scheduler.php:220
+#: classes/class-scheduler.php:228
 msgid "Provider settings not found"
 msgstr "Настройки провайдера не найдены"
 
-#: assets/scripts/metabox.js:480
+#: assets/scripts/metabox.js:498
 msgid "Publish immediately"
 msgstr "Отправить сразу"
 
@@ -258,7 +258,7 @@ msgstr ""
 "Прочтите <a href=\"%s\" target=\"_blank\">справочное руководство</a> для "
 "настройки ВКонтакте."
 
-#: assets/scripts/metabox.js:948
+#: assets/scripts/metabox.js:979
 msgid "Required meta field is empty"
 msgstr "Поле meta не должно быть пустым"
 
@@ -266,23 +266,23 @@ msgstr "Поле meta не должно быть пустым"
 msgid "Save changes"
 msgstr "Сохранить"
 
-#: assets/scripts/metabox.js:429
+#: assets/scripts/metabox.js:442
 msgid "Scheduled for:"
 msgstr "Запланировано:"
 
-#: classes/class-scheduler.php:226
+#: classes/class-scheduler.php:234
 msgid "Sending method is missed"
 msgstr "Отсутствует необходимый метод для отправки"
 
-#: assets/scripts/metabox.js:610
+#: assets/scripts/metabox.js:629
 msgid "Sent error:"
 msgstr "Ошибка отправки:"
 
-#: assets/scripts/metabox.js:665
+#: assets/scripts/metabox.js:684
 msgid "Sent message:"
 msgstr "Отправленное сообщение:"
 
-#: assets/scripts/metabox.js:356
+#: assets/scripts/metabox.js:354
 msgid "Sent:"
 msgstr "Отправлено:"
 
@@ -294,7 +294,7 @@ msgstr "Настройки"
 msgid "settings"
 msgstr "настройки"
 
-#: assets/scripts/metabox.js:301
+#: assets/scripts/metabox.js:303
 msgid "Social networks summary"
 msgstr "Подводка для соцсети"
 
@@ -321,7 +321,11 @@ msgstr "Что-то пошло не так. Попробуйте обновит�
 msgid "Subtitle"
 msgstr "Заголовок"
 
-#: assets/scripts/metabox.js:720
+#: assets/scripts/metabox.js:372
+msgid "Task in progress right now"
+msgstr "Задача в процессе отправки"
+
+#: assets/scripts/metabox.js:739
 msgid "The reason for this error is unknown"
 msgstr "Причина ошибки не известна"
 
