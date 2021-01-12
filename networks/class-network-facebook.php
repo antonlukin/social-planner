@@ -135,6 +135,10 @@ class Network_Facebook {
 			'access_token' => $token,
 		);
 
+		if ( ! empty( $message['preview'] ) && ! empty( $message['link'] ) ) {
+			$body['link'] = $message['link'];
+		}
+
 		$excerpt = self::prepare_message_excerpt( $message );
 
 		if ( ! empty( $message['poster'] ) ) {
