@@ -922,7 +922,7 @@
     });
   };
   /**
-   * Wait Gutenber post saving and reinit tasks list.
+   * Wait Gutenberg post saving and reinit tasks list.
    */
 
 
@@ -956,9 +956,7 @@
 
     var list = createTasksList(); // Add append button.
 
-    createAppend(list); // Subscribe and update on Gutenberg post saving.
-
-    subscribeOnSaving();
+    createAppend(list);
   };
 
   initMetabox();

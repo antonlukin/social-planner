@@ -190,7 +190,7 @@ class Metabox {
 		wp_enqueue_script(
 			'social-planner-metabox',
 			SOCIAL_PLANNER_URL . '/assets/scripts/metabox.js',
-			array( 'wp-i18n', 'wp-data', 'wp-edit-post' ),
+			array( 'wp-i18n', 'wp-data' ),
 			SOCIAL_PLANNER_VERSION,
 			true
 		);

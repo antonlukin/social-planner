@@ -685,8 +685,8 @@
                 <code class="language-php">
                     /**
                      * @param array $tasks   List of tasks from post meta.
-		             * @param int   $post_id Post ID.
-		             */
+                     * @param int   $post_id Post ID.
+                     */
                     function my_get_tasks( $tasks, $post_id ) {
                         if ( 0 === $post_id ) {
                             $tasks = array();
@@ -712,6 +712,7 @@
                     /**
                      * @param array  $tasks   List of tasks from post meta.
                      * @param int    $post_id Post ID.
+                     */
                     function my_update_tasks( $tasks, $post_id ) {
                         if ( 0 === $post_id ) {
                             $tasks = array();
@@ -737,6 +738,7 @@
                     /**
                      * @param array $results List of results from post meta.
                      * @param int   $post_id Post ID.
+                     */
                     function my_get_results( $results, $post_id ) {
                         if ( 0 === $post_id ) {
                             $results = array();
@@ -1057,7 +1059,7 @@
                     /**
                      * @param string $excerpt Message excerpt.
                      * @param array  $message Original message array.
-		             * @param string $network Network name.
+                     * @param string $network Network name.
                      */
                     function my_prepare_excerpt( $excerpt, $message, $network ) {
                         if ( empty( $excerpt ) ) {

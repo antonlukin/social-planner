@@ -1005,7 +1005,7 @@
 	};
 
 	/**
-	 * Wait Gutenber post saving and reinit tasks list.
+	 * Wait Gutenberg post saving and reinit tasks list.
 	 */
 	const subscribeOnSaving = () => {
 		let wasSavingPost = wp.data.select( 'core/edit-post' ).isSavingMetaBoxes();
@@ -1039,9 +1039,6 @@
 
 		// Add append button.
 		createAppend( list );
-
-		// Subscribe and update on Gutenberg post saving.
-		subscribeOnSaving();
 	};
 
 	initMetabox();
