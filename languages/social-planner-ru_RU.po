@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-01-06T21:52:32+00:00\n"
-"PO-Revision-Date: 2021-01-12 12:36+0000\n"
+"PO-Revision-Date: 2021-01-12 12:42+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: social-planner\n"
 "Language: ru_RU\n"
@@ -79,10 +79,6 @@ msgstr "Consumer API secret key"
 msgid "Delete provider"
 msgstr "Удалить"
 
-#: assets/scripts/metabox.js:540
-msgid "Disable preview"
-msgstr "Не формировать превью"
-
 #: assets/scripts/metabox.js:478
 msgid "Do not send automatically"
 msgstr "Не отправлять автоматически"
@@ -104,6 +100,11 @@ msgstr "Пустой ответ twitter"
 #: networks/class-network-vk.php:252 networks/class-network-vk.php:274
 msgid "Empty VK.com response"
 msgstr "Пустой ответ от ВКонтакте"
+
+#: assets/scripts/metabox.js:540
+#| msgid "Disable preview"
+msgid "Enable preview"
+msgstr "Сформировать превью"
 
 #: networks/class-network-facebook.php:145
 #: networks/class-network-telegram.php:162
@@ -186,11 +187,11 @@ msgstr "Параметр не найден: "
 msgid "Post ID element is not defined."
 msgstr "Идентификатор записи не определен."
 
-#: assets/scripts/metabox.js:523
+#: assets/scripts/metabox.js:528
 msgid "Preview disabled"
 msgstr "Превью отключено"
 
-#: assets/scripts/metabox.js:528
+#: assets/scripts/metabox.js:523
 msgid "Preview enabled"
 msgstr "Превью включено"
 
