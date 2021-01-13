@@ -18,6 +18,7 @@
 <body>
     <header>
         <h1>Social Planner: documentation</h1>
+
         <p>
             <a href="https://github.com/antonlukin/social-planner" target="_blank">Social Planner</a> is a WordPress plugin for automatic posting to social media accounts.
             It allows you to schedule announcements of your posts on social networks.
@@ -58,8 +59,8 @@
         <h2 id="installation">Installation <a aria-hidden="true" href="#installation">#</a></h2>
 
         <p>
-            Just search <code>social-planner</code> and activate plugin from your admin dashboard.
-            You can also manually upload latest release to <code>/wp-content/plugins</code> and activate it.
+            Just search <code>social-planner</code> and activate the plugin from your admin dashboard.
+            You can also manually upload the latest release to <code>/wp-content/plugins</code> and activate it.
         </p>
 
         <figure>
@@ -155,8 +156,8 @@
             </figure>
 
             <p>
-                Go to <strong>Settings</strong> tab and copy <strong>App ID</strong>.
-                Insert this ID to field bellow and push the button to generate your Token.
+                Go to the <strong>Settings</strong> tab and copy the <strong>App ID</strong>.
+                Insert this ID to the field below and push the button to generate your Token.
             </p>
 
             <form action="https://oauth.vk.com/authorize" method="GET" target="_blank">
@@ -184,7 +185,7 @@
 
             <p>
                 Please note that VK.com warns you not to transfer the Token to other sites.
-                So keep it secret and only use it on a trusted sites.
+                So keep it secret and only use it on trusted sites.
                 Social Planner <strong>does not send</strong> any user data to remote servers.
             </p>
 
@@ -343,7 +344,7 @@
             </pre>
         </details>
 
-        <h3>Can I use html in the summary field when scheduling new task?</h3>
+        <h3>Can I use html in the summary field when scheduling a new task?</h3>
         <p>
             You can use only Markdown <code>**text here**</code> for <strong>bold</strong> and
             <code>__text here__</code> for <em>italic</em> to beatify Telegram announcements.
@@ -352,7 +353,7 @@
         <h3>How to hide the metabox for custom post types?</h3>
         <p>
             Plugin shows metabox for all public post types except attachments.
-            You can override this behavior with <code>social_planner_post_types</code> filter.
+            You can override this behavior with the <code>social_planner_post_types</code> filter.
         </p>
         <details>
             <summary>Show me an example</summary>
@@ -458,7 +459,7 @@
                                 return new WP_Error( 'sending', 'Example sending error' );
                             }
 
-                            // If it is ok, you should return message link or ID.
+                            // If it is ok, you should return a message link or ID.
                             return 'https://example.com/' . $response;
                         }
                 </code>
@@ -483,7 +484,7 @@
                     return $networks;
                 }
 
-                // This filter must execute before `init` event.
+                // This filter must execute before the `init` event.
                 add_filter( 'social_planner_networks', 'add_example_network' );
             </code>
         </pre>
@@ -505,7 +506,7 @@
             <summary>social_planner_dashboard_before</summary>
 
             <p>
-                Use this <strong>action</strong> to add something before dashboard widget.
+                Use this <strong>action</strong> to add something before the dashboard widget.
             </p>
 
             <p>
@@ -561,7 +562,7 @@
             <summary>social_planner_network_label</summary>
 
             <p>
-                You can change network label in metabox and settings with this filter.
+                You can change network labels in metabox and settings with this filter.
             </p>
 
             <pre>
@@ -610,7 +611,7 @@
             <summary>social_planner_hide_dashboard</summary>
 
             <p>
-                You can use this filter to hide dashboard from some users or roles.
+                You can use this filter to hide the dashboard from some users or roles.
             </p>
 
             <pre>
@@ -871,7 +872,7 @@
             <summary>social_planner_calendar_days</summary>
 
             <p>
-                This filter manage number of future days in schedule select box.
+                This filter manages the number of future days in schedule select box.
             </p>
 
             <pre>
@@ -892,8 +893,8 @@
             <summary>social_planner_time_offset</summary>
 
             <p>
-                This filter set time offset. By default, it is a value between UTC and WordPress time in seconds.
-                This offset used in admin-side metabox to choose the time for planning.
+                This filter sets a time offset. By default, it is a value between UTC and WordPress time in seconds.
+                This offset is used in admin-side metabox to choose the time for planning.
             </p>
 
             <pre>
@@ -918,7 +919,7 @@
             <p>
                 This filter set post statuses that can be scheduled.
                 By default, we can schedule only posts with statuses 'publish' or 'future'.
-                You can add change this behavior here.
+                You can change this behavior.
             </p>
 
             <pre>
@@ -998,7 +999,7 @@
             <summary>social_planner_get_providers</summary>
 
             <p>
-                You can filter list of providers from options. It can be handy to use options bypassing the settings page.
+                You can filter the list of providers from options. It can be handy to use options bypassing the settings page.
             </p>
 
             <pre>
@@ -1078,7 +1079,32 @@
     <section>
         <h2 id="contribution">Contribution <a aria-hidden="true" href="#contribution">#</a></h2>
 
-        <p>This section still under construction.</p>
+        <p>
+            The best way to help the project is to report a bug or add some new functionality.
+            All project code is stored on <a href="https://github.com/antonlukin/social-planner">Github</a>.
+            You can also open there an <a href="https://github.com/antonlukin/social-planner/issues" taget="_blank">issue</a>
+            or send a <a href="https://github.com/antonlukin/social-planner/pulls" target="_blank">pull reguest</a>.
+        </p>
+
+        <p>
+            To start development follow the instructions:
+        </p>
+
+        <ol>
+            <li>Fork the repository.</li>
+            <li>Install dependencies with <code>yarn</code> and <code>composer update</code>.</li>
+            <li>Add some code.</li>
+            <li>Check syntax according to <a href="https://make.wordpress.org/core/handbook/best-practices/coding-standards/" target="_blank">WordPress Coding Standards</a>.</li>
+            <li>Write tests if needed.</li>
+            <li>Build assets with <code>gulp build</code> command.</li>
+            <li>Increase plugin version in <code>package.json</code> and <code>social-planner.php</code> files.</li>
+            <li>Create pull request.</li>
+        </ol>
+
+        <p>
+            A great opportunity to help a project is to write a new provider class.
+            You can read more about this in the section <a href="#custom-providers">Custom providers</a>.
+        </p>
     </section>
 
     <footer>
