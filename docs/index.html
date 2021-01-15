@@ -99,11 +99,11 @@
 
             <p>
                 You can send messages to any group or channel.
-                To do this, you need to create and add special Bot to the required chat with the ability to send messages.
+                To do this, you need to create and add a special Bot to the required chat with the ability to send messages.
             </p>
 
             <p>
-                Write to the <a href="https://t.me/BotFather" target="_blank">@BotFather</a> in Telegram and create new Bot.
+                Write to the <a href="https://t.me/BotFather" target="_blank">@BotFather</a> in Telegram and create a new Bot.
                 Follow the bot prompts, fill in all required fields and get an API Token.
             </p>
 
@@ -213,7 +213,7 @@
 
         <p>
             Once you have configured the plugin, you can start scheduling social media announcements.
-            Go to the post edit page and scroll to the end of the screen. There you will see a metabox for scheduling.
+            Go to the post edit page and scroll to the end of the screen. There you will see the metabox for scheduling.
         </p>
 
         <figure>
@@ -320,7 +320,7 @@
             </pre>
         </details>
 
-        <h3>How can I show the settings page only for some users?</h3>
+        <h3>How can I show the settings page only to some users?</h3>
         <p>
             You can use filter <code>social_planner_hide_settings</code>.
         </p>
@@ -388,14 +388,15 @@
         <h2 id="custom-providers">Custom providers <a aria-hidden="true" href="#custom-providers">#</a></h2>
 
         <p>
-            Only 4 social networks are available for posing now.
-            More likely to be added soon, but until that happens, you might want to write your own extension.
+            Only 4 social networks are available for posting now.
+            Some more are likely to be added soon, but until that happens, you might want to write your own extension.
             And it's not that hard to do.
         </p>
 
         <p>
-            You need to create a special social network class and connect to the plugin.
-            Below is an example of a non-existent network <code>Example</code>, copy it and replace the information in the methods.
+            You need to create a special social network class and connect it to the plugin.
+            There is an <code>Example</code> of a non-existent network in below.
+            Copy it and replace the information in the methods.
         </p>
 
         <details>
@@ -516,11 +517,11 @@
 
             <pre>
                 <code class="language-php">
-                    function my_dashboard_action() {
+                    function my_dashboard_before() {
                         echo 'This text will be displayed in the dashboard widget';
                     }
 
-                    add_action( 'social_planner_dashboard_before', 'my_dashboard_action' );
+                    add_action( 'social_planner_dashboard_before', 'my_dashboard_before' );
                 </code>
             </pre>
 
@@ -540,11 +541,36 @@
 
             <pre>
                 <code class="language-php">
-                    function my_metabox_action() {
+                    function my_metabox_before() {
                         echo 'This text will be displayed in the metabox';
                     }
 
-                    add_action( 'social_planner_metabox_before', 'my_metabox_action' );
+                    add_action( 'social_planner_metabox_before', 'my_metabox_before' );
+                </code>
+            </pre>
+        </details>
+
+        <details>
+            <summary>social_planner_task_sent</summary>
+
+            <p>
+                Use this <strong>action</strong> to do something with the task results right after sending.
+            </p>
+
+            <pre>
+                <code class="language-php">
+                    /**
+                     * Fires right after task sent.
+                     *
+                     * @param array  $results List of results after task sending.
+                     * @param string $key     Task key.
+                     * @param int    $post_id Post ID.
+                     */
+                    function my_task_sent( $results, $key, $post_id ) {
+                        my_save_results( $results, $key );
+                    }
+
+                    add_action( 'social_planner_task_sent', 'my_task_sent', 10, 3 );
                 </code>
             </pre>
         </details>
@@ -562,7 +588,7 @@
             <summary>social_planner_network_label</summary>
 
             <p>
-                You can change network labels in metabox and settings with this filter.
+                You can change network labels in the metabox and settings with this filter.
             </p>
 
             <pre>
@@ -636,7 +662,7 @@
             <summary>social_planner_dashboard_object</summary>
 
             <p>
-                This filter allows you to manage an object with dashboard settings.
+                This filter allows you to manage an object with the dashboard settings.
             </p>
 
             <pre>
@@ -658,7 +684,7 @@
         <details>
             <summary>social_planner_sanitize_tasks</summary>
 
-            <p>You can update tasks right after sanitization on metabox saving with this filter.</p>
+            <p>You can update tasks right after sanitization on the metabox saving with this filter.</p>
 
             <pre>
                 <code class="language-php">
@@ -783,7 +809,7 @@
             <summary>social_planner_metabox_object</summary>
 
             <p>
-                This filter allows you to manage an object with metabox settings.
+                This filter allows you to manage an object with the metabox settings.
             </p>
 
             <pre>
@@ -817,7 +843,7 @@
             <summary>social_planner_hide_metabox</summary>
 
             <p>
-                You can use this filter to hide metabox from some users or roles.
+                You can use this filter to hide the metabox from some users or roles.
             </p>
 
             <pre>
@@ -842,7 +868,7 @@
             <summary>social_planner_post_types</summary>
 
             <p>
-                By default, plugin shows metabox for all public post types except attachments.
+                By default, the plugin shows the metabox for all public post types except attachments.
                 You can override this behavior with this filter.
             </p>
 
@@ -917,7 +943,7 @@
             <summary>social_planner_post_statuses</summary>
 
             <p>
-                This filter set post statuses that can be scheduled.
+                This filter sets post statuses that can be scheduled.
                 By default, we can schedule only posts with statuses 'publish' or 'future'.
                 You can change this behavior.
             </p>
@@ -942,7 +968,7 @@
             <summary>social_poster_prepare_message</summary>
 
             <p>
-                This filter allows to update message array right before network sending method execution.
+                This filter allows updating message array right before network sending method execution.
                 This is a great place, for example, to add some text to the excerpt field or replace a post link.
             </p>
 
@@ -1094,11 +1120,11 @@
             <li>Fork the repository.</li>
             <li>Install dependencies with <code>yarn</code> and <code>composer update</code>.</li>
             <li>Add some code.</li>
-            <li>Check syntax according to <a href="https://make.wordpress.org/core/handbook/best-practices/coding-standards/" target="_blank">WordPress Coding Standards</a>.</li>
+            <li>Check the syntax according to <a href="https://make.wordpress.org/core/handbook/best-practices/coding-standards/" target="_blank">WordPress Coding Standards</a>.</li>
             <li>Write tests if needed.</li>
             <li>Build assets with <code>gulp build</code> command.</li>
             <li>Increase plugin version in <code>package.json</code> and <code>social-planner.php</code> files.</li>
-            <li>Create pull request.</li>
+            <li>Create a pull request.</li>
         </ol>
 
         <p>

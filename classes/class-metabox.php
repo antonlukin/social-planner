@@ -90,6 +90,9 @@ class Metabox {
 	 * Display metabox.
 	 */
 	public static function display_metabox() {
+		/**
+		 * Fires before dashboard widget displaying.
+		 */
 		do_action( 'social_planner_metabox_before' );
 
 		printf(

@@ -61,6 +61,9 @@ class Dashboard {
 	 * Display dashboard widget.
 	 */
 	public static function display_widget() {
+		/**
+		 * Fires before dashboard widget displaying.
+		 */
 		do_action( 'social_planner_dashboard_before' );
 
 		printf(

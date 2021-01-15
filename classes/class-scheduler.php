@@ -133,6 +133,15 @@ class Scheduler {
 
 		$results[ $key ]['sent'] = time();
 
+		/**
+		 * Fires right after task sent.
+		 *
+		 * @param array  $results List of results after task sending.
+		 * @param string $key     Task key.
+		 * @param int    $post_id Post ID.
+		 */
+		do_action( 'social_planner_task_sent', $results, $key, $post_id );
+
 		Metabox::update_results( $post_id, $results );
 	}
 
