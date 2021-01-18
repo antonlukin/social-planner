@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "gulp build",
-    "readme": "./vendor/bin/wp2md -i readme.txt -o README.md"
+    "readme": "gulp readme"
   },
   "prettier": {
     "printWidth": 120
@@ -16,6 +16,8 @@
     "@babel/preset-env": "^7.12.1",
     "@wordpress/eslint-plugin": "^7.3.0",
     "eslint": "^7.12.1",
+    "grunt": "^1.3.0",
+    "grunt-wp-readme-to-markdown": "^2.0.1",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^7.0.1",
     "gulp-babel": "^8.0.0",

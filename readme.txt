@@ -8,7 +8,7 @@ Stable tag: 1.1.0
 Requires PHP: 7.0
 License: GPLv2 or later
 
-Social Planner is a WordPress plugin for scheduling announcements of posts to your social networks accounts. The following providers are currently supported: Facebook, Twitter, VK.com, Telegram, but you can easily add a new one yourself.
+Social Planner is a WordPress plugin for scheduling announcements of posts to your social networks accounts.
 
 == Description ==
 Social Planner is a WordPress plugin for scheduling announcements of posts to your social networks accounts. The following providers are currently supported: Facebook, Twitter, VK.com, Telegram, but you can easily add a new one yourself.
@@ -16,19 +16,18 @@ The whole process is completely automated. Just write a new post and either enti
 
 = Configuration =
 You need to have account with either Facebook, Twitter, VK.com, Twitter or all of them.
-Please see [https://antonlukin.github.io/social-planner](detailed installation instructions with screenshots.)
+Please see detailed [installation instructions](https://antonlukin.github.io/social-planner) with screenshots.
 
-Getting social networks Authentication tokens can be a little tricky.
-**Please note that the plugin cannot affect this.**
+**Getting social networks Authentication tokens can be a little tricky. Please note that the plugin cannot affect this.**
 
 = Features =
-* Delayed announcement scheduling
-* Detailed descriptions of sending errors
-* Displaying previews of links in social networks
-* Gutenberg support
-* Direct links to the published posts from the "Edit" page
-* Simple markdown for Telegram posts
-* Image posts for all supported networks
+* Delayed announcement scheduling.
+* Detailed descriptions of sending errors.
+* Displaying previews of links in social networks.
+* Gutenberg support.
+* Direct links to the published posts from the "Edit" page.
+* Simple markdown for Telegram posts.
+* Image posts for all supported networks.
 * Chars counter in the excerpt text area.
 
 = Supported Networks =
@@ -38,9 +37,9 @@ Getting social networks Authentication tokens can be a little tricky.
 * **vk.com** — Autopost to your profile or group page with ability to make **Image** posts.
 
 == Get support ==
-First of all read the [https://antonlukin.github.io/social-planner/#faq](Frequently asked Questions) on the plugin documentation page.
+First of all read the [Frequently asked Questions](https://antonlukin.github.io/social-planner/#faq) on the plugin documentation page.
 
-If you find a bug or want to add new feature to this plugin, create new [https://github.com/antonlukin/social-planner/issues](issue) on Github or send a [https://github.com/antonlukin/social-planner/pulls](pull reguest).
+If you find a bug or want to add new feature to this plugin, create new [issue](https://github.com/antonlukin/social-planner/issues) on Github or send a [pull reguest](https://github.com/antonlukin/social-planner/pulls).
 
 == Screenshots ==
 1. Add new post metabox
