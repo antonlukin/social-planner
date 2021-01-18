@@ -4,7 +4,6 @@ const sassGlob = require( 'gulp-sass-glob' );
 const plumber = require( 'gulp-plumber' );
 const prefix = require( 'gulp-autoprefixer' );
 const babel = require( 'gulp-babel' );
-const readme = require( 'gulp-readme-to-markdown' );
 
 gulp.task( 'styles', ( done ) => {
 	const styles = gulp
@@ -42,19 +41,6 @@ gulp.task( 'scripts', ( done ) => {
 	done();
 } );
 
-gulp.task( 'readme', ( done ) => {
-	gulp.src( 'readme.txt' )
-		.pipe(
-			readme( {
-				details: false,
-				screenshot_ext: [ 'png' ],
-			} )
-		)
-		.pipe( gulp.dest( '.' ) );
-
-	done();
-} );
-
 gulp.task( 'watch', () => {
 	gulp.watch( './src/**/*', gulp.series( 'styles', 'scripts' ) );
 } );
@@ -62,7 +48,7 @@ gulp.task( 'watch', () => {
 /**
  * Build static files
  */
-gulp.task( 'build', gulp.series( 'styles', 'scripts', 'readme' ) );
+gulp.task( 'build', gulp.series( 'styles', 'scripts' ) );
 
 /**
  * Build static files and watch changes by default.

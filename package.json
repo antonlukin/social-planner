@@ -4,6 +4,10 @@
   "author": "Anton Lukin",
   "description": "Social Planner",
   "license": "MIT",
+  "scripts": {
+    "build": "gulp build",
+    "readme": "./vendor/bin/wp2md -i readme.txt -o README.md"
+  },
   "prettier": {
     "printWidth": 120
   },
@@ -16,8 +20,6 @@
     "gulp-autoprefixer": "^7.0.1",
     "gulp-babel": "^8.0.0",
     "gulp-plumber": "^1.2.1",
-    "gulp-readme-to-markdown": "^0.2.1",
-    "gulp-rename": "^2.0.0",
     "gulp-sass": "^4.1.0",
     "gulp-sass-glob": "^1.1.0"
   }

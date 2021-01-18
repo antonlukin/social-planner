@@ -16,9 +16,10 @@ The whole process is completely automated. Just write a new post and either enti
 
 = Configuration =
 You need to have account with either Facebook, Twitter, VK.com, Twitter or all of them.
-Please see <a href="https://antonlukin.github.io/social-planner">detailed installation instructions with screenshots.</a>
+Please see [https://antonlukin.github.io/social-planner](detailed installation instructions with screenshots.)
 
-**Getting social networks Authentication tokens can be a little tricky. Please note that the plugin cannot affect this**.
+Getting social networks Authentication tokens can be a little tricky.
+**Please note that the plugin cannot affect this.**
 
 = Features =
 * Delayed announcement scheduling
@@ -27,7 +28,7 @@ Please see <a href="https://antonlukin.github.io/social-planner">detailed instal
 * Gutenberg support
 * Direct links to the published posts from the "Edit" page
 * Simple markdown for Telegram posts
-* *Image* posts for all supported networks
+* Image posts for all supported networks
 * Chars counter in the excerpt text area.
 
 = Supported Networks =
@@ -37,9 +38,9 @@ Please see <a href="https://antonlukin.github.io/social-planner">detailed instal
 * **vk.com** — Autopost to your profile or group page with ability to make **Image** posts.
 
 == Get support ==
-First of all read the <a href="https://antonlukin.github.io/social-planner/#faq">Frequently asked Questions</a> on the plugin documentation page.
+First of all read the [https://antonlukin.github.io/social-planner/#faq](Frequently asked Questions) on the plugin documentation page.
 
-If you find a bug or want to add new feature to this plugin, create new <a href="https://github.com/antonlukin/social-planner/issues" taget="_blank">issue</a> on Github or send a <a href="https://github.com/antonlukin/social-planner/pulls">pull reguest</a>.
+If you find a bug or want to add new feature to this plugin, create new [https://github.com/antonlukin/social-planner/issues](issue) on Github or send a [https://github.com/antonlukin/social-planner/pulls](pull reguest).
 
 == Screenshots ==
 1. Add new post metabox
