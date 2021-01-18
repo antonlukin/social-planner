@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Social Planner plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Social Planner 1.0.5\n"
+"Project-Id-Version: Social Planner 1.0.7\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/social-planner\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-01-12T16:08:27+00:00\n"
+"POT-Creation-Date: 2021-01-18T14:26:19+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0-alpha-59d879d\n"
 "X-Domain: social-planner\n"
@@ -40,19 +40,19 @@ msgstr ""
 msgid "Untitled"
 msgstr ""
 
-#: classes/class-dashboard.php:68
+#: classes/class-dashboard.php:71
 msgid "This dashboard requires JavaScript. Enable it in your browser settings, please."
 msgstr ""
 
-#: classes/class-metabox.php:97
+#: classes/class-metabox.php:100
 msgid "This metabox requires JavaScript. Enable it in your browser settings, please."
 msgstr ""
 
-#: classes/class-scheduler.php:228
+#: classes/class-scheduler.php:237
 msgid "Provider settings not found"
 msgstr ""
 
-#: classes/class-scheduler.php:234
+#: classes/class-scheduler.php:243
 msgid "Sending method is missed"
 msgstr ""
 
