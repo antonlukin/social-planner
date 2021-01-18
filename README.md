@@ -36,6 +36,5 @@ If you find a bug or want to add new feature to this plugin, create new <a href=
 
 
 ## Changelog ##
-
 ### 1.1 ###
 * Initial version for WordPress Plugins.
