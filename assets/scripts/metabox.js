@@ -334,8 +334,8 @@
       }
     };
 
-    excerpt.addEventListener('keyup', createStatusbar);
-    excerpt.addEventListener('paste', createStatusbar);
+    excerpt.addEventListener('keyup', createStatusbar, false);
+    excerpt.addEventListener('paste', createStatusbar, false);
     createPoster(snippet, index, data, readonly);
   };
   /**

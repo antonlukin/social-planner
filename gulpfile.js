@@ -50,10 +50,12 @@ gulp.task( 'watch', () => {
 	gulp.watch( './src/**/*', gulp.series( 'styles', 'scripts' ) );
 } );
 
-gulp.task( 'build', ( done ) => {
-	gulp.parallel( 'styles', 'scripts' );
+/**
+ * Build static files
+ */
+gulp.task( 'build', gulp.series( 'styles', 'scripts' ) );
 
-	done();
-} );
-
-gulp.task( 'default', gulp.parallel( 'styles', 'scripts', 'watch' ) );
+/**
+ * Build static files and watch changes by default.
+ */
+gulp.task( 'default', gulp.series( 'styles', 'scripts', 'watch' ) );
