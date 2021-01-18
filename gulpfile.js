@@ -4,15 +4,11 @@ const sassGlob = require( 'gulp-sass-glob' );
 const plumber = require( 'gulp-plumber' );
 const prefix = require( 'gulp-autoprefixer' );
 const babel = require( 'gulp-babel' );
-
-const path = {
-	source: './src/',
-	assets: './assets/',
-};
+const readme = require( 'gulp-readme-to-markdown' );
 
 gulp.task( 'styles', ( done ) => {
 	const styles = gulp
-		.src( [ path.source + '/styles/*.scss' ] )
+		.src( 'src/styles/*.scss' )
 		.pipe( plumber() )
 		.pipe(
 			sassGlob( {
@@ -26,14 +22,14 @@ gulp.task( 'styles', ( done ) => {
 		)
 		.pipe( prefix() );
 
-	styles.pipe( gulp.dest( path.assets + '/styles/' ) );
+	styles.pipe( gulp.dest( 'assets/styles/' ) );
 
 	done();
 } );
 
 gulp.task( 'scripts', ( done ) => {
 	const scripts = gulp
-		.src( path.source + '/scripts/*.js' )
+		.src( 'src/scripts/*.js' )
 		.pipe( plumber() )
 		.pipe(
 			babel( {
@@ -41,7 +37,20 @@ gulp.task( 'scripts', ( done ) => {
 			} )
 		);
 
-	scripts.pipe( gulp.dest( path.assets + '/scripts/' ) );
+	scripts.pipe( gulp.dest( 'assets/scripts/' ) );
+
+	done();
+} );
+
+gulp.task( 'readme', ( done ) => {
+	gulp.src( 'readme.txt' )
+		.pipe(
+			readme( {
+				details: false,
+				screenshot_ext: [ 'png' ],
+			} )
+		)
+		.pipe( gulp.dest( '.' ) );
 
 	done();
 } );
@@ -53,7 +62,7 @@ gulp.task( 'watch', () => {
 /**
  * Build static files
  */
-gulp.task( 'build', gulp.series( 'styles', 'scripts' ) );
+gulp.task( 'build', gulp.series( 'styles', 'scripts', 'readme' ) );
 
 /**
  * Build static files and watch changes by default.

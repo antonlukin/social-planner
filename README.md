@@ -1,5 +1,41 @@
-# Get started
+# Social Planner #
+Contributors: antonlukin
+Donate link: http://antonlukin.github.io/social-planner/#donation
 
-Social Planner is a WordPress plugin for automatic posting to social media accounts. It allows you to schedule announcements of your posts on social networks. At the moment, 4 providers are supported, but you can easily add a new one yourself.
 
-Currently the plugin is in the final stages of development, testing and documentation.
+## Description ##
+Social Planner is a WordPress plugin for scheduling announcements of posts to your social networks accounts. The following providers are currently supported: Facebook, Twitter, VK.com, Telegram, but you can easily add a new one yourself.
+The whole process is completely automated. Just write a new post and either entire post or it’s nicely formatted announcement with backlink will be published to all your configured social networks. Plugin works with profiles, business pages, community pages, groups, etc.
+
+### Configuration ###
+You need to have account with either Facebook, Twitter, VK.com, Twitter or all of them.
+Please see <a href="https://antonlukin.github.io/social-planner">detailed installation instructions with screenshots.</a>
+
+**Getting social networks Authentication tokens can be a little tricky. Please note that the plugin cannot affect this**.
+
+### Features ###
+* Delayed announcement scheduling
+* Detailed descriptions of sending errors
+* Displaying previews of links in social networks
+* Gutenberg support
+* Direct links to the published posts from the "Edit" page
+* Simple markdown for Telegram posts
+* *Image* posts for all supported networks
+* Chars counter in the excerpt text area.
+
+### Supported Networks ###
+* **Facebook** — Autopost to your business page or community page with ability to make **Image** posts.
+* **Twitter** — Autopost to your account with ability to attach **Image** to tweets.
+* **Telegram** — Autopost to the channel, group or chat using Telegram bot.
+* **vk.com** — Autopost to your profile or group page with ability to make **Image** posts.
+
+## Get support ##
+First of all read the <a href="https://antonlukin.github.io/social-planner/#faq">Frequently asked Questions</a> on the plugin documentation page.
+
+If you find a bug or want to add new feature to this plugin, create new <a href="https://github.com/antonlukin/social-planner/issues" taget="_blank">issue</a> on Github or send a <a href="https://github.com/antonlukin/social-planner/pulls">pull reguest</a>.
+
+
+## Changelog ##
+
+### 1.1 ###
+* Initial version for WordPress Plugins.
