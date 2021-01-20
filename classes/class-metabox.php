@@ -97,7 +97,7 @@ class Metabox {
 
 		printf(
 			'<p class="hide-if-js">%s</p>',
-			esc_html__( 'This metabox requires JavaScript. Enable it in your browser settings, please.', 'social-planner' ),
+			esc_html__( 'This metabox requires JavaScript. Enable it in your browser settings, please.', 'social-planner' )
 		);
 
 		wp_nonce_field( 'metabox', self::METABOX_NONCE );

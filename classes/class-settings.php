@@ -71,7 +71,7 @@ class Settings {
 			$actions[] = sprintf(
 				'<a href="%s">%s</a>',
 				admin_url( 'options-general.php?page=' . self::PAGE ),
-				__( 'Settings', 'social-planner' ),
+				__( 'Settings', 'social-planner' )
 			);
 		}
 
