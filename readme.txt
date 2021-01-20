@@ -4,8 +4,8 @@ Donate link: http://antonlukin.github.io/social-planner/#donation
 Tags: automation, autopost, auto-post, auto post, socialnetworks, socialnetwork, social networks, social network, facebook, twitter, telegram, vkontakte, vk.com, api, social images, social image, sharing, share, repost, re-post, open graph
 Requires at least: 5.3
 Tested up to: 5.6
-Stable tag: 1.1.0
-Requires PHP: 7.0
+Stable tag: 1.1.1
+Requires PHP: 5.6
 License: GPLv2 or later
 
 Social Planner is a WordPress plugin for scheduling announcements of posts to your social networks accounts.

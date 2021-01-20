@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-01-06T21:52:32+00:00\n"
-"PO-Revision-Date: 2021-01-12 16:08+0000\n"
+"PO-Revision-Date: 2021-01-20 19:21+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: social-planner\n"
 "Language: ru_RU\n"
@@ -29,7 +29,7 @@ msgstr "Access token secret"
 
 #: assets/scripts/metabox.js:985
 msgid "Add at least one provider on the settings page."
-msgstr "Добавьте как минимум один провайдер на странице настроек."
+msgstr "Сконфигурируйте плагин на странице настроек."
 
 #: assets/scripts/settings.js:193
 msgid "Add provider"
@@ -214,7 +214,7 @@ msgctxt "provider label"
 msgid "VK.com"
 msgstr "ВКонтакте"
 
-#: classes/class-scheduler.php:228
+#: classes/class-scheduler.php:237
 msgid "Provider settings not found"
 msgstr "Настройки провайдера не найдены"
 
@@ -270,7 +270,7 @@ msgstr "Сохранить"
 msgid "Scheduled for:"
 msgstr "Запланировано:"
 
-#: classes/class-scheduler.php:234
+#: classes/class-scheduler.php:243
 msgid "Sending method is missed"
 msgstr "Отсутствует необходимый метод для отправки"
 
@@ -329,7 +329,7 @@ msgstr "Задача в процессе отправки"
 msgid "The reason for this error is unknown"
 msgstr "Причина ошибки не известна"
 
-#: classes/class-dashboard.php:68
+#: classes/class-dashboard.php:71
 msgid ""
 "This dashboard requires JavaScript. Enable it in your browser settings, "
 "please."
@@ -337,7 +337,7 @@ msgstr ""
 "Этот виджет требует JavaScript. Пожалуйста, включите его поддержку в "
 "настройках браузера."
 
-#: classes/class-metabox.php:97
+#: classes/class-metabox.php:100
 msgid ""
 "This metabox requires JavaScript. Enable it in your browser settings, please."
 msgstr ""

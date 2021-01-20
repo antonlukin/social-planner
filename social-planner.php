@@ -6,8 +6,8 @@
  * Author: Anton Lukin
  * Author URI: https://lukin.me
  * Requires at least: 5.3
- * Tested up to: 5.5
- * Version: 1.1.0
+ * Tested up to: 5.6
+ * Version: 1.1.1
  *
  * Text Domain: social-planner
  * Domain Path: /languages/
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin version.
  */
-define( 'SOCIAL_PLANNER_VERSION', '1.1.0' );
+define( 'SOCIAL_PLANNER_VERSION', '1.1.1' );
 
 /**
  * Plugin admin menu slug.
