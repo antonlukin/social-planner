@@ -60,7 +60,8 @@ gulp.task( 'readme', ( done ) => {
 				},
 				options: {
 					screenshot_url:
-						'https://github.com/antonlukin/social-planner/blob/master/assets/{screenshot}.png?raw=true',
+						// eslint-disable-next-line max-len
+						'https://github.com/antonlukin/social-planner/blob/master/.wordpress-org/{screenshot}.png?raw=true',
 
 					post_convert( readme ) {
 						return readme.replace( new RegExp( '^(#.+?#).+? ##', 'is' ), '$1' );

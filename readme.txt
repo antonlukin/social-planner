@@ -48,5 +48,12 @@ If you find a bug or want to add new feature to this plugin, create new [issue](
 4. Settings Page
 
 == Changelog ==
+
+= 1.1.2 =
+* Update plugin docs
+
+= 1.1.1 =
+* Change the minimum version of php to 5.6
+
 = 1.1 =
 * Initial version for WordPress Plugin Directory.

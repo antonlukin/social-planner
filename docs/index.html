@@ -61,7 +61,8 @@
 
         <p>
             Just search <code>social-planner</code> and activate the plugin from your admin dashboard.
-            You can also manually upload the latest release to <code>/wp-content/plugins</code> and activate it.
+            You can also manually upload the <a href="https://downloads.wordpress.org/plugin/social-planner.zip" target="_blank">latest release</a>
+            to <code>/wp-content/plugins</code> and activate it.
         </p>
 
         <figure>
@@ -95,7 +96,7 @@
             Fill it out if you want to use several accounts of the same social network or just for your convenience when scheduling.
         </p>
 
-        <section>
+        <article>
             <h3 id="telegram">Telegram <a aria-hidden="true" href="#telegram">#</a></h3>
 
             <p>
@@ -120,7 +121,7 @@
                     <img src="images/telegram-1.png" alt="Social Planner Telegram configuration">
                 </a>
 
-                <figcaption>Your settings should look something like this.</figcaption>
+                <figcaption>Example settings for Telegram.</figcaption>
             </figure>
 
             <p>
@@ -129,15 +130,118 @@
             </p>
 
             <p>You can find full help on Telegram Bot API on the <a href="https://core.telegram.org/bots/api" target="_blank">official website</a>.</p>
-        </section>
+        </article>
 
-        <section>
+        <article>
             <h3 id="facebook">Facebook <a aria-hidden="true" href="#facebook">#</a></h3>
 
+            <p>
+                With this plugin you can publish to <strong>Facebook Pages only</strong>.
+                If you already have an application with permissions to publish to your page,
+                you can immediately proceed to the <a href="#facebook-pageid">stage</a> of obtaining the Page ID.
+            </p>
 
-        </section>
+            <p>
+                <strong>Attention!</strong> Due to Facebook Restriction we can use the new Facebook App in HTTPS sites only.
+            </p>
 
-        <section>
+            <p>
+                <strong>Attention!</strong> You can publish to Facebook with the approved app only.
+                So you need to submit the app for approval and it may take upto 3 months to get the approval.
+                Facebook changes the rules of using its products often, so before starting the setup,
+                read the latest guidelines on the <a href="https://developers.facebook.com/docs/pages/getting-started" target="_blank">help page.</a>
+            </p>
+
+            <p>
+                To create a new Facebook application, go to the <a href="https://developers.facebook.com/apps" target="_blank">developer pages</a>
+                and create new one. You will need to select the type of your application.
+            </p>
+
+            <figure>
+                <a href="images/facebook-1.png" target="_blank">
+                    <img src="images/facebook-1.png" alt="Social Planner Facebook configuration">
+                </a>
+
+                <figcaption>The easiest way to focus on Business integrations.</figcaption>
+            </figure>
+
+            <p>
+                Enter the App Display Name and the contact Email. The purpose is for <strong>Yourself or your own business</strong>.
+            </p>
+
+            <p id="facebook-pageid">
+                After the application is created, let's find out the ID of your page.
+                Read how to do it on the Facebook <a href="https://www.facebook.com/help/1503421039731588" target="_blank">help page</a>.
+            </p>
+
+            <figure>
+                <a href="images/facebook-2.png" target="_blank">
+                    <img src="images/facebook-2.png" alt="Social Planner Facebook configuration">
+                </a>
+
+                <figcaption>This is how the Page ID usually looks.</figcaption>
+            </figure>
+
+            <p>
+                Now let's move on getting access token.
+                For this you can use <a href="https://developers.facebook.com/tools/explorer/" target="_blank">Graph API Explorer</a> tool.
+                In the right section select your Facebook App and in the User or Page field click <strong>Get page access token</strong>.
+            </p>
+
+            <p>
+                Now you need to request some required permissions:
+            </p>
+
+            <ul>
+                <li>pages_manage_metadata</li>
+                <li>pages_manage_posts</li>
+                <li>pages_manage_read_engagement</li>
+                <li>pages_show_list</li>
+            </ul>
+
+            <figure>
+                <a href="images/facebook-3.png" target="_blank">
+                    <img src="images/facebook-3.png" alt="Social Planner Facebook configuration">
+                </a>
+
+                <figcaption>Ideally you should see something like this for your app and page.</figcaption>
+            </figure>
+
+            <p>
+                Check that the access token is working by sending a <strong>POST</strong> request in the Graph Explorer tool of the
+                <code>{PageID}/feed</code>.
+                Getting an error <code>The post is empty. Please enter a message to share</code> means that the token is correct.
+                If the error says about the need to obtain additional permissions, then you will have to pass the application verification.
+                You can read more about this in the <a href="https://developers.facebook.com/docs/app-review/submission-guide" target="_blank">Facebook help guide</a>.
+            </p>
+
+            <p>
+                The received token must be made long-term with <a href="https://developers.facebook.com/tools/debug/accesstoken/" target="_blank">Access Token Debuger</a>.
+                You can also get a permanent token using <a href="https://stackoverflow.com/a/43570120/8495047" target="_blank">this guide</a>.
+            </p>
+
+            <figure>
+                <a href="images/facebook-4.png" target="_blank">
+                    <img src="images/facebook-4.png" alt="Social Planner Facebook configuration">
+                </a>
+
+                <figcaption>Receiving permanent token in Access Token Debugger.</figcaption>
+            </figure>
+
+            <p>
+                After receiving the <strong>access token</strong> and <strong>Page ID</strong>, you can proceed to configuring the plugin.
+            </p>
+
+            <figure>
+                <a href="images/facebook-5.png" target="_blank">
+                    <img src="images/facebook-5.png" alt="Social Planner Facebook configuration">
+                </a>
+
+                <figcaption>Example settings for Facebook.</figcaption>
+            </figure>
+        </article>
+
+        <article>
             <h3 id="vk">VK.com <a aria-hidden="true" href="#vk">#</a></h3>
 
             <p>
@@ -202,11 +306,112 @@
 
                 <figcaption>You can see the ID in the url on the stats page for example.</figcaption>
             </figure>
-        </section>
 
-        <section>
+            <p>
+                Use <strong>access token</strong> and <strong>group ID</strong> on the plugin settings page.
+            </p>
+
+            <figure>
+                <a href="images/vk-4.png" target="_blank">
+                    <img src="images/vk-4.png" alt="Social Planner VK.com configuration">
+                </a>
+
+                <figcaption>Example settings for VK.com.</figcaption>
+            </figure>
+        </article>
+
+        <article>
             <h3 id="twitter">Twitter <a aria-hidden="true" href="#twitter">#</a></h3>
-        </section>
+
+            <p>
+                To set up this provider, you need to have full access to your Twitter account,
+                as well as access to the attached Email in order to receive messages from support.
+                If you already have a developer account and you created the application earlier,
+                then skip directly to the <a href="#twitter-tokens">last step</a>.
+            </p>
+
+            <p>
+                <strong>Attention!</strong> Getting keys on Twitter can take patience and time.
+                It is plugin independent and completely on your shoulders.
+            </p>
+
+            <p>
+                Log in to <a href="https://developer.twitter.com/en/apply-for-access" target="_blank">Twitter Developers</a>
+                and click on the <strong>Apply for a developer account</strong> button.
+            </p>
+
+            <p>
+                Now you need to fill out a form to obtain developer status.
+                Fill in all fields and submit. You will receive a response in about 12 hours.
+                Try to describe in as much detail how you will use the keys and on which specific site.
+
+                A sample description is given below.
+            </p>
+
+            <blockquote>
+                <p>
+                    I am using a WordPress plugin Social Planner (https://wordpress.org/plugins/social-planner/) to publish posts automatically from blog to Twitter.
+                    The plugin requires Twitter App to publish posts from WordPress to Twitter.
+                    For this I must create an app and provide the app details such as API key, API secret, Access token and Access token secret.
+
+                    While creating a new post on my WordPress site, I can schedule the task to send this post to Twitter with custom excerpt or image.
+                    The detailed process is described in the documentation for the plugin (https://antonlukin.github.io/social-planner/#task-scheduling).
+                </p>
+            </blockquote>
+
+            <figure>
+                <a href="images/twitter-1.png" target="_blank">
+                    <img src="images/twitter-1.png" alt="Social Planner Twitter configuration">
+                </a>
+
+                <figcaption>Accept terms and conditions and submit the application.</figcaption>
+            </figure>
+
+            <p>
+                Once the developer account gets approved, you will get a mail from Twitter. Then you can create a new app.
+                In the create app section we can add the App Name, Application description, website url, and tell how the app is used.
+                A sample description is given below.
+            </p>
+
+            <blockquote>
+                <p>
+                    I am using a WordPress plugin to publish posts automatically from blog to Twitter as a simple text message or or as text message with image.
+                    The plugin requires Twitter App to publish posts from WordPress to Twitter.
+                    For this I must create an app and provide the app details such as API key, API secret, Access token and Access token secret.
+                </p>
+            </blockquote>
+
+            <p>
+                Review the terms and create the app. Go to the <strong>Keys and tokens</strong> section.
+                Click on the <strong>Create</strong> button under <strong>Access token & access token secret</strong> section.
+            </p>
+
+            <p id="twitter-tokens">
+                Now you can use the received keys to configure the plugin.
+                Access level should be <strong>Read and write</strong>.
+            </p>
+
+            <figure>
+                <a href="images/twitter-2.png" target="_blank">
+                    <img src="images/twitter-2.png" alt="Social Planner Twitter configuration">
+                </a>
+
+                <figcaption>Necessary Twitter access tokens.</figcaption>
+            </figure>
+
+            <p>
+                You need to use all keys and  tokens when configuring the plugin.
+                Fields order on the settings page is the same as the order in Twitter.
+            </p>
+
+            <figure>
+                <a href="images/twitter-3.png" target="_blank">
+                    <img src="images/twitter-3.png" alt="Social Planner Twitter configuration">
+                </a>
+
+                <figcaption>Example settings for Twitter.</figcaption>
+            </figure>
+        </article>
     </section>
 
     <section>
