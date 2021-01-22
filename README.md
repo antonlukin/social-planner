@@ -31,18 +31,25 @@ If you find a bug or want to add new feature to this plugin, create new [issue](
 
 ## Screenshots ##
 ### 1. Add new post metabox ###
-![Add new post metabox](https://github.com/antonlukin/social-planner/blob/master/assets/screenshot-1.png?raw=true)
+![Add new post metabox](https://github.com/antonlukin/social-planner/blob/master/.wordpress-org/screenshot-1.png?raw=true)
 
 ### 2. Scheduled and sent posts ###
-![Scheduled and sent posts](https://github.com/antonlukin/social-planner/blob/master/assets/screenshot-2.png?raw=true)
+![Scheduled and sent posts](https://github.com/antonlukin/social-planner/blob/master/.wordpress-org/screenshot-2.png?raw=true)
 
 ### 3. Scheduled posts on dashboard widget ###
-![Scheduled posts on dashboard widget](https://github.com/antonlukin/social-planner/blob/master/assets/screenshot-3.png?raw=true)
+![Scheduled posts on dashboard widget](https://github.com/antonlukin/social-planner/blob/master/.wordpress-org/screenshot-3.png?raw=true)
 
 ### 4. Settings Page ###
-![Settings Page](https://github.com/antonlukin/social-planner/blob/master/assets/screenshot-4.png?raw=true)
+![Settings Page](https://github.com/antonlukin/social-planner/blob/master/.wordpress-org/screenshot-4.png?raw=true)
 
 
 ## Changelog ##
+
+### 1.1.2 ###
+* Update plugin docs
+
+### 1.1.1 ###
+* Change the minimum version of php to 5.6
+
 ### 1.1 ###
 * Initial version for WordPress Plugin Directory.

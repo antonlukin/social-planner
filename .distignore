@@ -1,6 +1,14 @@
 # A set of files and directories you probably don't want in your WordPress.org distribution
 
-# Files
+.git/
+.github/
+.vscode/
+.wordpress-org/
+node_modules/
+vendor/
+src/
+docs/
+
 .DS_Store
 .distignore
 .eslintrc.js
@@ -8,23 +16,14 @@
 .travis.yml
 CHANGELOG.md
 README.md
+Makefile
 yarn.lock
+gulpfile.js
 package.json
-gulpfile.json
 composer.json
 composer.lock
-Thumbs.db
+
 *.sql
 *.tar.gz
 *.zip
 *.po~
-
-# Directories
-.git
-.github
-.vscode
-node_modules
-vendor
-src
-docs
-

@@ -175,6 +175,20 @@ details summary {
   font-weight: 600;
 }
 
+blockquote {
+  display: block;
+
+  margin: 1.75em 0;
+  padding: 0.25em 0.5rem 0.25em 2em;
+
+  font-size: 0.875em;
+
+  color: rgba(0, 0, 0, 0.875);
+  background: rgba(0, 0, 0, 0.025);
+
+  border-left: solid 0.125rem #179cde;
+}
+
 figure {
   display: block;
   position: relative;
