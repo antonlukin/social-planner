@@ -88,7 +88,7 @@ gulp.task( 'watch', () => {
 /**
  * Build static files
  */
-gulp.task( 'build', gulp.series( 'styles', 'scripts' ) );
+gulp.task( 'build', gulp.series( 'styles', 'scripts', 'readme' ) );
 
 /**
  * Build static files and watch changes by default.

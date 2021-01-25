@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-01-06T21:52:32+00:00\n"
-"PO-Revision-Date: 2021-01-20 19:21+0000\n"
+"PO-Revision-Date: 2021-01-25 10:30+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: social-planner\n"
 "Language: ru_RU\n"
@@ -39,6 +39,14 @@ msgstr "Добавить"
 msgid "Add task"
 msgstr "Добавить задачу"
 
+#: networks/class-network-vk.php:210 networks/class-network-vk.php:216
+msgid "An error occurred while saving image"
+msgstr "При сохранении изображения произошла ошибка"
+
+#: networks/class-network-twitter.php:228
+msgid "An error occurred while uploading image"
+msgstr "При загрузке изображения произошла ошибка"
+
 #. Author of the plugin
 msgid "Anton Lukin"
 msgstr "Anton Lukin"
@@ -54,6 +62,10 @@ msgstr "Отменить"
 #: networks/class-network-vk.php:280
 msgid "Cannot get upload server"
 msgstr "Невозможно получить сервер ддя загрузки постера"
+
+#: networks/class-network-twitter.php:270
+msgid "Cannot read poster file"
+msgstr "Не удалось прочитать файл постера"
 
 #: networks/class-network-telegram.php:74
 msgid "Channel or group ID"

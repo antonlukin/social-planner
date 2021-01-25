@@ -225,7 +225,7 @@ class Network_Twitter {
 		$response = json_decode( $response['body'], false );
 
 		if ( empty( $response->media_id_string ) ) {
-			return new WP_Error( 'sending', esc_html__( 'An error occurred while uploading image', 'knife-theme' ) );
+			return new WP_Error( 'sending', esc_html__( 'An error occurred while uploading image', 'social-planner' ) );
 		}
 
 		return $response->media_id_string;
@@ -267,7 +267,7 @@ class Network_Twitter {
 		$content = file_get_contents( $path );
 
 		if ( false === $content ) {
-			return new WP_Error( 'sending', esc_html__( 'Cannot read poster file' ) );
+			return new WP_Error( 'sending', esc_html__( 'Cannot read poster file', 'social-planner' ) );
 		}
 
 		$body[] = "--$boundary";

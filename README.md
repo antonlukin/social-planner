@@ -45,6 +45,9 @@ If you find a bug or want to add new feature to this plugin, create new [issue](
 
 ## Changelog ##
 
+### 1.1.3 ###
+* Fix language text domain and replace screenshots
+
 ### 1.1.2 ###
 * Update plugin docs
 

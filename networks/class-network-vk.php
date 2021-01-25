@@ -207,13 +207,13 @@ class Network_VK {
 		$response = json_decode( $response['body'], false );
 
 		if ( empty( $response->response[0] ) ) {
-			return new WP_Error( 'sending', esc_html__( 'An error occurred while saving image', 'knife-theme' ) );
+			return new WP_Error( 'sending', esc_html__( 'An error occurred while saving image', 'social-planner' ) );
 		}
 
 		$response = $response->response[0];
 
 		if ( empty( $response->owner_id ) || empty( $response->id ) ) {
-			return new WP_Error( 'sending', esc_html__( 'An error occurred while saving image', 'knife-theme' ) );
+			return new WP_Error( 'sending', esc_html__( 'An error occurred while saving image', 'social-planner' ) );
 		}
 
 		return $response->owner_id . '_' . $response->id;
