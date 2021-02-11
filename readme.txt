@@ -15,7 +15,7 @@ Social Planner is a WordPress plugin for scheduling announcements of posts to yo
 The whole process is completely automated. Just write a new post and either entire post or it’s nicely formatted announcement with backlink will be published to all your configured social networks. Plugin works with profiles, business pages, community pages, groups, etc.
 
 = Configuration =
-You need to have account with either Facebook, Twitter, VK.com, Twitter or all of them.
+You need to have account with either Facebook, Twitter, VK.com, Telegram or all of them.
 Please see detailed [installation instructions](https://antonlukin.github.io/social-planner) with screenshots.
 
 **Getting social networks Authentication tokens can be a little tricky. Please note that the plugin cannot affect this.**
