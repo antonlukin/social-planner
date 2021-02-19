@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-01-06T21:52:32+00:00\n"
-"PO-Revision-Date: 2021-01-25 10:30+0000\n"
+"PO-Revision-Date: 2021-02-19 18:06+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: social-planner\n"
 "Language: ru_RU\n"
@@ -43,6 +43,7 @@ msgstr "Добавить задачу"
 msgid "An error occurred while saving image"
 msgstr "При сохранении изображения произошла ошибка"
 
+#: networks/class-network-ok.php:230 networks/class-network-ok.php:239
 #: networks/class-network-twitter.php:228
 msgid "An error occurred while uploading image"
 msgstr "При загрузке изображения произошла ошибка"
@@ -50,6 +51,10 @@ msgstr "При загрузке изображения произошла оши
 #. Author of the plugin
 msgid "Anton Lukin"
 msgstr "Anton Lukin"
+
+#: networks/class-network-ok.php:72
+msgid "Application public key"
+msgstr "Публичный ключ приложения"
 
 #: networks/class-network-telegram.php:68
 msgid "Bot token"
@@ -59,11 +64,11 @@ msgstr "Токен бота"
 msgid "Cancel"
 msgstr "Отменить"
 
-#: networks/class-network-vk.php:280
+#: networks/class-network-ok.php:320 networks/class-network-vk.php:280
 msgid "Cannot get upload server"
 msgstr "Невозможно получить сервер ддя загрузки постера"
 
-#: networks/class-network-twitter.php:270
+#: networks/class-network-ok.php:342 networks/class-network-twitter.php:270
 msgid "Cannot read poster file"
 msgstr "Не удалось прочитать файл постера"
 
@@ -95,9 +100,17 @@ msgstr "Удалить"
 msgid "Do not send automatically"
 msgstr "Не отправлять автоматически"
 
+#: networks/class-network-ok.php:117 networks/class-network-ok.php:314
+msgid "Empty API response"
+msgstr "Пустой ответ от API"
+
 #: networks/class-network-facebook.php:110
 msgid "Empty Facebook response"
 msgstr "Пустой ответ Facebook"
+
+#: networks/class-network-ok.php:282
+msgid "Empty response while image uploading"
+msgstr "Пустой ответ в процессе загрузки изображения"
 
 #: networks/class-network-telegram.php:112
 msgid "Empty Telegram response"
@@ -132,6 +145,10 @@ msgstr ""
 "Общие настройки автопостинга в социальные сети. Обратите внимание, что "
 "плагин создан преимущественно для продвинутых пользователей. Пожалуйста, "
 "внимательно прочитайте инструкции по настройке каждого провайдера."
+
+#: networks/class-network-ok.php:67
+msgid "Group ID"
+msgstr "ID группы"
 
 #: networks/class-network-facebook.php:93
 #: networks/class-network-telegram.php:102 networks/class-network-vk.php:98
@@ -170,6 +187,13 @@ msgstr ""
 "Необязательное поле. Используйте подзаголовок, если у вас несколько Facebook "
 "аккаунтов."
 
+#: networks/class-network-ok.php:88
+msgid ""
+"Optional field. Used as an subtitle if there are multiple OK.ru providers."
+msgstr ""
+"Необязательное поле. Используйте подзаголовок, если у вас несколько "
+"аккаунтов ok.ru."
+
 #: networks/class-network-telegram.php:80
 msgid ""
 "Optional field. Used as an subtitle if there are multiple Telegram providers."
@@ -191,9 +215,13 @@ msgstr ""
 "Необязательное поле. Используйте подзаголовок, если у вас несколько "
 "аккаунтов ВКонтакте."
 
-#: networks/class-network-twitter.php:106
+#: networks/class-network-ok.php:106 networks/class-network-twitter.php:106
 msgid "Parameter is empty: "
 msgstr "Параметр не найден: "
+
+#: networks/class-network-ok.php:77
+msgid "Permanent access token"
+msgstr "Вечный access token"
 
 #: assets/scripts/metabox.js:60
 msgid "Post ID element is not defined."
@@ -215,6 +243,11 @@ msgstr "Провайдер"
 msgctxt "provider label"
 msgid "Facebook"
 msgstr "Facebook"
+
+#: networks/class-network-ok.php:37
+msgctxt "provider label"
+msgid "OK.ru"
+msgstr "OK.ru"
 
 #: networks/class-network-twitter.php:37
 msgctxt "provider label"
@@ -242,6 +275,15 @@ msgid ""
 msgstr ""
 "Прочтите <a href=\"%s\" target=\"_blank\">справочное руководство</a> для "
 "настройки Facebook."
+
+#. translators: %s is a link for current network help guide.
+#: networks/class-network-ok.php:47
+msgid ""
+"Read the <a href=\"%s\" target=\"_blank\">help guide</a> for configuring OK."
+"ru provider."
+msgstr ""
+"Прочтите <a href=\"%s\" target=\"_blank\">справочное руководство</a> для "
+"настройки OK.ru."
 
 #. translators: %s is a link for current network help guide.
 #: networks/class-network-telegram.php:48
@@ -281,6 +323,10 @@ msgstr "Сохранить"
 #: assets/scripts/metabox.js:442
 msgid "Scheduled for:"
 msgstr "Запланировано:"
+
+#: networks/class-network-ok.php:82
+msgid "Secret session key"
+msgstr "Секретный session key"
 
 #: classes/class-scheduler.php:243
 msgid "Sending method is missed"
@@ -327,7 +373,7 @@ msgstr "Настройки Social Planner"
 msgid "Something went wrong. Try to reload page."
 msgstr "Что-то пошло не так. Попробуйте обновить страницу."
 
-#: networks/class-network-facebook.php:77
+#: networks/class-network-facebook.php:77 networks/class-network-ok.php:87
 #: networks/class-network-telegram.php:79 networks/class-network-twitter.php:87
 #: networks/class-network-vk.php:78
 msgid "Subtitle"
@@ -376,6 +422,10 @@ msgstr ""
 msgid "Token parameter is empty"
 msgstr "Параметр ключа не найден"
 
+#: networks/class-network-ok.php:127
+msgid "Unknown API error"
+msgstr "Неизвестная ошибка API"
+
 #: networks/class-network-facebook.php:123
 msgid "Unknown Facebook error"
 msgstr "Неизвестная ошибка запроса к Facebook"
@@ -392,7 +442,7 @@ msgstr "Неизвестная ошибка запроса к Twitter"
 msgid "Unknown VK.com error"
 msgstr "Неизвестная ошибка запроса к ВКонтакте"
 
-#: classes/class-core.php:125
+#: classes/class-core.php:126
 msgid "Untitled"
 msgstr "Без названия"
 

@@ -63,6 +63,7 @@ class Core {
 			'Social_Planner\Network_Twitter'  => SOCIAL_PLANNER_DIR . '/networks/class-network-twitter.php',
 			'Social_Planner\Network_VK'       => SOCIAL_PLANNER_DIR . '/networks/class-network-vk.php',
 			'Social_Planner\Network_Facebook' => SOCIAL_PLANNER_DIR . '/networks/class-network-facebook.php',
+			'Social_Planner\Network_OK'       => SOCIAL_PLANNER_DIR . '/networks/class-network-ok.php',
 		);
 
 		/**
