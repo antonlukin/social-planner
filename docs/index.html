@@ -45,6 +45,7 @@
                 <a href="#facebook">Facebook</a>
                 <a href="#vk">VK.com</a>
                 <a href="#twitter">Twitter</a>
+                <a href="#ok">OK.ru</a>
             </nav>
 
             <a href="#task-scheduling">Task scheduling</a>
@@ -410,6 +411,93 @@
                 </a>
 
                 <figcaption>Example settings for Twitter.</figcaption>
+            </figure>
+        </article>
+
+        <article>
+            <h3 id="ok">OK.ru <a aria-hidden="true" href="#ok">#</a></h3>
+
+            <p>
+                With this plugin you can publish to <strong>OK.ru groups</strong> only.
+                If you already have an application with permissions to publish to your group,
+                you can immediately proceed to the <a href="#ok-settings">configuring</a> the plugin.
+            </p>
+
+            <p>
+                <strong>Attention!</strong> You can publish to OK.ru groups with the approved app only.
+                So you need to submit the app for approval and request the necessary permissions.
+                This process usually takes <strong>3 days</strong>, but the time frame may increase.
+            </p>
+
+            <p>
+                Log in to OK.ru and go to the <a href="https://ok.ru/app/setup" target="_blank"></a>develpment page</a> for creating a new application.
+            </p>
+
+            <p>
+                Fill in the settings fields. Select the type-custom application and save it.
+                Immediately after that, a letter should come to your mail indicating your application credentials.
+            </p>
+
+            <figure>
+                <a href="images/ok-1.png" target="_blank">
+                    <img src="images/ok-1.png" alt="Social Planner OK.ru configuration">
+                </a>
+
+                <figcaption>Do not forget to fill in all the required fields and save the application settings.</figcaption>
+            </figure>
+
+            <p>
+                Now you need to request additional permissions for your app in order to be able to post.
+                To do this, send an email to <strong>api-support@ok.ru</strong> with the ID of your application
+                and a detailed description of the tasks for which you need permissions.
+                A sample description is given below. Do not forget to replace values in brackets.
+            </p>
+
+            <blockquote>
+                <p>
+                    Здравствуйте, прошу предоставить разрешения на создание топиков в моем сообществе в Одноклассниках <strong>[link to your group]</strong>
+                    для моего приложения с ID <strong>[application ID from email]</strong>.
+                    Публикация будет выполняться с моего сайта <strong>[link to your WordPress site]</strong>
+                    с помощью плагина Social Planner: https://wordpress.org/plugins/social-planner.
+                    Требуемые разрешения: GROUP_CONTENT, PHOTO_CONTENT.
+                    Для других целей это приложение использоваться не будет.
+                </p>
+            </blockquote>
+
+            <p>
+                You will receive an answer in about <strong>3 days</strong>.
+                If you have not received the letter, check the application settings,
+                you may have already been granted permissions.
+                You can do this by following <a href="https://ok.ru/vitrine/myuploaded" target="_blank">the link</a>
+                and selecting the application you need.
+            </p>
+
+            <figure>
+                <a href="images/ok-2.png" target="_blank">
+                    <img src="images/ok-2.png" alt="Social Planner OK.ru configuration">
+                </a>
+
+                <figcaption>This is how the screen will look after the OK.ru support team gives you permissions.</figcaption>
+            </figure>
+
+            <p id="ok-settings">
+                New fields <strong>GROUP_CONTENT</strong> and <strong>PHOTO_CONTENT</strong> will appear in the access rights of your application.
+                Now you can proceed to configuring the plugin. First of all, get an access token.
+                Copy both access token and secret session key to the plugin settings.
+            </p>
+
+            <p>
+                You can find the <strong>Application public key</strong> at the top of your app's settings page
+                or in the first letter from OK.ru support team.
+                The <strong>Group ID</strong> value can be viewed in the link address of your group or on its settings page.
+            </p>
+
+            <figure>
+                <a href="images/ok-3.png" target="_blank">
+                    <img src="images/ok-3.png" alt="Social Planner OK.ru configuration">
+                </a>
+
+                <figcaption>Example settings for OK.ru.</figcaption>
             </figure>
         </article>
     </section>
