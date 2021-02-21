@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-01-06T21:52:32+00:00\n"
-"PO-Revision-Date: 2021-02-19 18:06+0000\n"
+"PO-Revision-Date: 2021-02-21 14:19+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: social-planner\n"
 "Language: ru_RU\n"
@@ -100,31 +100,18 @@ msgstr "Удалить"
 msgid "Do not send automatically"
 msgstr "Не отправлять автоматически"
 
-#: networks/class-network-ok.php:117 networks/class-network-ok.php:314
+#: networks/class-network-facebook.php:110 networks/class-network-ok.php:117
+#: networks/class-network-ok.php:314 networks/class-network-telegram.php:112
+#: networks/class-network-twitter.php:117
+#: networks/class-network-twitter.php:222 networks/class-network-vk.php:108
+#: networks/class-network-vk.php:204 networks/class-network-vk.php:252
+#: networks/class-network-vk.php:274
 msgid "Empty API response"
 msgstr "Пустой ответ от API"
-
-#: networks/class-network-facebook.php:110
-msgid "Empty Facebook response"
-msgstr "Пустой ответ Facebook"
 
 #: networks/class-network-ok.php:282
 msgid "Empty response while image uploading"
 msgstr "Пустой ответ в процессе загрузки изображения"
-
-#: networks/class-network-telegram.php:112
-msgid "Empty Telegram response"
-msgstr "Пустой ответ Telegram"
-
-#: networks/class-network-twitter.php:117
-#: networks/class-network-twitter.php:222
-msgid "Empty Twitter response"
-msgstr "Пустой ответ twitter"
-
-#: networks/class-network-vk.php:108 networks/class-network-vk.php:204
-#: networks/class-network-vk.php:252 networks/class-network-vk.php:274
-msgid "Empty VK.com response"
-msgstr "Пустой ответ от ВКонтакте"
 
 #: assets/scripts/metabox.js:559
 #| msgid "Disable preview"
@@ -192,7 +179,7 @@ msgid ""
 "Optional field. Used as an subtitle if there are multiple OK.ru providers."
 msgstr ""
 "Необязательное поле. Используйте подзаголовок, если у вас несколько "
-"аккаунтов ok.ru."
+"аккаунтов Одноклассников."
 
 #: networks/class-network-telegram.php:80
 msgid ""
@@ -422,25 +409,11 @@ msgstr ""
 msgid "Token parameter is empty"
 msgstr "Параметр ключа не найден"
 
-#: networks/class-network-ok.php:127
+#: networks/class-network-facebook.php:123 networks/class-network-ok.php:127
+#: networks/class-network-telegram.php:135
+#: networks/class-network-twitter.php:137 networks/class-network-vk.php:124
 msgid "Unknown API error"
 msgstr "Неизвестная ошибка API"
-
-#: networks/class-network-facebook.php:123
-msgid "Unknown Facebook error"
-msgstr "Неизвестная ошибка запроса к Facebook"
-
-#: networks/class-network-telegram.php:135
-msgid "Unknown Telegram error"
-msgstr "Неизвестная ошибка запроса к Telegram"
-
-#: networks/class-network-twitter.php:137
-msgid "Unknown Twitter error"
-msgstr "Неизвестная ошибка запроса к Twitter"
-
-#: networks/class-network-vk.php:124
-msgid "Unknown VK.com error"
-msgstr "Неизвестная ошибка запроса к ВКонтакте"
 
 #: classes/class-core.php:126
 msgid "Untitled"

@@ -105,7 +105,7 @@ class Network_VK {
 		}
 
 		if ( empty( $response['body'] ) ) {
-			return new WP_Error( 'sending', esc_html__( 'Empty VK.com response', 'social-planner' ) );
+			return new WP_Error( 'sending', esc_html__( 'Empty API response', 'social-planner' ) );
 		}
 
 		$response = json_decode( $response['body'], false );
@@ -121,7 +121,7 @@ class Network_VK {
 			return new WP_Error( 'sending', $response->error->error_msg );
 		}
 
-		return new WP_Error( 'sending', esc_html__( 'Unknown VK.com error', 'social-planner' ) );
+		return new WP_Error( 'sending', esc_html__( 'Unknown API error', 'social-planner' ) );
 	}
 
 	/**
@@ -201,7 +201,7 @@ class Network_VK {
 		}
 
 		if ( empty( $response['body'] ) ) {
-			return new WP_Error( 'sending', esc_html__( 'Empty VK.com response', 'social-planner' ) );
+			return new WP_Error( 'sending', esc_html__( 'Empty API response', 'social-planner' ) );
 		}
 
 		$response = json_decode( $response['body'], false );
@@ -249,7 +249,7 @@ class Network_VK {
 		}
 
 		if ( empty( $response['body'] ) ) {
-			return new WP_Error( 'sending', esc_html__( 'Empty VK.com response', 'social-planner' ) );
+			return new WP_Error( 'sending', esc_html__( 'Empty API response', 'social-planner' ) );
 		}
 
 		return json_decode( $response['body'], true );
@@ -271,7 +271,7 @@ class Network_VK {
 		}
 
 		if ( empty( $response['body'] ) ) {
-			return new WP_Error( 'sending', esc_html__( 'Empty VK.com response', 'social-planner' ) );
+			return new WP_Error( 'sending', esc_html__( 'Empty API response', 'social-planner' ) );
 		}
 
 		$response = json_decode( $response['body'], false );

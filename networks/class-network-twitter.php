@@ -114,7 +114,7 @@ class Network_Twitter {
 		}
 
 		if ( empty( $response['body'] ) ) {
-			return new WP_Error( 'sending', esc_html__( 'Empty Twitter response', 'social-planner' ) );
+			return new WP_Error( 'sending', esc_html__( 'Empty API response', 'social-planner' ) );
 		}
 
 		$response = json_decode( $response['body'], false );
@@ -134,7 +134,7 @@ class Network_Twitter {
 			return new WP_Error( 'sending', $response->errors[0]->message );
 		}
 
-		return new WP_Error( 'sending', esc_html__( 'Unknown Twitter error', 'social-planner' ) );
+		return new WP_Error( 'sending', esc_html__( 'Unknown API error', 'social-planner' ) );
 	}
 
 	/**
@@ -219,7 +219,7 @@ class Network_Twitter {
 		}
 
 		if ( empty( $response['body'] ) ) {
-			return new WP_Error( 'sending', esc_html__( 'Empty Twitter response', 'social-planner' ) );
+			return new WP_Error( 'sending', esc_html__( 'Empty API response', 'social-planner' ) );
 		}
 
 		$response = json_decode( $response['body'], false );

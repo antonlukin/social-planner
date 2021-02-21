@@ -107,7 +107,7 @@ class Network_Facebook {
 		}
 
 		if ( empty( $response['body'] ) ) {
-			return new WP_Error( 'sending', esc_html__( 'Empty Facebook response', 'social-planner' ) );
+			return new WP_Error( 'sending', esc_html__( 'Empty API response', 'social-planner' ) );
 		}
 
 		$response = json_decode( $response['body'], false );
@@ -120,7 +120,7 @@ class Network_Facebook {
 			return new WP_Error( 'sending', $response->error->message );
 		}
 
-		return new WP_Error( 'sending', esc_html__( 'Unknown Facebook error', 'social-planner' ) );
+		return new WP_Error( 'sending', esc_html__( 'Unknown API error', 'social-planner' ) );
 	}
 
 	/**

@@ -1,9 +1,9 @@
 # Social Planner #
-Social Planner is a WordPress plugin for scheduling announcements of posts to your social networks accounts. The following providers are currently supported: Facebook, Twitter, VK.com, Telegram, but you can easily add a new one yourself.
+Social Planner is a WordPress plugin for scheduling announcements of posts to your social networks accounts. The following providers are currently supported: Facebook, Twitter, VK.com, OK.ru, Telegram, but you can easily add a new one yourself.
 The whole process is completely automated. Just write a new post and either entire post or it’s nicely formatted announcement with backlink will be published to all your configured social networks. Plugin works with profiles, business pages, community pages, groups, etc.
 
 ### Configuration ###
-You need to have account with either Facebook, Twitter, VK.com, Twitter or all of them.
+You need to have account with either Facebook, Twitter, VK.com, OK.ru, Telegram or all of them.
 Please see detailed [installation instructions](https://antonlukin.github.io/social-planner) with screenshots.
 
 **Getting social networks Authentication tokens can be a little tricky. Please note that the plugin cannot affect this.**
@@ -22,7 +22,8 @@ Please see detailed [installation instructions](https://antonlukin.github.io/soc
 * **Facebook** — Autopost to your business page or community page with ability to make **Image** posts.
 * **Twitter** — Autopost to your account with ability to attach **Image** to tweets.
 * **Telegram** — Autopost to the channel, group or chat using Telegram bot.
-* **vk.com** — Autopost to your profile or group page with ability to make **Image** posts.
+* **VK.com** — Autopost to your profile or group page with ability to make **Image** posts.
+* **OK.ru** — Autopost to your groups with ability to make **Image** posts.
 
 ## Get support ##
 First of all read the [Frequently asked Questions](https://antonlukin.github.io/social-planner/#faq) on the plugin documentation page.
@@ -44,6 +45,9 @@ If you find a bug or want to add new feature to this plugin, create new [issue](
 
 
 ## Changelog ##
+
+### 1.1.4 ###
+* Add OK.ru provider
 
 ### 1.1.3 ###
 * Fix language text domain and replace screenshots

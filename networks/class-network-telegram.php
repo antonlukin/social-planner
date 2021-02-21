@@ -109,7 +109,7 @@ class Network_Telegram {
 		}
 
 		if ( empty( $response['body'] ) ) {
-			return new WP_Error( 'sending', esc_html__( 'Empty Telegram response', 'social-planner' ) );
+			return new WP_Error( 'sending', esc_html__( 'Empty API response', 'social-planner' ) );
 		}
 
 		$response = json_decode( $response['body'], false );
@@ -132,7 +132,7 @@ class Network_Telegram {
 			return new WP_Error( 'sending', $response->description );
 		}
 
-		return new WP_Error( 'sending', esc_html__( 'Unknown Telegram error', 'social-planner' ) );
+		return new WP_Error( 'sending', esc_html__( 'Unknown API error', 'social-planner' ) );
 	}
 
 	/**
