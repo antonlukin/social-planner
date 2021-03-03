@@ -3,7 +3,7 @@ Contributors: antonlukin
 Donate link: http://antonlukin.github.io/social-planner/#donation
 Tags: automation, autopost, auto-post, auto post, socialnetworks, socialnetwork, social networks, social network, facebook, twitter, telegram, vkontakte, vk.com, ok.ru, api, social images, social image, sharing, share, repost, re-post, open graph
 Requires at least: 5.3
-Tested up to: 5.6
+Tested up to: 5.7
 Stable tag: 1.1.4
 Requires PHP: 5.6
 License: GPLv2 or later
