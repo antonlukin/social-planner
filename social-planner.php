@@ -6,8 +6,8 @@
  * Author: Anton Lukin
  * Author URI: https://lukin.me
  * Requires at least: 5.3
- * Tested up to: 5.6
- * Version: 1.1.4
+ * Tested up to: 5.8
+ * Version: 1.1.5
  *
  * Text Domain: social-planner
  * Domain Path: /languages/

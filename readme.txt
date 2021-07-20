@@ -3,8 +3,8 @@ Contributors: antonlukin
 Donate link: http://antonlukin.github.io/social-planner/#donation
 Tags: automation, autopost, auto-post, auto post, socialnetworks, socialnetwork, social networks, social network, facebook, twitter, telegram, vkontakte, vk.com, ok.ru, api, social images, social image, sharing, share, repost, re-post, open graph
 Requires at least: 5.3
-Tested up to: 5.7
-Stable tag: 1.1.4
+Tested up to: 5.8
+Stable tag: 1.1.5
 Requires PHP: 5.6
 License: GPLv2 or later
 
@@ -49,6 +49,9 @@ If you find a bug or want to add new feature to this plugin, create new [issue](
 4. Settings Page
 
 == Changelog ==
+
+= 1.1.5 =
+* Update node modules and rebuild assets
 
 = 1.1.4 =
 * Add OK.ru provider

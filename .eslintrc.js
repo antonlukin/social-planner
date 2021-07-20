@@ -13,6 +13,7 @@ module.exports = {
 		quotes: [ 'error', 'single' ],
 		semi: [ 'error', 'always' ],
 		'max-len': [ 'error', { code: 120 } ],
+		'no-global-event-listener': 'disable',
 	},
 	ignorePatterns: [ 'docs/*.js', 'assets/scripts/*.js' ],
 };

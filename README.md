@@ -46,6 +46,9 @@ If you find a bug or want to add new feature to this plugin, create new [issue](
 
 ## Changelog ##
 
+### 1.1.5 ###
+* Update node modules and rebuild assets
+
 ### 1.1.4 ###
 * Add OK.ru provider
 
