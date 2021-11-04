@@ -28,7 +28,7 @@ class Network_OK {
 	 *
 	 * @var string
 	 */
-	const HELPER_LINK = 'https://antonlukin.github.io/social-planner/#ok';
+	const HELPER_LINK = 'https://wpget.org/social-planner/setup/#ok';
 
 	/**
 	 * Return human-readable network label

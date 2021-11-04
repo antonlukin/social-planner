@@ -1,12 +1,11 @@
 {
   "name": "social-planner",
-  "version": "1.1.5",
+  "version": "1.1.7",
   "author": "Anton Lukin",
   "description": "Social Planner",
   "license": "MIT",
   "scripts": {
-    "build": "gulp build",
-    "readme": "gulp readme"
+    "build": "gulp build"
   },
   "prettier": {
     "printWidth": 120
@@ -16,8 +15,6 @@
     "@babel/preset-env": "^7.14.7",
     "@wordpress/eslint-plugin": "^9.0.6",
     "eslint": "^7.31.0",
-    "grunt": "^1.4.1",
-    "grunt-wp-readme-to-markdown": "^2.0.1",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-babel": "^8.0.0",

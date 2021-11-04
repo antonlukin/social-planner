@@ -29,7 +29,7 @@ class Network_Telegram {
 	 *
 	 * @var string
 	 */
-	const HELPER_LINK = 'https://antonlukin.github.io/social-planner/#telegram';
+	const HELPER_LINK = 'https://wpget.org/social-planner/setup/#telegram';
 
 	/**
 	 * Return human-readable network label

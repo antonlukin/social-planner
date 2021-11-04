@@ -1,5 +1,4 @@
 const gulp = require( 'gulp' );
-const grunt = require( 'grunt' );
 const sass = require( 'gulp-sass' )( require( 'sass' ) );
 const sassGlob = require( 'gulp-sass-glob' );
 const plumber = require( 'gulp-plumber' );
@@ -49,36 +48,6 @@ gulp.task( 'scripts', ( done ) => {
 } );
 
 /**
- * Convert readme.txt to README.md file.
- */
-gulp.task( 'readme', ( done ) => {
-	grunt.initConfig( {
-		wp_readme_to_markdown: {
-			your_target: {
-				files: {
-					'README.md': 'readme.txt',
-				},
-				options: {
-					screenshot_url:
-						// eslint-disable-next-line max-len
-						'https://github.com/antonlukin/social-planner/blob/master/.wordpress-org/{screenshot}.png?raw=true',
-
-					post_convert( readme ) {
-						return readme.replace( new RegExp( '^(#.+?#).+? ##', 'is' ), '$1' );
-					},
-				},
-			},
-		},
-	} );
-
-	grunt.loadNpmTasks( 'grunt-wp-readme-to-markdown' );
-
-	grunt.tasks( [ 'wp_readme_to_markdown' ], { gruntfile: false }, () => {
-		done();
-	} );
-} );
-
-/**
  * Watch soruces and update styles and scripts
  */
 gulp.task( 'watch', () => {
@@ -88,7 +57,7 @@ gulp.task( 'watch', () => {
 /**
  * Build static files
  */
-gulp.task( 'build', gulp.series( 'styles', 'scripts', 'readme' ) );
+gulp.task( 'build', gulp.series( 'styles', 'scripts' ) );
 
 /**
  * Build static files and watch changes by default.

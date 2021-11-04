@@ -28,7 +28,7 @@ class Network_VK {
 	 *
 	 * @var string
 	 */
-	const HELPER_LINK = 'https://antonlukin.github.io/social-planner/#vk';
+	const HELPER_LINK = 'https://wpget.org/social-planner/setup/#vk';
 
 	/**
 	 * Return human-readable network label

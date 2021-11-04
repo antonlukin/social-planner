@@ -28,7 +28,7 @@ class Network_Facebook {
 	 *
 	 * @var string
 	 */
-	const HELPER_LINK = 'https://antonlukin.github.io/social-planner/#facebook';
+	const HELPER_LINK = 'https://wpget.org/social-planner/setup/#facebook';
 
 	/**
 	 * Return human-readable network label.

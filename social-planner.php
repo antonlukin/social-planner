@@ -7,7 +7,7 @@
  * Author URI: https://lukin.me
  * Requires at least: 5.3
  * Tested up to: 5.8
- * Version: 1.1.6
+ * Version: 1.1.7
  *
  * Text Domain: social-planner
  * Domain Path: /languages/
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin version.
  */
-define( 'SOCIAL_PLANNER_VERSION', '1.1.4' );
+define( 'SOCIAL_PLANNER_VERSION', '1.1.7' );
 
 /**
  * Plugin admin menu slug.
