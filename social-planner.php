@@ -7,7 +7,7 @@
  * Author URI: https://lukin.me
  * Requires at least: 5.3
  * Tested up to: 5.8
- * Version: 1.1.5
+ * Version: 1.1.6
  *
  * Text Domain: social-planner
  * Domain Path: /languages/

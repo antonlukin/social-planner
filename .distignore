@@ -14,6 +14,7 @@ docs/
 .eslintrc.js
 .gitignore
 .travis.yml
+phpcs.xml
 CHANGELOG.md
 README.md
 Makefile
