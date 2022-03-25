@@ -4,10 +4,10 @@
  * Plugin URI: https://github.com/antonlukin/social-planner
  * Description: This plugin automatically publishes posts from your blog to your social media accounts on Facebook, Twitter, VK.com, Telegram.
  * Author: Anton Lukin
- * Author URI: https://wpget.org
+ * Author URI: https://wpset.org
  * Requires at least: 5.3
  * Tested up to: 5.8
- * Version: 1.1.8
+ * Version: 1.1.9
  *
  * Text Domain: social-planner
  * Domain Path: /languages/
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin version.
  */
-define( 'SOCIAL_PLANNER_VERSION', '1.1.8' );
+define( 'SOCIAL_PLANNER_VERSION', '1.1.9' );
 
 /**
  * Plugin admin menu slug.

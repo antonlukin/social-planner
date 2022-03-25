@@ -14,3 +14,4 @@
 /yarn.lock export-ignore
 
 /src export-ignore
+/docs export-ignore

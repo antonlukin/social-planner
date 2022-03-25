@@ -1,10 +1,10 @@
 === Social Planner ===
 Contributors: antonlukin
-Donate link: https://wpget.org/about/
+Donate link: https://wpset.org/about/
 Tags: automation, autopost, auto-post, auto post, socialnetworks, socialnetwork, social networks, social network, facebook, twitter, telegram, vkontakte, vk.com, ok.ru, api, social images, social image, sharing, share, repost, re-post, open graph
 Requires at least: 5.3
 Tested up to: 5.8
-Stable tag: 1.1.8
+Stable tag: 1.1.9
 Requires PHP: 5.6
 License: GPLv2 or later
 
@@ -16,7 +16,7 @@ The whole process is completely automated. Just write a new post and either enti
 
 = Configuration =
 You need to have account with either Facebook, Twitter, VK.com, OK.ru, Telegram or all of them.
-Please see detailed [installation instructions](https://wpget.org/social-planner/) with screenshots.
+Please see detailed [installation instructions](https://wpset.org/social-planner/) with screenshots.
 
 **Getting social networks Authentication tokens can be a little tricky. Please note that the plugin cannot affect this.**
 
@@ -38,7 +38,7 @@ Please see detailed [installation instructions](https://wpget.org/social-planner
 * **OK.ru** — Autopost to your groups with ability to make **Image** posts.
 
 == Get support ==
-First of all read the [Frequently asked Questions](https://wpget.org/social-planner/#faq) on the plugin documentation page.
+First of all read the [Frequently asked Questions](https://wpset.org/social-planner/#faq) on the plugin documentation page.
 
 If you find a bug or want to add new feature to this plugin, create new [issue](https://github.com/antonlukin/social-planner/issues) on Github or send a [pull reguest](https://github.com/antonlukin/social-planner/pulls).
 
@@ -49,6 +49,9 @@ If you find a bug or want to add new feature to this plugin, create new [issue](
 4. Settings Page
 
 == Changelog ==
+
+= 1.1.9 =
+* Replacing official plugin site url
 
 = 1.1.8 =
 * Update readme and add WordPress catalog assets

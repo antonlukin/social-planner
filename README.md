@@ -4,8 +4,8 @@ Social Planner is a WordPress plugin for scheduling announcements of posts to yo
 
 ## Documentation
 
-Detailed information about the plugin, its configuration and enhancement, is described on the [official website](https://wpget.org/social-planner/).
-Pay attention to the page with available [hooks and filters](https://wpget.org/social-planner/hooks/). Read the [setup instructions](https://wpget.org/social-planner/setup/) before using the plugin.
+Detailed information about the plugin, its configuration and enhancement, is described on the [official website](https://wpset.org/social-planner/).
+Pay attention to the page with available [hooks and filters](https://wpset.org/social-planner/hooks/). Read the [setup instructions](https://wpset.org/social-planner/setup/) before using the plugin.
 
 ## Development
 
