@@ -7,7 +7,7 @@
  * Author URI: https://wpset.org
  * Requires at least: 5.3
  * Tested up to: 5.8
- * Version: 1.1.9
+ * Version: 1.1.10
  *
  * Text Domain: social-planner
  * Domain Path: /languages/
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin version.
  */
-define( 'SOCIAL_PLANNER_VERSION', '1.1.9' );
+define( 'SOCIAL_PLANNER_VERSION', '1.1.10' );
 
 /**
  * Plugin admin menu slug.

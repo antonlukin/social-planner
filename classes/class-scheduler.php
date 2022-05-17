@@ -270,7 +270,7 @@ class Scheduler {
 		 * @param string $target  Target provider name.
 		 * @param array  $task    Scheduled task data.
 		 */
-		$message = apply_filters( 'social_poster_prepare_message', $message, $target, $task );
+		$message = apply_filters( 'social_planner_prepare_message', $message, $target, $task );
 
 		return $class::send_message( $message, $providers[ $target ] );
 	}

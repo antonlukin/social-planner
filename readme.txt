@@ -3,8 +3,8 @@ Contributors: antonlukin
 Donate link: https://wpset.org/about/
 Tags: automation, autopost, auto-post, auto post, socialnetworks, socialnetwork, social networks, social network, facebook, twitter, telegram, vkontakte, vk.com, ok.ru, api, social images, social image, sharing, share, repost, re-post, open graph
 Requires at least: 5.3
-Tested up to: 5.8
-Stable tag: 1.1.9
+Tested up to: 5.9
+Stable tag: 1.1.10
 Requires PHP: 5.6
 License: GPLv2 or later
 
@@ -49,6 +49,9 @@ If you find a bug or want to add new feature to this plugin, create new [issue](
 4. Settings Page
 
 == Changelog ==
+
+= 1.1.10 =
+* Replacing invalid `social_poster_prepare_message` filter with `social_planner_prepare_message`
 
 = 1.1.9 =
 * Replacing official plugin site url
