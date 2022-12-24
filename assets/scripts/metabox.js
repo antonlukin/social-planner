@@ -952,15 +952,9 @@
 
 
   var subscribeOnSaving = function subscribeOnSaving() {
-    var editPost = wp.data.select('core/edit-post');
-
-    if (null === editPost) {
-      return;
-    }
-
-    var wasSavingPost = editPost.isSavingMetaBoxes();
+    var wasSavingPost = wp.data.select('core/edit-post').isSavingMetaBoxes();
     wp.data.subscribe(function () {
-      var isSavingPost = editPost.isSavingMetaBoxes();
+      var isSavingPost = wp.data.select('core/edit-post').isSavingMetaBoxes();
 
       if (wasSavingPost && !isSavingPost) {
         reinitMetabox();
@@ -989,7 +983,9 @@
 
     createAppend(list); // Subscribe and update on Gutenberg post saving.
 
-    subscribeOnSaving();
+    if (wp.data && wp.data.select('core/edit-post')) {
+      subscribeOnSaving();
+    }
   };
 
   initMetabox();
