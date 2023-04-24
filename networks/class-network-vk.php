@@ -158,10 +158,19 @@ class Network_VK {
 			'attachments'  => implode( ',', $attachments ),
 		);
 
-		$url = 'https://api.vk.com/method/wall.post';
+		/**
+		 * Filter request body arguments using message data.
+		 *
+		 * @param string $body    Request body arguments.
+		 * @param array  $message Message data.
+		 * @param string $network Network name.
+		 *
+		 * @since 1.1.12
+		 */
+		$body = apply_filters( 'social_planner_filter_request_body', $body, $message, self::NETWORK_NAME );
 
 		// Publish message.
-		return self::send_request( $url, $body );
+		return self::send_request( 'https://api.vk.com/method/wall.post', $body );
 	}
 
 	/**
@@ -191,10 +200,8 @@ class Network_VK {
 			return $options;
 		}
 
-		$url = 'https://api.vk.com/method/photos.saveWallPhoto';
-
 		// Save image to VK.com wall.
-		$response = self::send_request( $url, array_merge( $body, $options ) );
+		$response = self::send_request( 'https://api.vk.com/method/photos.saveWallPhoto', array_merge( $body, $options ) );
 
 		if ( is_wp_error( $response ) ) {
 			return $response;
@@ -261,10 +268,8 @@ class Network_VK {
 	 * @param array $body List of request params.
 	 */
 	private static function get_upload_server( $body ) {
-		$url = 'https://api.vk.com/method/photos.getWallUploadServer';
-
 		// Try to get VK wall upload server.
-		$response = self::send_request( $url, $body );
+		$response = self::send_request( 'https://api.vk.com/method/photos.getWallUploadServer', $body );
 
 		if ( is_wp_error( $response ) ) {
 			return $response;
@@ -367,6 +372,17 @@ class Network_VK {
 		if ( $headers ) {
 			$args['headers'] = $headers;
 		}
+
+		/**
+		 * Filter request arguments right before sending.
+		 *
+		 * @param string $args    Request arguments.
+		 * @param array  $url     URL to retrieve.
+		 * @param string $network Network name.
+		 *
+		 * @since 1.1.12
+		 */
+		$args = apply_filters( 'social_planner_before_request', $args, $url, self::NETWORK_NAME );
 
 		return wp_remote_post( $url, $args );
 	}

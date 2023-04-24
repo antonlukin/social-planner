@@ -180,6 +180,17 @@ class Network_Twitter {
 			'Expect'        => '',
 		);
 
+		/**
+		 * Filter request body arguments using message data.
+		 *
+		 * @param string $body    Request body arguments.
+		 * @param array  $message Message data.
+		 * @param string $network Network name.
+		 *
+		 * @since 1.1.12
+		 */
+		$body = apply_filters( 'social_planner_filter_request_body', $body, $message, self::NETWORK_NAME );
+
 		return self::send_request( $url, $body, $headers );
 	}
 
@@ -229,27 +240,6 @@ class Network_Twitter {
 		}
 
 		return $response->media_id_string;
-	}
-
-	/**
-	 * Send request to remote server.
-	 *
-	 * @param string $url     Remote API URL.
-	 * @param array  $body    Request body.
-	 * @param array  $headers Optional. Request headers.
-	 */
-	private static function send_request( $url, $body, $headers = null ) {
-		$args = array(
-			'user-agent' => 'social-planner/' . SOCIAL_PLANNER_VERSION,
-			'body'       => $body,
-			'timeout'    => 15,
-		);
-
-		if ( $headers ) {
-			$args['headers'] = $headers;
-		}
-
-		return wp_remote_post( $url, $args );
 	}
 
 	/**
@@ -342,5 +332,37 @@ class Network_Twitter {
 		}
 
 		return 'OAuth ' . implode( ', ', $values );
+	}
+
+	/**
+	 * Send request to remote server.
+	 *
+	 * @param string $url     Remote API URL.
+	 * @param array  $body    Request body.
+	 * @param array  $headers Optional. Request headers.
+	 */
+	private static function send_request( $url, $body, $headers = null ) {
+		$args = array(
+			'user-agent' => 'social-planner/' . SOCIAL_PLANNER_VERSION,
+			'body'       => $body,
+			'timeout'    => 15,
+		);
+
+		if ( $headers ) {
+			$args['headers'] = $headers;
+		}
+
+		/**
+		 * Filter request arguments right before sending.
+		 *
+		 * @param string $args    Request arguments.
+		 * @param array  $url     URL to retrieve.
+		 * @param string $network Network name.
+		 *
+		 * @since 1.1.12
+		 */
+		$args = apply_filters( 'social_planner_before_request', $args, $url, self::NETWORK_NAME );
+
+		return wp_remote_post( $url, $args );
 	}
 }

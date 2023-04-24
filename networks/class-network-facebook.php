@@ -151,6 +151,17 @@ class Network_Facebook {
 
 		$body['message'] = $excerpt;
 
+		/**
+		 * Filter request body arguments using message data.
+		 *
+		 * @param string $body    Request body arguments.
+		 * @param array  $message Message data.
+		 * @param string $network Network name.
+		 *
+		 * @since 1.1.12
+		 */
+		$body = apply_filters( 'social_planner_filter_request_body', $body, $message, self::NETWORK_NAME );
+
 		return self::send_request( $url . '/feed', $body );
 	}
 
@@ -268,6 +279,17 @@ class Network_Facebook {
 		if ( $headers ) {
 			$args['headers'] = $headers;
 		}
+
+		/**
+		 * Filter request arguments right before sending.
+		 *
+		 * @param string $args    Request arguments.
+		 * @param array  $url     URL to retrieve.
+		 * @param string $network Network name.
+		 *
+		 * @since 1.1.12
+		 */
+		$args = apply_filters( 'social_planner_before_request', $args, $url, self::NETWORK_NAME );
 
 		return wp_remote_post( $url, $args );
 	}
