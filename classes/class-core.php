@@ -59,11 +59,12 @@ class Core {
 	 */
 	public static function init_networks() {
 		$networks = array(
-			'Social_Planner\Network_Telegram' => SOCIAL_PLANNER_DIR . '/networks/class-network-telegram.php',
-			'Social_Planner\Network_Twitter'  => SOCIAL_PLANNER_DIR . '/networks/class-network-twitter.php',
-			'Social_Planner\Network_VK'       => SOCIAL_PLANNER_DIR . '/networks/class-network-vk.php',
-			'Social_Planner\Network_Facebook' => SOCIAL_PLANNER_DIR . '/networks/class-network-facebook.php',
-			'Social_Planner\Network_OK'       => SOCIAL_PLANNER_DIR . '/networks/class-network-ok.php',
+			'Social_Planner\Network_Telegram'   => SOCIAL_PLANNER_DIR . '/networks/class-network-telegram.php',
+			'Social_Planner\Network_Twitter'    => SOCIAL_PLANNER_DIR . '/networks/class-network-twitter.php',
+			'Social_Planner\Network_Twitter_V2' => SOCIAL_PLANNER_DIR . '/networks/class-network-twitter-v2.php',
+			'Social_Planner\Network_VK'         => SOCIAL_PLANNER_DIR . '/networks/class-network-vk.php',
+			'Social_Planner\Network_Facebook'   => SOCIAL_PLANNER_DIR . '/networks/class-network-facebook.php',
+			'Social_Planner\Network_OK'         => SOCIAL_PLANNER_DIR . '/networks/class-network-ok.php',
 		);
 
 		/**
@@ -77,14 +78,14 @@ class Core {
 		/**
 		 * For each filtered network try to include its class.
 		 */
-		foreach ( $networks as $class => $path ) {
+		foreach ( $networks as $plugin_class => $path ) {
 			include_once $path;
 
 			/**
 			 * Add class to networks list with its name as key.
 			 */
-			if ( defined( "$class::NETWORK_NAME" ) ) {
-				self::$networks[ $class::NETWORK_NAME ] = $class;
+			if ( defined( "$plugin_class::NETWORK_NAME" ) ) {
+				self::$networks[ $plugin_class::NETWORK_NAME ] = $plugin_class;
 			}
 		}
 	}
@@ -118,27 +119,27 @@ class Core {
 	/**
 	 * Helper method to get network label by class.
 	 *
-	 * @param string $class Network class name.
+	 * @param string $plugin_class Network class name.
 	 */
-	public static function get_network_label( $class ) {
+	public static function get_network_label( $plugin_class ) {
 		// Just to avoid fatal errors.
-		if ( ! defined( "$class::NETWORK_NAME" ) ) {
+		if ( ! defined( "$plugin_class::NETWORK_NAME" ) ) {
 			return __( 'Untitled', 'social-planner' );
 		}
 
-		$label = $class::NETWORK_NAME;
+		$label = $plugin_class::NETWORK_NAME;
 
-		if ( method_exists( $class, 'get_label' ) ) {
-			$label = $class::get_label();
+		if ( method_exists( $plugin_class, 'get_label' ) ) {
+			$label = $plugin_class::get_label();
 		}
 
 		/**
 		 * Filters network label.
 		 *
 		 * @param string $label Network label.
-		 * @param string $class Current network class.
+		 * @param string $plugin_class Current network class.
 		 */
-		return apply_filters( 'social_planner_network_label', $label, $class );
+		return apply_filters( 'social_planner_network_label', $label, $plugin_class );
 	}
 
 	/**
