@@ -44,7 +44,7 @@ class Network_Twitter_V2 {
 		$helper = sprintf(
 			wp_kses(
 				// translators: %s is a link for current network help guide.
-				__( 'Read the <a href="%s" target="_blank">help guide</a> for configuring Twitter provider.', 'social-planner' ),
+				__( 'Read the <a href="%s" target="_blank">help guide</a> for configuring Twitter provider. Use this options to set up Twitter API v2.', 'social-planner' ),
 				array(
 					'a' => array(
 						'href'   => array(),

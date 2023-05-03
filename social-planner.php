@@ -7,10 +7,9 @@
  * Author URI: https://wpset.org
  * Requires at least: 5.3
  * Tested up to: 5.8
- * Version: 1.1.12
+ * Version: 1.2.0
  *
  * Text Domain: social-planner
- * Domain Path: /languages/
  *
  * @package social-planner
  * @author  Anton Lukin

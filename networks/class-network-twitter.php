@@ -44,7 +44,7 @@ class Network_Twitter {
 		$helper = sprintf(
 			wp_kses(
 				// translators: %s is a link for current network help guide.
-				__( 'Read the <a href="%s" target="_blank">help guide</a> for configuring Twitter provider.', 'social-planner' ),
+				__( 'Read the <a href="%s" target="_blank">help guide</a> for configuring Twitter provider. Use this options to set up legacy Twitter API v1.', 'social-planner' ),
 				array(
 					'a' => array(
 						'href'   => array(),
@@ -85,7 +85,7 @@ class Network_Twitter {
 
 			'title'           => array(
 				'label' => __( 'Subtitle', 'social-planner' ),
-				'hint'  => __( 'Optional field. Used as an subtitle if there are multiple Twitter providers.', 'social-planner' ),
+				'hint'  => __( 'Optional field. Used as an subtitle if there are multiple Twitter providers. ', 'social-planner' ),
 			),
 		);
 
