@@ -4,7 +4,7 @@ Donate link: https://wpset.org/about/
 Tags: automation, autopost, auto-post, auto post, socialnetworks, socialnetwork, social networks, social network, facebook, twitter, telegram, vkontakte, vk.com, ok.ru, api, social images, social image, sharing, share, repost, re-post, open graph
 Requires at least: 5.3
 Tested up to: 6.2
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 Requires PHP: 5.6
 License: GPLv2 or later
 
@@ -49,6 +49,10 @@ If you find a bug or want to add new feature to this plugin, create new [issue](
 4. Settings Page
 
 == Changelog ==
+
+= 1.3.0 =
+* Adding new provider for Linkedin.
+* Adding `url` parameter to `social_planner_filter_request_body` filter for each network class
 
 = 1.2.0 =
 * Adding new provider for Twitter API v2.

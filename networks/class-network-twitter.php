@@ -186,10 +186,12 @@ class Network_Twitter {
 		 * @param string $body    Request body arguments.
 		 * @param array  $message Message data.
 		 * @param string $network Network name.
+		 * @param string $url     Remote API URL.
 		 *
 		 * @since 1.1.12
+		 * @version 1.3.0
 		 */
-		$body = apply_filters( 'social_planner_filter_request_body', $body, $message, self::NETWORK_NAME );
+		$body = apply_filters( 'social_planner_filter_request_body', $body, $message, self::NETWORK_NAME, $url );
 
 		return self::send_request( $url, $body, $headers );
 	}

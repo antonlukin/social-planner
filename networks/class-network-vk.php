@@ -158,19 +158,22 @@ class Network_VK {
 			'attachments'  => implode( ',', $attachments ),
 		);
 
+		$url = 'https://api.vk.com/method/wall.post';
+
 		/**
 		 * Filter request body arguments using message data.
 		 *
 		 * @param string $body    Request body arguments.
 		 * @param array  $message Message data.
 		 * @param string $network Network name.
+		 * @param string $url     Remote API URL.
 		 *
 		 * @since 1.1.12
+		 * @version 1.3.0
 		 */
-		$body = apply_filters( 'social_planner_filter_request_body', $body, $message, self::NETWORK_NAME );
+		$body = apply_filters( 'social_planner_filter_request_body', $body, $message, self::NETWORK_NAME, $url );
 
-		// Publish message.
-		return self::send_request( 'https://api.vk.com/method/wall.post', $body );
+		return self::send_request( $url, $body );
 	}
 
 	/**

@@ -96,13 +96,13 @@ class Network_Telegram {
 		}
 
 		// Get API URL using bot token from settings.
-		$url = 'https://api.telegram.org/bot' . $settings['token'];
+		$path = 'https://api.telegram.org/bot' . $settings['token'];
 
 		if ( empty( $settings['group'] ) ) {
 			return new WP_Error( 'sending', esc_html__( 'Group parameter is not found', 'social-planner' ) );
 		}
 
-		$response = self::make_request( $message, $url, $settings['group'] );
+		$response = self::make_request( $message, $path, $settings['group'] );
 
 		if ( is_wp_error( $response ) ) {
 			return $response;
@@ -139,10 +139,10 @@ class Network_Telegram {
 	 * Prepare data and send request to remote API.
 	 *
 	 * @param array  $message List of message args.
-	 * @param string $url     Remote API URL.
+	 * @param string $path    Remote API URL path.
 	 * @param string $group   Group ID.
 	 */
-	private static function make_request( $message, $url, $group ) {
+	private static function make_request( $message, $path, $group ) {
 		$body = array(
 			'parse_mode' => 'HTML',
 			'chat_id'    => $group,
@@ -155,7 +155,7 @@ class Network_Telegram {
 		$excerpt = self::prepare_message_excerpt( $message );
 
 		if ( ! empty( $message['poster'] ) ) {
-			return self::send_poster( $message['poster'], $url, $excerpt, $body );
+			return self::send_poster( $message['poster'], $path, $excerpt, $body );
 		}
 
 		if ( empty( $excerpt ) ) {
@@ -164,29 +164,34 @@ class Network_Telegram {
 
 		$body['text'] = $excerpt;
 
+		// Set url for message request.
+		$url = $path . '/sendMessage';
+
 		/**
 		 * Filter request body arguments using message data.
 		 *
 		 * @param string $body    Request body arguments.
 		 * @param array  $message Message data.
 		 * @param string $network Network name.
+		 * @param string $url     Remote API URL.
 		 *
 		 * @since 1.1.12
+		 * @version 1.3.0
 		 */
-		$body = apply_filters( 'social_planner_filter_request_body', $body, $message, self::NETWORK_NAME );
+		$body = apply_filters( 'social_planner_filter_request_body', $body, $message, self::NETWORK_NAME, $url );
 
-		return self::send_request( $url . '/sendMessage', $body );
+		return self::send_request( $url, $body );
 	}
 
 	/**
 	 * Send poster with caption to Telegram.
 	 *
 	 * @param string $poster  Path to local image file.
-	 * @param string $url     Remote API URL.
+	 * @param string $path    Remote API URL path.
 	 * @param string $excerpt Prepared caption for poster.
 	 * @param array  $body    Prepared body array.
 	 */
-	private static function send_poster( $poster, $url, $excerpt, $body ) {
+	private static function send_poster( $poster, $path, $excerpt, $body ) {
 		$boundary = uniqid( 'wp', true );
 
 		if ( ! empty( $excerpt ) ) {
@@ -205,7 +210,21 @@ class Network_Telegram {
 			'Content-Length' => strlen( $body ),
 		);
 
-		return self::send_request( $url . '/sendPhoto', $body, $headers );
+		$url = $path . '/sendPhoto';
+
+		/**
+		 * Filter request body arguments using message data.
+		 *
+		 * @param string $body    Request body arguments.
+		 * @param array  $message Message data.
+		 * @param string $network Network name.
+		 * @param string $url     Remote API URL.
+		 *
+		 * @since 1.3.0
+		 */
+		$body = apply_filters( 'social_planner_filter_request_body', $body, $message, self::NETWORK_NAME, $url );
+
+		return self::send_request( $url, $body, $headers );
 	}
 
 	/**

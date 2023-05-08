@@ -93,14 +93,14 @@ class Network_Facebook {
 			return new WP_Error( 'sending', esc_html__( 'Group parameter is not found', 'social-planner' ) );
 		}
 
-		// Get API URL using group id from settings.
-		$url = 'https://graph.facebook.com/v9.0/' . $settings['group'];
+		// Get API URL path using group id from settings.
+		$path = 'https://graph.facebook.com/v9.0/' . $settings['group'];
 
 		if ( empty( $settings['token'] ) ) {
 			return new WP_Error( 'sending', esc_html__( 'Token parameter is empty', 'social-planner' ) );
 		}
 
-		$response = self::make_request( $message, $url, $settings['token'] );
+		$response = self::make_request( $message, $path, $settings['token'] );
 
 		if ( is_wp_error( $response ) ) {
 			return $response;
@@ -127,10 +127,10 @@ class Network_Facebook {
 	 * Prepare data and send request to remote API.
 	 *
 	 * @param array  $message Message data.
-	 * @param string $url     Remote API URL.
+	 * @param string $path    Remote API URL path.
 	 * @param string $token   Access token from settings.
 	 */
-	private static function make_request( $message, $url, $token ) {
+	private static function make_request( $message, $path, $token ) {
 		$body = array(
 			'access_token' => $token,
 		);
@@ -142,7 +142,7 @@ class Network_Facebook {
 		$excerpt = self::prepare_message_excerpt( $message );
 
 		if ( ! empty( $message['poster'] ) ) {
-			return self::send_poster( $message['poster'], $url, $excerpt, $body );
+			return self::send_poster( $message['poster'], $path . '/photos', $excerpt, $body );
 		}
 
 		if ( empty( $excerpt ) ) {
@@ -151,18 +151,23 @@ class Network_Facebook {
 
 		$body['message'] = $excerpt;
 
+		// Set final URL.
+		$url = $path . '/feed';
+
 		/**
 		 * Filter request body arguments using message data.
 		 *
 		 * @param string $body    Request body arguments.
 		 * @param array  $message Message data.
 		 * @param string $network Network name.
+		 * @param string $url     Remote API URL.
 		 *
 		 * @since 1.1.12
+		 * @version 1.3.0
 		 */
-		$body = apply_filters( 'social_planner_filter_request_body', $body, $message, self::NETWORK_NAME );
+		$body = apply_filters( 'social_planner_filter_request_body', $body, $message, self::NETWORK_NAME, $url );
 
-		return self::send_request( $url . '/feed', $body );
+		return self::send_request( $url, $body );
 	}
 
 	/**
@@ -192,7 +197,19 @@ class Network_Facebook {
 			'Content-Length' => strlen( $body ),
 		);
 
-		return self::send_request( $url . '/photos', $body, $headers );
+		/**
+		 * Filter request body arguments using message data.
+		 *
+		 * @param string $body    Request body arguments.
+		 * @param array  $message Message data.
+		 * @param string $network Network name.
+		 * @param string $url     Remote API URL.
+		 *
+		 * @since 1.3.0
+		 */
+		$body = apply_filters( 'social_planner_filter_request_body', $body, $message, self::NETWORK_NAME, $url );
+
+		return self::send_request( $url, $body, $headers );
 	}
 
 	/**
