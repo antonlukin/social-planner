@@ -36,6 +36,7 @@ Please see detailed [installation instructions](https://wpset.org/social-planner
 * **Telegram** — Autopost to the channel, group or chat using Telegram bot.
 * **VK.com** — Autopost to your profile or group page with ability to make **Image** posts.
 * **OK.ru** — Autopost to your groups with ability to make **Image** posts.
+* **Linkedin.com** — Autopost to your profile or group with ability to attach image.
 
 == Get support ==
 First of all read the [Frequently asked Questions](https://wpset.org/social-planner/#faq) on the plugin documentation page.
