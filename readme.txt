@@ -3,8 +3,8 @@ Contributors: antonlukin
 Donate link: https://wpset.org/about/
 Tags: automation, autopost, auto-post, auto post, socialnetworks, socialnetwork, social networks, social network, facebook, twitter, telegram, vkontakte, vk.com, ok.ru, api, social images, social image, sharing, share, repost, re-post, open graph
 Requires at least: 5.3
-Tested up to: 6.2
-Stable tag: 1.3.0
+Tested up to: 6.5.5
+Stable tag: 1.3.1
 Requires PHP: 5.6
 License: GPLv2 or later
 
