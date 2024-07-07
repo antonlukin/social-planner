@@ -6,8 +6,8 @@
  * Author: Anton Lukin
  * Author URI: https://wpset.org
  * Requires at least: 5.3
- * Tested up to: 6.2
- * Version: 1.3.1
+ * Tested up to: 6.5.5
+ * Version: 1.3.2
  *
  * Text Domain: social-planner
  *
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin version.
  */
-define( 'SOCIAL_PLANNER_VERSION', '1.3.1' );
+define( 'SOCIAL_PLANNER_VERSION', '1.3.2' );
 
 /**
  * Plugin admin menu slug.

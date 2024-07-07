@@ -1,10 +1,10 @@
 === Social Planner ===
 Contributors: antonlukin
 Donate link: https://wpset.org/about/
-Tags: automation, autopost, auto-post, auto post, socialnetworks, socialnetwork, social networks, social network, facebook, twitter, telegram, vkontakte, vk.com, ok.ru, api, social images, social image, sharing, share, repost, re-post, open graph
+Tags: auto post, social networks, facebook, twitter, linkedin
 Requires at least: 5.3
 Tested up to: 6.5.5
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 Requires PHP: 5.6
 License: GPLv2 or later
 
@@ -50,6 +50,9 @@ If you find a bug or want to add new feature to this plugin, create new [issue](
 4. Settings Page
 
 == Changelog ==
+
+= 1.3.2 =
+* Bump 'Tested up' version and update readme
 
 = 1.3.0 =
 * Adding new provider for Linkedin.
