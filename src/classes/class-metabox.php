@@ -167,7 +167,7 @@ class Metabox {
 
 		wp_enqueue_style(
 			'social-planner-metabox',
-			SOCIAL_PLANNER_URL . '/assets/styles/metabox.css',
+			SOCIAL_PLANNER_URL . '/styles/metabox.css',
 			array(),
 			SOCIAL_PLANNER_VERSION,
 			'all'
@@ -196,7 +196,7 @@ class Metabox {
 
 		wp_enqueue_script(
 			'social-planner-metabox',
-			SOCIAL_PLANNER_URL . '/assets/scripts/metabox.js',
+			SOCIAL_PLANNER_URL . '/scripts/metabox.js',
 			array( 'wp-i18n', 'wp-data' ),
 			SOCIAL_PLANNER_VERSION,
 			true

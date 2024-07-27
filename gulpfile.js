@@ -24,7 +24,7 @@ gulp.task( 'styles', ( done ) => {
 		)
 		.pipe( prefix() );
 
-	styles.pipe( gulp.dest( 'assets/styles/' ) );
+	styles.pipe( gulp.dest( 'dist/styles/' ) );
 
 	done();
 } );
@@ -42,7 +42,7 @@ gulp.task( 'scripts', ( done ) => {
 			} )
 		);
 
-	scripts.pipe( gulp.dest( 'assets/scripts/' ) );
+	scripts.pipe( gulp.dest( 'dist/scripts/' ) );
 
 	done();
 } );

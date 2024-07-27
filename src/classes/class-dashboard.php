@@ -84,7 +84,7 @@ class Dashboard {
 
 		wp_enqueue_style(
 			'social-planner-dashboard',
-			SOCIAL_PLANNER_URL . '/assets/styles/dashboard.css',
+			SOCIAL_PLANNER_URL . '/styles/dashboard.css',
 			array(),
 			SOCIAL_PLANNER_VERSION,
 			'all'
@@ -103,7 +103,7 @@ class Dashboard {
 
 		wp_enqueue_script(
 			'social-planner-dashboard',
-			SOCIAL_PLANNER_URL . '/assets/scripts/dashboard.js',
+			SOCIAL_PLANNER_URL . '/scripts/dashboard.js',
 			array( 'wp-i18n' ),
 			SOCIAL_PLANNER_VERSION,
 			true

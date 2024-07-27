@@ -135,7 +135,7 @@ class Settings {
 
 		wp_enqueue_style(
 			'social-planner-settings',
-			SOCIAL_PLANNER_URL . '/assets/styles/settings.css',
+			SOCIAL_PLANNER_URL . '/styles/settings.css',
 			array(),
 			SOCIAL_PLANNER_VERSION,
 			'all'
@@ -152,7 +152,7 @@ class Settings {
 
 		wp_enqueue_script(
 			'social-planner-settings',
-			SOCIAL_PLANNER_URL . '/assets/scripts/settings.js',
+			SOCIAL_PLANNER_URL . '/scripts/settings.js',
 			array( 'wp-i18n' ),
 			SOCIAL_PLANNER_VERSION,
 			true

@@ -15,5 +15,5 @@ module.exports = {
 		'max-len': [ 'error', { code: 120 } ],
 		'no-global-event-listener': 'disable',
 	},
-	ignorePatterns: [ 'docs/*.js', 'assets/scripts/*.js' ],
+	ignorePatterns: [ 'docs/*.js', 'dist/scripts/*.js' ],
 };
