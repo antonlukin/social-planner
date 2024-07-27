@@ -4,7 +4,7 @@ Donate link: https://wpset.org/about/
 Tags: auto post, social networks, facebook, twitter, linkedin
 Requires at least: 5.3
 Tested up to: 6.5.5
-Stable tag: 1.3.2
+Stable tag: 1.4.0
 Requires PHP: 5.6
 License: GPLv2 or later
 
@@ -50,6 +50,9 @@ If you find a bug or want to add new feature to this plugin, create new [issue](
 4. Settings Page
 
 == Changelog ==
+
+= 1.4.0 =
+* Adding new provider for make.
 
 = 1.3.2 =
 * Bump 'Tested up' version and update readme
