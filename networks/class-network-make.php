@@ -68,7 +68,7 @@ class Network_Make {
 				'required' => true,
 			),
 
-			'title' => array(
+			'title'       => array(
 				'label' => __( 'Subtitle', 'social-planner' ),
 				'hint'  => __( 'Optional field. Used as an subtitle if there are multiple Make providers.', 'social-planner' ),
 			),
@@ -88,14 +88,13 @@ class Network_Make {
 			return new WP_Error( 'sending', esc_html__( 'WebHook URL parameter is not found', 'social-planner' ) );
 		}
 
-
 		$response = self::make_request( $message, $settings['webhook_url'] );
 
-		if($response["response"]["code"] == 200) {
+		if ( 200 === $response['response']['code'] ) {
 			return true;
 		}
 
-		return new WP_Error( 'sending', esc_html__( 'API return error: ', 'social-planner' ).$response->code );
+		return new WP_Error( 'sending', esc_html__( 'API return error: ', 'social-planner' ) . $response->code );
 	}
 
 	/**
@@ -104,7 +103,7 @@ class Network_Make {
 	 * @param array $message List of message args.
 	 */
 	private static function prepare_message_excerpt( $message ) {
-		$excerpt = "";
+		$excerpt = '';
 
 		if ( ! empty( $message['excerpt'] ) ) {
 			$excerpt = $message['excerpt'];
@@ -123,24 +122,22 @@ class Network_Make {
 	/**
 	 * Prepare data and send request to remote API.
 	 *
-	 * @param array  $message Message data.
-	 * @param string $path    Remote API URL path.
-	 * @param string $token   Access token from settings.
+	 * @param array  $message     Message data.
+	 * @param string $webhook_url Remote API URL.
 	 */
 	protected static function make_request( $message, $webhook_url ) {
 		$body = array();
-		
-		$url = $webhook_url;
+
+		$url     = $webhook_url;
 		$excerpt = self::prepare_message_excerpt( $message );
-		
-		if ( empty( $excerpt ) && empty( $message['poster_id']) ) {
+
+		if ( empty( $excerpt ) && empty( $message['poster_id'] ) ) {
 			return new WP_Error( 'sending', esc_html__( 'Excerpt and poster are both empty', 'social-planner' ) );
 		}
 
 		if ( ! empty( $message['poster_id'] ) ) {
-			$body["image_url"] = wp_get_attachment_url($message['poster_id']);
+			$body['image_url'] = wp_get_attachment_url( $message['poster_id'] );
 		}
-
 
 		$body['content'] = $excerpt;
 
@@ -169,16 +166,12 @@ class Network_Make {
 	private static function send_request( $url, $body, $headers = null ) {
 		$args = array(
 			'user-agent' => 'social-planner/' . SOCIAL_PLANNER_VERSION,
-			'body' 		=> $body,
+			'body'       => $body,
 		);
 
-		// array_merge($args, $body);
-		
 		if ( $headers ) {
 			$args['headers'] = $headers;
 		}
-
-
 
 		/**
 		 * Filter request arguments right before sending.

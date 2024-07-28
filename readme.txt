@@ -52,7 +52,7 @@ If you find a bug or want to add new feature to this plugin, create new [issue](
 == Changelog ==
 
 = 1.4.0 =
-* Adding new provider for make.
+* Adding new provider for make.com.
 
 = 1.3.2 =
 * Bump 'Tested up' version and update readme
